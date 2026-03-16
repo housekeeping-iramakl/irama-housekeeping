@@ -320,8 +320,6 @@ body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--t
         <option>Level 1</option><option>Level 2</option><option>Level 3</option><option>Level 4</option><option>Level 5</option>
         <option>Level 6</option><option>Level 7</option><option>Level 8</option><option>Level 9</option><option>Level 10</option>
       </select>
-      <label>Email To</label>
-      <input type="email" id="h_email" placeholder="supervisor@iramahotel.com" autocomplete="off">
     </div>
     <div class="form-tiles">
       <div class="form-tile linen" onclick="startForm('linen')">
@@ -662,7 +660,7 @@ function showView(v) {
 function startForm(type) {
   staff.name=document.getElementById('h_name').value.trim();
   staff.floor=document.getElementById('h_floor').value;
-  staff.email=document.getElementById('h_email').value.trim();
+  staff.email='';
   if(!staff.name){alert('Please enter your name first.');return;}
   if(!staff.floor){alert('Please select your floor.');return;}
   activeForm=type;
@@ -972,7 +970,8 @@ async function supaFetch(method, path, body) {
       'apikey': SUPA_KEY,
       'Authorization': 'Bearer ' + SUPA_KEY,
       'Content-Type': 'application/json',
-      'Prefer': method === 'POST' ? 'return=representation' : ''
+      'Prefer': method === 'POST' ? 'return=representation' : '',
+      'Access-Control-Allow-Origin': '*'
     },
     body: body ? JSON.stringify(body) : undefined
   });
@@ -1328,7 +1327,25 @@ function startDigestScheduler() {
 // ── ADD SUPERVISOR BUTTON TO HEADER ───────────────────────────
 // Supervisor button added by supervisor script
 
+// ── NEW MAID / END SHIFT ──────────────────────────────────────
+function newMaid() {
+  if (!confirm('End current shift and clear maid details?')) return;
+  localStorage.removeItem('maid_name');
+  localStorage.removeItem('maid_floor');
+  document.getElementById('h_name').value = '';
+  document.getElementById('h_floor').value = '';
+  staff = { name:'', floor:'', email:'' };
+  showToast('✅ Ready for next maid');
+}
+
 // ── INIT ──────────────────────────────────────────────────────
+// Restore saved maid name and floor
+(function restoreMaid() {
+  const savedName = localStorage.getItem('maid_name') || '';
+  const savedFloor = localStorage.getItem('maid_floor') || '';
+  if (savedName) document.getElementById('h_name').value = savedName;
+  if (savedFloor) document.getElementById('h_floor').value = savedFloor;
+})();
 updateHomeCounts().catch(console.error);
 </script>
 
@@ -1383,7 +1400,7 @@ updateHomeCounts().catch(console.error);
       <div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
         <div style="flex:1">
           <div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:4px">📧 Daily Digest Email</div>
-          <div style="font-size:11px;color:var(--muted)">Sent automatically at 2PM and 10PM daily</div>
+          <div style="font-size:11px;color:var(--muted)">Click Send Digest to email a full summary anytime</div>
         </div>
         <input type="email" id="sup_digestEmail" placeholder="supervisor@iramakl.com"
           style="flex:1;padding:10px 14px;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none">
