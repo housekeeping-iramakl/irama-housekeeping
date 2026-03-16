@@ -1326,29 +1326,7 @@ function startDigestScheduler() {
 }
 
 // ── ADD SUPERVISOR BUTTON TO HEADER ───────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  // Add supervisor button next to records button
-  const recBtn = document.querySelector('.rec-btn');
-  if (recBtn) {
-    const supBtn = document.createElement('button');
-    supBtn.className = 'rec-btn';
-    supBtn.style.background = '#6B4C1E22';
-    supBtn.style.borderColor = '#9A724055';
-    supBtn.textContent = '👔 Supervisor';
-    supBtn.onclick = () => {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.form-view').forEach(v => v.classList.remove('active'));
-      document.getElementById('navBar').style.display = 'none';
-      document.getElementById('supervisorView').classList.add('active');
-      document.getElementById('supLoginScreen').style.display = 'block';
-      document.getElementById('supDashboard').style.display = 'none';
-      document.getElementById('supPassInput').value = '';
-      document.getElementById('supPassErr').style.display = 'none';
-      window.scrollTo(0,0);
-    };
-    recBtn.parentNode.insertBefore(supBtn, recBtn);
-  }
-});
+// Supervisor button added by supervisor script
 </script>
 
 </body></html>`);
@@ -1392,6 +1370,7 @@ updateHomeCounts().catch(console.error);
       <div style="display:flex;gap:8px;align-items:center">
         <button onclick="exportDailyPDF()" style="background:#C8A96E22;border:1px solid var(--gold3);color:#6B4C1E;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;padding:8px 12px;border-radius:20px;cursor:pointer">🖨️ Export PDF</button>
         <button onclick="sendDailyDigest()" style="background:#4A906022;border:1px solid var(--green);color:var(--green);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;padding:8px 12px;border-radius:20px;cursor:pointer">📧 Send Digest</button>
+        <button onclick="showView('home')" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;padding:8px 12px;border-radius:20px;cursor:pointer">← Home</button>
         <button onclick="lockSupervisor()" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;padding:8px 12px;border-radius:20px;cursor:pointer">🔒 Lock</button>
       </div>
     </div>
