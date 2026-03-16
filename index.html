@@ -866,8 +866,7 @@ function buildSummary(type) {
   const d=formData[type];
   const prefix=type==='linen'?'l_':type==='amenities'?'a_':'e_';
   const colorClass=type==='linen'?'linen':type==='amenities'?'amen':'equip';
-  const emailInput=document.getElementById(prefix+'email');
-  emailInput.value=staff.email;
+  // No email input (removed - supervisor gets daily digest instead)
 
   let infoHtml=`<div class="sum-card">
     <div class="sum-h ${colorClass}">👤 Staff & Room</div>
