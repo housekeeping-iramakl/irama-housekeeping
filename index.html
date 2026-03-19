@@ -950,7 +950,23 @@ async function printRec(id){
   <table><tr><th>Item</th><th>Status</th><th>Count</th></tr>
   ${EQUIP_CATS.flatMap(c=>c.items).map(i=>{const ok=log.equipment[i]?.count>0;return`<tr><td>${i}</td><td class="${ok?'ok':'miss'}">${ok?'✅ Present':'❌ Not Present'}</td><td>${log.equipment[i]?.count||0}</td></tr>`;}).join('')}</table>
   <div style="text-align:center;margin-top:16px"><button onclick="window.print()" style="background:#0B1520;color:#C8A96E;border:none;padding:10px 24px;border-radius:8px;font-size:13px;cursor:pointer">🖨️ Print / Save PDF</button></div>
-  </body></html>`);pw.document.close();
+  
+<!-- EDIT MODAL -->
+<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#00000088;z-index:1000;overflow-y:auto;">
+  <div style="background:var(--bg2);margin:20px auto;max-width:600px;border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#F8F3EA,#EDE4D0);border-bottom:2px solid var(--gold);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#6B4C1E;font-weight:700;">✏️ Amend Report — Room <span id="edit_room_title"></span></div>
+      <button onclick="closeEdit()" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;border-radius:20px;cursor:pointer;">✕ Close</button>
+    </div>
+    <div style="padding:16px;" id="editBody"></div>
+    <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;">
+      <button onclick="saveEdit()" style="flex:1;padding:14px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:var(--r);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">💾 Save Changes</button>
+      <button onclick="closeEdit()" style="padding:14px 20px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+</body></html>`);pw.document.close();
 }
 
 // ── SUPERVISOR ────────────────────────────────────────────────
@@ -1030,6 +1046,7 @@ async function loadDash(){
         </div>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">🛏️ ${linenActive.length} linen · 🧴 ${amenActive.length} amenities · 🛎️ ${EQUIP_CATS.flatMap(c=>c.items).length-Object.values(l.equipment||{}).filter(v=>v.count===0).length}/${EQUIP_CATS.flatMap(c=>c.items).length} equip</div>
         ${l.remarks?`<div style="font-size:11px;color:var(--gold2);margin-top:3px">📝 ${l.remarks}</div>`:''}
+        <button onclick="openEdit('${l.id}')" style="margin-top:6px;background:var(--gold3)20;border:1px solid var(--gold3)44;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;padding:5px 12px;border-radius:8px;cursor:pointer;">✏️ Amend Report</button>
       </div>`;
     }).join('');
 }
@@ -1092,12 +1109,234 @@ async function exportPDF(){
   ${logs.map(l=>{const li=Object.values(l.linen||{}).filter(v=>v.in>0||v.out>0).length;const am=Object.values(l.amenities||{}).filter(v=>v.in>0||v.out>0).length;const eq=EQUIP_CATS.flatMap(c=>c.items).filter(i=>l.equipment[i]?.count>0).length;const tot=EQUIP_CATS.flatMap(c=>c.items).length;return`<tr><td><b>Rm ${l.room}</b></td><td>${l.staff?.name||'—'}</td><td>${l.tin||'—'}→${l.tout||'—'}</td><td>${l.sfrom||'—'}→${l.sto||'—'}</td><td>${li} items</td><td>${am} items</td><td class="${eq<tot?'miss':'ok'}">${eq}/${tot}</td><td style="font-size:10px;color:#9A7240">${l.remarks||'—'}</td></tr>`;}).join('')}
   </table>
   <div style="text-align:center;margin-top:16px"><button onclick="window.print()" style="background:#0B1520;color:#C8A96E;border:none;padding:10px 24px;border-radius:8px;font-size:13px;cursor:pointer">🖨️ Print / Save PDF</button></div>
-  </body></html>`);pw.document.close();
+  
+<!-- EDIT MODAL -->
+<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#00000088;z-index:1000;overflow-y:auto;">
+  <div style="background:var(--bg2);margin:20px auto;max-width:600px;border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#F8F3EA,#EDE4D0);border-bottom:2px solid var(--gold);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#6B4C1E;font-weight:700;">✏️ Amend Report — Room <span id="edit_room_title"></span></div>
+      <button onclick="closeEdit()" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;border-radius:20px;cursor:pointer;">✕ Close</button>
+    </div>
+    <div style="padding:16px;" id="editBody"></div>
+    <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;">
+      <button onclick="saveEdit()" style="flex:1;padding:14px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:var(--r);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">💾 Save Changes</button>
+      <button onclick="closeEdit()" style="padding:14px 20px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+</body></html>`);pw.document.close();
+}
+
+
+// ── SUPERVISOR EDIT ───────────────────────────────────────────
+let editingLog = null;
+
+async function openEdit(id) {
+  const logs = await getLogs();
+  editingLog = logs.find(l => l.id === id);
+  if (!editingLog) return;
+
+  document.getElementById('edit_room_title').textContent = editingLog.room;
+  document.getElementById('editModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+
+  let h = '';
+
+  // Room info
+  h += `<div style="background:var(--bg3);border:1.5px solid var(--gold3)44;border-radius:var(--r);padding:13px;margin-bottom:14px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">🏨 Room Info</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">STATUS FROM</div>
+        <select id="ed_sfrom" style="width:100%;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+          ${['','VC','VD','OC','OD','CO','SO','OOO','VIP'].map(s=>`<option ${editingLog.sfrom===s?'selected':''}>${s}</option>`).join('')}
+        </select></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">STATUS TO</div>
+        <select id="ed_sto" style="width:100%;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+          ${['','VC','VD','OC','OD','CO','SO','OOO','VIP'].map(s=>`<option ${editingLog.sto===s?'selected':''}>${s}</option>`).join('')}
+        </select></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">TIME IN</div>
+        <input type="time" id="ed_tin" value="${editingLog.tin||''}" style="width:100%;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;"></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">TIME OUT</div>
+        <input type="time" id="ed_tout" value="${editingLog.tout||''}" style="width:100%;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;"></div>
+    </div>
+  </div>`;
+
+  // Linen
+  h += `<div style="background:var(--bg3);border:1.5px solid var(--linen2)44;border-radius:var(--r);padding:13px;margin-bottom:14px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--linen);margin-bottom:10px;">🛏️ Linen Report</div>`;
+  LINEN_CATS.forEach(cat => {
+    h += `<div style="font-size:11px;font-weight:700;color:var(--gold);margin:8px 0 5px;">${cat.icon} ${cat.name}</div>`;
+    cat.items.forEach(item => {
+      const val = editingLog.linen[item] || {in:0, out:0};
+      const k = item.replace(/[^a-zA-Z0-9]/g,'_');
+      h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <div style="flex:1;font-size:12px;">${item}</div>
+        <div style="font-size:10px;color:var(--linen);font-weight:700;min-width:20px;">IN</div>
+        <input type="number" id="edl_${k}_in" value="${val.in}" min="0" style="width:55px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
+        <div style="font-size:10px;color:var(--linen);font-weight:700;min-width:24px;">OUT</div>
+        <input type="number" id="edl_${k}_out" value="${val.out}" min="0" style="width:55px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
+      </div>`;
+    });
+  });
+  h += `</div>`;
+
+  // Recycle
+  h += `<div style="background:var(--bg3);border:1.5px solid var(--linen2)33;border-radius:var(--r);padding:13px;margin-bottom:14px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--linen);margin-bottom:10px;">♻️ Recycle Linen</div>`;
+  const recycleOpts = ['Clean','Stained','Torn','Missing'];
+  RECYCLE_ITEMS.forEach(item => {
+    const cur = editingLog.recycle?.[item] || '';
+    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
+    h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <div style="flex:1;font-size:12px;">${item}</div>
+      <select id="edr_${k}" style="padding:7px 10px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;">
+        ${['', ...recycleOpts].map(o=>`<option ${cur===o?'selected':''}>${o}</option>`).join('')}
+      </select></div>`;
+  });
+  h += `</div>`;
+
+  // Amenities
+  h += `<div style="background:var(--bg3);border:1.5px solid var(--amen2)44;border-radius:var(--r);padding:13px;margin-bottom:14px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--amen);margin-bottom:10px;">🧴 Amenities Report</div>`;
+  AMEN_CATS.forEach(cat => {
+    h += `<div style="font-size:11px;font-weight:700;color:var(--gold);margin:8px 0 5px;">${cat.icon} ${cat.name}</div>`;
+    cat.items.forEach(item => {
+      const val = editingLog.amenities[item] || {in:0, out:0};
+      const k = item.replace(/[^a-zA-Z0-9]/g,'_');
+      h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <div style="flex:1;font-size:12px;">${item}</div>
+        <div style="font-size:10px;color:var(--amen);font-weight:700;min-width:20px;">IN</div>
+        <input type="number" id="eda_${k}_in" value="${val.in}" min="0" style="width:55px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
+        <div style="font-size:10px;color:var(--amen);font-weight:700;min-width:24px;">OUT</div>
+        <input type="number" id="eda_${k}_out" value="${val.out}" min="0" style="width:55px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
+      </div>`;
+    });
+  });
+  h += `</div>`;
+
+  // Equipment
+  h += `<div style="background:var(--bg3);border:1.5px solid var(--equip2)44;border-radius:var(--r);padding:13px;margin-bottom:14px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--equip);margin-bottom:10px;">🛎️ Equipment Report</div>`;
+  EQUIP_CATS.forEach(cat => {
+    h += `<div style="font-size:11px;font-weight:700;color:var(--gold);margin:8px 0 5px;">${cat.icon} ${cat.name}</div>`;
+    cat.items.forEach(item => {
+      const val = editingLog.equipment[item] || {count:0};
+      const k = item.replace(/[^a-zA-Z0-9]/g,'_');
+      h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <div style="flex:1;font-size:12px;">${item}</div>
+        <div style="font-size:10px;color:var(--equip);font-weight:700;">Count</div>
+        <input type="number" id="ede_${k}" value="${val.count}" min="0" style="width:65px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
+      </div>`;
+    });
+  });
+  h += `</div>`;
+
+  // Remarks
+  h += `<div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:13px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">📝 Remarks</div>
+    <textarea id="ed_remarks" style="width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;padding:10px 12px;resize:none;min-height:80px;">${editingLog.remarks||''}</textarea>
+  </div>`;
+
+  document.getElementById('editBody').innerHTML = h;
+}
+
+function closeEdit() {
+  document.getElementById('editModal').style.display = 'none';
+  document.body.style.overflow = '';
+  editingLog = null;
+}
+
+async function saveEdit() {
+  if (!editingLog) return;
+
+  // Collect linen
+  LINEN_CATS.forEach(cat => cat.items.forEach(item => {
+    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
+    const inEl = document.getElementById('edl_'+k+'_in');
+    const outEl = document.getElementById('edl_'+k+'_out');
+    if (inEl) editingLog.linen[item] = {in: parseInt(inEl.value)||0, out: parseInt(outEl.value)||0};
+  }));
+
+  // Collect recycle
+  RECYCLE_ITEMS.forEach(item => {
+    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
+    const el = document.getElementById('edr_'+k);
+    if (el) editingLog.recycle[item] = el.value;
+  });
+
+  // Collect amenities
+  AMEN_CATS.forEach(cat => cat.items.forEach(item => {
+    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
+    const inEl = document.getElementById('eda_'+k+'_in');
+    const outEl = document.getElementById('eda_'+k+'_out');
+    if (inEl) editingLog.amenities[item] = {in: parseInt(inEl.value)||0, out: parseInt(outEl.value)||0};
+  }));
+
+  // Collect equipment
+  EQUIP_CATS.forEach(cat => cat.items.forEach(item => {
+    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
+    const el = document.getElementById('ede_'+k);
+    if (el) { const c = parseInt(el.value)||0; editingLog.equipment[item] = {count:c, checked:c>0}; }
+  }));
+
+  // Collect other fields
+  editingLog.sfrom = document.getElementById('ed_sfrom').value;
+  editingLog.sto = document.getElementById('ed_sto').value;
+  editingLog.tin = document.getElementById('ed_tin').value;
+  editingLog.tout = document.getElementById('ed_tout').value;
+  editingLog.remarks = document.getElementById('ed_remarks').value;
+
+  // Save to Supabase
+  try {
+    await supaFetch('PATCH', `/rest/v1/housekeeping_logs?id=eq.${editingLog.id}`, {
+      time_in: editingLog.tin,
+      time_out: editingLog.tout,
+      status_from: editingLog.sfrom,
+      status_to: editingLog.sto,
+      items: {
+        linen: editingLog.linen,
+        amenities: editingLog.amenities,
+        equipment: editingLog.equipment,
+        recycle: editingLog.recycle,
+        remarks: editingLog.remarks
+      }
+    });
+    showToast('✅ Report updated!');
+  } catch(e) {
+    console.error(e);
+    showToast('⚠️ Saved locally only');
+  }
+
+  // Update local cache
+  const cache = getCached();
+  const idx = cache.findIndex(l => l.id === editingLog.id);
+  if (idx >= 0) cache[idx] = editingLog;
+  setCached(cache);
+
+  closeEdit();
+  loadDash();
 }
 
 // ── INIT ──────────────────────────────────────────────────────
 function newMaid(){if(!confirm('End shift and clear maid details?'))return;localStorage.removeItem('maid_name');localStorage.removeItem('maid_floor');document.getElementById('h_name').value='';document.getElementById('h_floor').value='';staff={name:'',floor:''};showToast('✅ Ready for next maid');}
 updateHome().catch(console.error);
 </script>
+
+<!-- EDIT MODAL -->
+<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#00000088;z-index:1000;overflow-y:auto;">
+  <div style="background:var(--bg2);margin:20px auto;max-width:600px;border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#F8F3EA,#EDE4D0);border-bottom:2px solid var(--gold);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#6B4C1E;font-weight:700;">✏️ Amend Report — Room <span id="edit_room_title"></span></div>
+      <button onclick="closeEdit()" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;border-radius:20px;cursor:pointer;">✕ Close</button>
+    </div>
+    <div style="padding:16px;" id="editBody"></div>
+    <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;">
+      <button onclick="saveEdit()" style="flex:1;padding:14px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:var(--r);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">💾 Save Changes</button>
+      <button onclick="closeEdit()" style="padding:14px 20px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
