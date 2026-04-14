@@ -2,1340 +2,1132 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Irama KL – Housekeeping System</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Irama KL — Housekeeping System</title>
 <style>
-:root {
-  --bg:#0B1520;--bg2:#111E2E;--bg3:#172436;
-  --border:#263C58;--soft:#324E6A;
-  --gold:#C8A96E;--gold2:#E8D4A8;--gold3:#9A7240;
-  --linen:#7EBFCF;--linen2:#3A8FA0;--linen3:#1A6070;
-  --amen:#9A7EC8;--amen2:#6A4EA0;--amen3:#3A2060;
-  --equip:#7EBF90;--equip2:#4A9060;--equip3:#1A5030;
-  --red:#C05050;--teal:#3AAFA9;--green:#4A9060;
-  --text:#EAE4D4;--muted:#6A8099;--white:#F8F6F0;--r:16px;
-}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;}
+:root{
+  --navy:#0B1520;--navy2:#111E2E;--navy3:#172436;
+  --gold:#C8A96E;--gold2:#9A7240;
+  --cream:#F8F3EA;--white:#FFFFFF;
+  --muted:#6A8099;--soft:#324E6A;--text:#EAE4D4;
+  --green:#2D6A4F;--green-bg:#E8F5E9;
+  --red:#C05050;--red-bg:#FFEBEE;
+  --amber:#9A7240;--amber-bg:#FFF8E7;
+  --border:#263C58;
+}
+html,body{height:100%;background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);overflow-x:hidden;}
 
-/* HEADER */
-.hdr{background:linear-gradient(135deg,#F8F3EA,#EDE4D0);border-bottom:2px solid #C8A96E;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;}
-.brand{display:flex;align-items:center;gap:8px;min-width:150px;}
-.brand-logo{display:flex;align-items:center;overflow:visible;}
-.brand p{font-size:9px;color:#9A7240;letter-spacing:0.14em;text-transform:uppercase;margin-top:2px;}
-.hdr-right{display:flex;align-items:center;gap:8px;}
-.hdr-btn{background:#C8A96E22;border:1px solid #9A724066;color:#6B4C1E;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;padding:7px 11px;border-radius:20px;cursor:pointer;white-space:nowrap;}
-.hdr-btn:active{background:#9A724033;}
-.clk{font-family:'Cormorant Garamond',serif;font-size:18px;color:#6B4C1E;text-align:right;}
-.clk-d{font-size:9px;color:#9A7240;}
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
 
-/* VIEWS */
-.view{display:none;}.view.active{display:block;}
+/* ── LOGIN ── */
+#loginScreen{align-items:center;justify-content:center;padding:24px;background:var(--navy);}
+.login-box{width:100%;max-width:380px;background:var(--navy2);border:1px solid var(--border);border-radius:20px;padding:32px 28px;}
+.login-logo{text-align:center;margin-bottom:28px;}
+.login-logo h1{font-size:26px;font-weight:300;color:var(--white);letter-spacing:0.05em;}
+.login-logo h1 span{color:var(--gold);font-weight:600;}
+.login-logo p{font-size:12px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:12px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
+.form-group input{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-size:15px;color:var(--white);outline:none;letter-spacing:0.08em;}
+.form-group input:focus{border-color:var(--gold);}
+.form-group input::placeholder{color:var(--muted);letter-spacing:0.04em;}
+.login-btn{width:100%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:0.04em;}
+.login-btn:active{opacity:0.88;}
+.login-err{background:var(--red-bg);color:var(--red);border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;display:none;text-align:center;}
+.sup-link{text-align:center;margin-top:20px;}
+.sup-link a{color:var(--muted);font-size:12px;text-decoration:none;letter-spacing:0.06em;}
+.sup-link a:hover{color:var(--gold);}
 
-/* HOME */
-.home{padding:24px 16px;}
-.home-hero{text-align:center;margin-bottom:24px;}
-.home-hero h2{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--white);}
-.home-hero p{font-size:14px;color:var(--muted);margin-top:4px;}
-.staff-card{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:20px;}
-.staff-card label{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;}
-.staff-card input,.staff-card select{width:100%;padding:15px;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:17px;outline:none;margin-bottom:14px;-webkit-appearance:none;transition:border-color 0.2s;}
-.staff-card input:focus,.staff-card select:focus{border-color:var(--gold);}
-.staff-card select option{background:var(--bg2);}
-.new-maid-btn{width:100%;padding:12px;background:var(--red)15;border:1.5px solid var(--red)44;border-radius:12px;color:#FF9090;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
-.start-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:var(--r);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:17px;font-weight:700;cursor:pointer;margin-top:16px;}
-.start-btn:active{opacity:0.9;}
-.today-strip{display:flex;gap:8px;margin-bottom:16px;}
-.today-pill{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:10px 8px;text-align:center;}
-.today-num{font-family:'Cormorant Garamond',serif;font-size:26px;}
-.today-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+/* ── HEADER ── */
+.app-header{background:var(--navy2);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.header-left{display:flex;align-items:center;gap:10px;}
+.hk-logo{font-size:15px;font-weight:300;color:var(--white);}
+.hk-logo span{color:var(--gold);font-weight:600;}
+.staff-badge{background:var(--gold)22;border:1px solid var(--gold)44;color:var(--gold);font-size:10px;padding:3px 10px;border-radius:20px;letter-spacing:0.08em;}
+.header-right{display:flex;align-items:center;gap:8px;}
+.hdr-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:6px 12px;border-radius:20px;cursor:pointer;letter-spacing:0.04em;}
+.hdr-btn:active{background:var(--border);}
+.hdr-time{font-size:12px;color:var(--muted);}
 
-/* FORM */
-.form-view{display:none;}.form-view.active{display:block;}
-.prog-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 16px;}
-.prog-track{display:flex;gap:3px;}
-.prog-seg{height:4px;border-radius:4px;flex:1;background:var(--soft);transition:all 0.3s;}
-.prog-seg.done{background:var(--gold2);}
-.prog-seg.active{background:var(--gold);}
-.prog-info{font-size:10px;color:var(--muted);margin-top:5px;}
-.prog-info span{font-weight:700;color:var(--gold);}
-.screen{display:none;padding:16px;animation:fadeUp 0.3s ease;}
-.screen.active{display:block;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-.s-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
-.s-tag.room{background:var(--gold3)30;color:var(--gold);}
-.s-tag.linen{background:var(--linen2)30;color:var(--linen);}
-.s-tag.amen{background:var(--amen2)30;color:var(--amen);}
-.s-tag.equip{background:var(--equip2)30;color:var(--equip);}
-.s-tag.done{background:var(--green)30;color:var(--equip);}
-.s-head h2{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--white);}
-.s-head p{font-size:14px;color:var(--muted);margin-top:4px;line-height:1.5;}
-.s-head{margin-bottom:16px;}
+/* ── HOME ── */
+#homeScreen .body{flex:1;overflow-y:auto;padding:16px;}
+.home-welcome{text-align:center;padding:20px 0 24px;}
+.home-welcome h2{font-family:Georgia,serif;font-size:24px;font-weight:400;color:var(--white);}
+.home-welcome p{font-size:13px;color:var(--muted);margin-top:4px;}
+.home-welcome .staff-name{color:var(--gold);font-weight:600;}
 
-/* NUMPAD */
-.npad-box{background:var(--bg);border:2px solid var(--gold3)44;border-radius:var(--r);padding:14px;text-align:center;margin-bottom:12px;}
-.npad-lbl{font-size:10px;color:var(--muted);}
-.npad-val{font-family:'Cormorant Garamond',serif;font-size:52px;color:var(--gold);}
-.npad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:280px;margin:0 auto;}
-.nb{background:var(--bg3);border:1.5px solid var(--border);border-radius:11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:22px;font-weight:500;padding:17px;cursor:pointer;user-select:none;transition:all 0.12s;}
-.nb:active{background:var(--gold3);border-color:var(--gold);transform:scale(0.94);}
-.nb.sm{font-size:12px;color:var(--red);}
-.nb.de{font-size:13px;color:var(--muted);}
+.room-entry-box{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;}
+.room-entry-box label{display:block;font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;}
+.room-num-input{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:20px;color:var(--white);outline:none;letter-spacing:0.15em;text-align:center;font-weight:600;}
+.room-num-input:focus{border-color:var(--gold);}
+.room-type-badge{text-align:center;margin-top:10px;min-height:24px;}
+.room-type-pill{display:inline-block;background:var(--gold)22;border:1px solid var(--gold)44;color:var(--gold);font-size:11px;padding:3px 14px;border-radius:20px;letter-spacing:0.06em;}
+.room-type-err{color:var(--red);font-size:12px;}
+.start-btn{width:100%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:14px;letter-spacing:0.04em;}
+.start-btn:disabled{opacity:0.4;cursor:not-allowed;}
 
-/* STATUS */
-.status-wrap{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:14px;}
-.status-inner{display:flex;align-items:center;gap:8px;}
-.status-sel{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;-webkit-appearance:none;}
-.status-arrow{color:var(--gold);font-size:18px;}
-.sub-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:5px;}
-.time-auto-box{background:var(--bg3);border:1.5px solid var(--gold3)44;border-radius:var(--r);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.time-auto-icon{font-size:22px;}
-.time-auto-info{flex:1;}
-.time-auto-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
-.time-auto-val{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold);}
+.today-summary{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:20px;}
+.today-summary h3{font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;}
+.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.sstat{background:var(--navy3);border-radius:10px;padding:12px 8px;text-align:center;}
+.sstat-num{font-size:22px;font-weight:700;color:var(--gold);font-family:Georgia,serif;}
+.sstat-lbl{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.05em;}
 
-/* CATEGORY HEADER */
-.cat-hdr{border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:9px 14px;margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
-.cat-hdr.linen{background:linear-gradient(90deg,var(--linen3)30,transparent);border-color:var(--linen);}
-.cat-hdr.amen{background:linear-gradient(90deg,var(--amen3)30,transparent);border-color:var(--amen);}
-.cat-hdr.equip{background:linear-gradient(90deg,var(--equip3)30,transparent);border-color:var(--equip);}
-.cat-hdr .ci{font-size:17px;}
-.cat-hdr .cn{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold2);font-weight:600;}
-.cat-hdr .cc{font-size:10px;color:var(--muted);margin-top:1px;}
+/* ── REPORT SCREEN ── */
+#reportScreen .body{flex:1;overflow-y:auto;}
+.progress-bar{display:flex;background:var(--navy3);padding:0;border-bottom:1px solid var(--border);}
+.step-tab{flex:1;padding:10px 4px;text-align:center;font-size:10px;color:var(--muted);letter-spacing:0.05em;border-bottom:2px solid transparent;transition:all 0.2s;}
+.step-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.step-tab.done{color:var(--green);}
 
-/* IO ROWS */
-.io-row{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:13px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px;transition:border-color 0.2s;}
-.io-row.has-data{border-color:var(--linen2)55;}
-.io-row.amen-data{border-color:var(--amen2)55;}
-.io-name{flex:1;font-size:15px;font-weight:600;color:var(--text);line-height:1.4;}
-.io-cols{display:flex;gap:8px;}
-.io-col{display:flex;flex-direction:column;align-items:center;gap:3px;}
-.io-col-lbl{font-size:13px;color:var(--gold);text-transform:uppercase;letter-spacing:0.06em;font-weight:700;}
-.io-ctrl{display:flex;align-items:center;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;overflow:hidden;}
-.io-btn{width:38px;height:38px;background:var(--soft);border:none;color:var(--gold);font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;user-select:none;}
-.io-btn:active{background:var(--gold3);}
-.io-val{width:36px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text);pointer-events:none;}
-.io-val.z{color:var(--muted);}
+.step-panel{display:none;padding:16px;}
+.step-panel.active{display:block;}
+.step-title{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.step-title::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* RECYCLE LINEN */
-.recycle-section{background:var(--bg3);border:1.5px solid var(--linen2)44;border-radius:var(--r);padding:14px;margin-top:16px;}
-.recycle-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--linen);margin-bottom:12px;}
-.recycle-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.recycle-row:last-child{margin-bottom:0;}
-.recycle-name{flex:1;font-size:15px;font-weight:600;color:var(--text);}
-.recycle-opts{display:flex;gap:6px;}
-.rec-opt{padding:9px 14px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--bg2);color:var(--muted);transition:all 0.15s;}
-.rec-opt:active{transform:scale(0.96);}
-.rec-opt.clean.sel{background:var(--teal)25;border-color:var(--teal);color:var(--teal);}
-.rec-opt.stained.sel{background:#FFB30025;border-color:#FFB300;color:#FFB300;}
-.rec-opt.torn.sel{background:var(--red)25;border-color:var(--red);color:#FF9090;}
-.rec-opt.missing.sel{background:#FF500025;border-color:#FF5000;color:#FF8060;}
+/* Room info bar */
+.room-info-bar{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+.rib-room{font-family:Georgia,serif;font-size:20px;font-weight:600;color:var(--white);}
+.rib-type{font-size:11px;color:var(--gold);letter-spacing:0.08em;}
+.rib-time{font-size:11px;color:var(--muted);}
 
-/* EQUIP ROWS */
-.eq-row{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:13px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px;transition:all 0.2s;}
-.eq-row.present{border-color:var(--equip2)55;background:var(--equip3)15;}
-.eq-row.missing{border-color:var(--red)44;background:var(--red)08;}
-.eq-chk{width:36px;height:36px;min-width:36px;border-radius:10px;border:2px solid var(--border);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.18s;user-select:none;}
-.eq-row.present .eq-chk{background:var(--equip2);border-color:var(--equip2);}
-.eq-row.missing .eq-chk{background:var(--red)30;border-color:var(--red);color:var(--red);}
-.eq-name{flex:1;font-size:15px;font-weight:600;}
-.eq-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:none;}
-.eq-row.present .eq-badge{display:inline-block;background:var(--equip2)25;color:var(--equip);}
-.eq-row.missing .eq-badge{display:inline-block;background:var(--red)20;color:#FF9090;}
-.eq-ctrl{display:flex;align-items:center;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;overflow:hidden;}
-.eq-btn{width:38px;height:38px;background:var(--soft);border:none;color:var(--gold);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;user-select:none;}
-.eq-btn:active{background:var(--gold3);}
-.eq-val{width:36px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text);pointer-events:none;}
-.eq-val.z{color:var(--muted);}
-.stats-bar{display:flex;gap:7px;margin-bottom:14px;}
-.sp{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:11px;padding:10px 7px;text-align:center;}
-.sp .sn{font-family:'Cormorant Garamond',serif;font-size:22px;}
-.sp .sl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:1px;}
+/* ── ITEM ROWS ── */
+.section-hdr{font-size:11px;font-weight:700;color:var(--gold2);letter-spacing:0.1em;text-transform:uppercase;padding:10px 0 6px;border-bottom:1px solid var(--border);margin-bottom:8px;margin-top:16px;}
+.section-hdr:first-child{margin-top:0;}
 
-/* REMARKS */
-.remark-box{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:14px;}
-.remark-box label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px;}
-.remark-box textarea{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;outline:none;padding:14px;resize:none;min-height:100px;line-height:1.6;}
-.remark-box textarea:focus{border-color:var(--gold);}
+.item-row{display:flex;align-items:center;background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;gap:12px;transition:all 0.15s;}
+.item-row.flagged{border-color:var(--red);background:#1E1010;}
+.item-row.ok{border-color:var(--border);}
 
-/* SUMMARY */
-.sum-card{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:11px;}
-.sum-h{border-bottom:1px solid var(--border);padding:9px 14px;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;}
-.sum-h.room{background:var(--gold3)20;color:var(--gold);}
-.sum-h.linen{background:var(--linen3)30;color:var(--linen);}
-.sum-h.amen{background:var(--amen3)30;color:var(--amen);}
-.sum-h.equip{background:var(--equip3)30;color:var(--equip);}
-.sum-b{padding:12px 14px;}
-.sr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)44;font-size:12px;}
-.sr:last-child{border:none;}
-.sk{color:var(--muted);}
-.sv{color:var(--text);font-weight:500;text-align:right;}
-.cloud-info{background:var(--bg3);border:1.5px solid var(--gold3)33;border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.cloud-info .ci{font-size:26px;}
-.cloud-info .ct{font-size:13px;font-weight:600;color:var(--text);}
-.cloud-info .cs{font-size:11px;color:var(--muted);margin-top:3px;}
+.item-info{flex:1;min-width:0;}
+.item-name{font-size:13px;color:var(--white);font-weight:500;line-height:1.3;}
+.item-std{font-size:11px;color:var(--muted);margin-top:2px;}
+.item-std span{color:var(--gold);font-weight:600;}
 
-/* SUCCESS */
-.suc-wrap{text-align:center;padding:30px 20px;}
-.suc-icon{width:80px;height:80px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:36px;background:linear-gradient(135deg,var(--gold3),var(--gold));box-shadow:0 0 30px var(--gold3)66;}
-.suc-wrap h2{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--white);}
-.suc-room{font-family:'Cormorant Garamond',serif;font-size:52px;color:var(--gold);margin:8px 0;}
-.suc-wrap p{font-size:12px;color:var(--muted);}
-.suc-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:12px 0;}
-.suc-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green)20;border:1px solid var(--green)44;color:#80D0A0;border-radius:20px;padding:5px 12px;font-size:11px;}
-.id-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:inline-block;margin-top:12px;}
-.id-lbl{font-size:9px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
-.id-val{font-size:15px;color:var(--gold);font-weight:600;margin-top:2px;}
-.suc-actions{margin-top:22px;border-top:1px solid var(--border);padding-top:20px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.item-status{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.status-ok{width:32px;height:32px;border-radius:50%;background:var(--green-bg);border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.flag-btn{padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;font-weight:600;transition:all 0.15s;white-space:nowrap;}
+.flag-btn:active{transform:scale(0.96);}
+.flag-btn.missing{border-color:var(--red);color:var(--red);background:var(--red-bg);}
+.flag-btn.reuse{border-color:var(--amber);color:var(--amber);background:var(--amber-bg);}
 
-/* NAV */
-.nav-bar{position:sticky;bottom:0;background:var(--bg2);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:9px;}
-.btn-back{flex:0.35;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:17px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
-.btn-next{flex:1;border:none;border-radius:var(--r);padding:17px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.18s;}
-.btn-next:active{opacity:0.87;transform:scale(0.99);}
-.btn-next.gold{background:linear-gradient(135deg,var(--gold3),var(--gold));color:var(--bg);}
-.btn-next.green{background:linear-gradient(135deg,#2A6040,var(--green));color:#fff;}
+/* Reuse options */
+.reuse-opts{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+.reuse-opts.show{display:flex;flex-wrap:wrap;gap:6px;}
+.reuse-opt{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;}
+.reuse-opt.sel{border-color:var(--amber);color:var(--amber);background:var(--amber-bg);}
 
-/* RECORDS */
-.rec-view{padding:18px;animation:fadeUp 0.3s ease;}
-.rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.rec-top h2{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);}
-.back-btn{background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:8px 14px;border-radius:20px;cursor:pointer;}
-.filters{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
-.fi{flex:1;min-width:100px;background:var(--bg3);border:1.5px solid var(--border);border-radius:11px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;-webkit-appearance:none;}
-.fi:focus{border-color:var(--gold);}
-.fi option{background:var(--bg2);}
-.fi-clear{background:var(--soft);border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;padding:9px 12px;border-radius:11px;cursor:pointer;}
-.strip{display:flex;gap:7px;margin-bottom:12px;}
-.strip-pill{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:11px;padding:9px 7px;text-align:center;}
-.strip-num{font-family:'Cormorant Garamond',serif;font-size:21px;}
-.strip-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
-.rc{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:9px;overflow:hidden;cursor:pointer;}
-.rc.has-issue{border-color:var(--red)44;}
-.rc-top{padding:13px 14px;display:flex;align-items:center;gap:11px;}
-.rc-room{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);min-width:54px;}
-.rc-info{flex:1;}
-.rc-name{font-size:13px;font-weight:600;}
-.rc-meta{font-size:10px;color:var(--muted);margin-top:2px;}
-.rc-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
-.miss-badge{background:var(--red)20;color:#FF9090;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;}
-.ok-badge{background:var(--teal)20;color:var(--teal);font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;}
-.rc-expand{display:none;border-top:1px solid var(--border);padding:13px 14px;background:var(--bg)44;}
-.rc.expanded .rc-expand{display:block;}
-.exp-section{margin-bottom:12px;}
-.exp-title{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
-.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px;}
-.exp-item{font-size:11px;padding:4px 7px;border-radius:7px;display:flex;align-items:center;gap:5px;}
-.exp-item.ok{background:var(--teal)12;}
-.exp-item.miss{background:var(--red)12;color:#FF9090;}
-.rc-actions{display:flex;gap:7px;margin-top:11px;}
-.act{flex:1;padding:10px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:none;}
-.act-p{background:var(--gold3)28;border:1px solid var(--gold3)44;color:var(--gold);}
-.act-d{background:var(--red)14;border:1px solid var(--red)30;color:#FF9090;}
-.empty{text-align:center;padding:44px 20px;}
-.empty .ei{font-size:44px;margin-bottom:12px;}
-.empty h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--muted);}
-.sml-btn{background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:11px 18px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+/* ── LINEN SPECIAL ── */
+.linen-row{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;}
+.linen-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.linen-name{font-size:13px;color:var(--white);font-weight:500;}
+.linen-std-badge{background:var(--gold)22;color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px;letter-spacing:0.06em;}
+.linen-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.linen-btn{flex:1;min-width:80px;padding:8px 6px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.15s;}
+.linen-btn:active{transform:scale(0.97);}
+.linen-btn.sel-ok{border-color:var(--green);color:var(--green);background:var(--green-bg);}
+.linen-btn.sel-reuse{border-color:var(--amber);color:var(--amber);background:var(--amber-bg);}
+.linen-btn.sel-missing{border-color:var(--red);color:var(--red);background:var(--red-bg);}
 
-/* SUPERVISOR */
-.sup-kpi{background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
-.kpi-num{font-family:'Cormorant Garamond',serif;font-size:26px;}
-.kpi-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;}
-.c-gold{color:var(--gold);}.c-teal{color:var(--teal);}.c-red{color:var(--red);}
-.maid-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)44;}
-.maid-row:last-child{border:none;}
-.maid-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold3),var(--gold));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg);flex-shrink:0;font-family:'Cormorant Garamond',serif;}
-.maid-info{flex:1;}
-.maid-name{font-size:13px;font-weight:600;color:var(--text);}
-.maid-meta{font-size:11px;color:var(--muted);margin-top:2px;}
-.maid-stats{display:flex;gap:6px;}
-.maid-stat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:4px 8px;font-size:10px;color:var(--muted);text-align:center;}
-.maid-stat strong{display:block;font-size:13px;color:var(--text);font-family:'Cormorant Garamond',serif;}
-.room-chip{display:inline-flex;align-items:center;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;margin:3px;}
-.room-chip.done{border-color:var(--teal)55;background:var(--teal)10;color:var(--teal);}
-.room-chip.issue{border-color:var(--red)55;background:var(--red)10;color:#FF9090;}
-.log-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)33;font-size:12px;}
-.log-row:last-child{border:none;}
+/* ── NAVIGATION BUTTONS ── */
+.nav-btns{display:flex;gap:10px;padding:16px;background:var(--navy2);border-top:1px solid var(--border);flex-shrink:0;}
+.nav-back{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:13px 20px;font-size:14px;cursor:pointer;}
+.nav-next{flex:1;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.02em;}
+.nav-next:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* ── SUBMIT STEP ── */
+.remarks-box{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;}
+.remarks-box label{display:block;font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.remarks-box textarea{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;color:var(--white);resize:none;height:80px;outline:none;font-family:inherit;}
+.remarks-box textarea:focus{border-color:var(--gold);}
+
+.flag-summary{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;}
+.flag-summary h3{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+.flag-item{display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border);}
+.flag-item:last-child{border-bottom:none;}
+.flag-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.flag-dot.missing{background:var(--red);}
+.flag-dot.reuse{background:var(--amber);}
+.no-flags{color:var(--green);font-size:12px;display:flex;align-items:center;gap:6px;}
+
+.submit-btn{width:100%;background:var(--green);color:var(--white);border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:0.04em;}
+.submit-btn:active{opacity:0.88;}
+
+/* ── SUCCESS ── */
+#successScreen{align-items:center;justify-content:center;padding:24px;text-align:center;}
+.success-icon{font-size:56px;margin-bottom:16px;}
+.success-title{font-family:Georgia,serif;font-size:24px;color:var(--white);margin-bottom:8px;}
+.success-sub{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.6;}
+.success-room{color:var(--gold);font-weight:600;font-size:18px;}
+.success-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;}
+.btn-next-room{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;}
+.btn-done{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:13px;font-size:14px;cursor:pointer;}
+
+/* ── SUPERVISOR ── */
+#supScreen .body{flex:1;overflow-y:auto;padding:16px;}
+.sup-login{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:20px;max-width:360px;margin:0 auto;}
+.sup-login h2{font-size:18px;font-weight:600;color:var(--white);margin-bottom:16px;text-align:center;}
+.sup-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.sup-filter{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--navy2);color:var(--muted);font-size:12px;cursor:pointer;}
+.sup-filter.active{background:var(--navy);border-color:var(--gold);color:var(--gold);}
+.record-card{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
+.rc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.rc-room{font-family:Georgia,serif;font-size:18px;color:var(--white);font-weight:600;}
+.rc-type{font-size:10px;color:var(--gold);letter-spacing:0.08em;}
+.rc-staff{font-size:12px;color:var(--muted);}
+.rc-time{font-size:11px;color:var(--muted);text-align:right;}
+.rc-flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.rc-flag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;}
+.rc-flag.missing{background:var(--red-bg);color:var(--red);}
+.rc-flag.reuse{background:var(--amber-bg);color:var(--amber);}
+.rc-flag.ok{background:var(--green-bg);color:var(--green);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--navy2);border:1px solid var(--border);color:var(--white);padding:10px 20px;border-radius:30px;font-size:13px;opacity:0;transition:all 0.3s;z-index:999;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── UTILS ── */
+.divider{height:1px;background:var(--border);margin:12px 0;}
+.text-gold{color:var(--gold);}
+.text-green{color:var(--green);}
+.text-red{color:var(--red);}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="hdr">
-  <div class="brand">
-    <div class="brand-logo"><img src="data:image/png;base64,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" alt="Irama KL" style="height:72px;width:auto;mix-blend-mode:multiply;"></div>
+<!-- ════════════════════════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════════════════════ -->
+<div id="loginScreen" class="screen active">
+  <div class="login-box">
+    <div class="login-logo">
+      <h1>IRAMA <span>KL</span></h1>
+      <p>Housekeeping System</p>
     </div>
-    <div><p>Housekeeping System</p></div>
-  </div>
-  <div class="hdr-right">
-    <button class="hdr-btn" id="supBtnHdr" onclick="openSupervisor()">👔 Supervisor</button>
-    <button class="hdr-btn" onclick="showView('records')">📋 Records</button>
-    <div>
-      <div class="clk" id="clockEl">--:--</div>
-      <div class="clk-d" id="dateEl">--</div>
+    <div class="form-group">
+      <label>Staff ID</label>
+      <input type="text" id="loginId" placeholder="e.g. IKL0050" autocomplete="off" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()">
     </div>
-  </div>
-</div>
-
-<!-- HOME -->
-<div class="view active" id="homeView">
-  <div class="home">
-    <div class="home-hero">
-      <h2 id="greeting">Good Morning 🌅</h2>
-      <p>Housekeeping Management System — Select a room to begin</p>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPw" placeholder="Enter password" autocomplete="current-password">
     </div>
-    <div class="today-strip">
-      <div class="today-pill"><div class="today-num" style="color:var(--gold)" id="t_rooms">0</div><div class="today-lbl">Rooms Today</div></div>
-      <div class="today-pill"><div class="today-num" style="color:var(--teal)" id="t_reports">0</div><div class="today-lbl">Reports</div></div>
-      <div class="today-pill"><div class="today-num" style="color:var(--red)" id="t_issues">0</div><div class="today-lbl">Issues</div></div>
-    </div>
-    <div class="staff-card">
-      <label>Your Name</label>
-      <input type="text" id="h_name" placeholder="e.g. Lisa" autocomplete="off">
-      <label>Floor</label>
-      <select id="h_floor">
-        <option value="">Select floor...</option>
-        <option>Level 14</option><option>Level 15</option><option>Level 16</option><option>Level 17</option><option>Level 18</option>
-        <option>Level 19</option><option>Level 20</option><option>Level 21</option><option>Level 22</option><option>Level 23</option>
-        <option>Level 24</option><option>Level 25</option><option>Level 26</option><option>Level 27</option><option>Level 28</option>
-        <option>Level 29</option><option>Level 30</option><option>Level 31</option><option>Level 32</option><option>Level 33</option>
-        <option>Level 34</option><option>Level 35</option><option>Level 36</option><option>Level 37</option>
-      </select>
-      <button class="new-maid-btn" onclick="newMaid()">🔄 New Maid / End Shift</button>
-    </div>
-    <button class="start-btn" onclick="startReport()">🚪 Start Room Report</button>
-  </div>
-</div>
-
-<!-- COMBINED ROOM REPORT FORM -->
-<div class="form-view" id="roomForm">
-  <div class="prog-wrap">
-    <div class="prog-track" id="progTrack"></div>
-    <div class="prog-info" id="progInfo"></div>
-  </div>
-
-  <!-- STEP 1: Room & Status -->
-  <div class="screen active" id="step1">
-    <div class="s-head"><div class="s-tag room">Step 1 of 5</div><h2>Room & Status</h2><p>Enter room number and current status</p></div>
-    <div class="npad-box"><div class="npad-lbl">Room No.</div><div class="npad-val" id="f_room">–</div></div>
-    <div class="npad">
-      <button class="nb" onclick="np('1')">1</button><button class="nb" onclick="np('2')">2</button><button class="nb" onclick="np('3')">3</button>
-      <button class="nb" onclick="np('4')">4</button><button class="nb" onclick="np('5')">5</button><button class="nb" onclick="np('6')">6</button>
-      <button class="nb" onclick="np('7')">7</button><button class="nb" onclick="np('8')">8</button><button class="nb" onclick="np('9')">9</button>
-      <button class="nb sm" onclick="np('C')">CLR</button><button class="nb" onclick="np('0')">0</button><button class="nb de" onclick="np('D')">⌫</button>
-    </div>
-    <div style="margin-top:16px" class="sub-lbl">Status Change</div>
-    <div class="status-wrap"><div class="status-inner">
-      <div style="flex:1"><div class="sub-lbl">From</div><select class="status-sel" id="f_sfrom"><option value="">—</option><option>VC</option><option>VD</option><option>OC</option><option>OD</option><option>CO</option><option>SO</option><option>OOO</option><option>VIP</option></select></div>
-      <div class="status-arrow">→</div>
-      <div style="flex:1"><div class="sub-lbl">To</div><select class="status-sel" id="f_sto"><option value="">—</option><option>VC</option><option>VD</option><option>OC</option><option>OD</option><option>CO</option><option>SO</option><option>OOO</option><option>VIP</option></select></div>
-    </div></div>
-    <div class="time-auto-box">
-      <div class="time-auto-icon">⏱️</div>
-      <div class="time-auto-info">
-        <div class="time-auto-lbl">Time In (Auto)</div>
-        <div class="time-auto-val" id="f_tin_display">--:--</div>
-      </div>
-      <div style="font-size:11px;color:var(--muted);text-align:right">Recorded<br>automatically</div>
-    </div>
-  </div>
-
-  <!-- STEP 2: Linen -->
-  <div class="screen" id="step2">
-    <div class="s-head"><div class="s-tag linen">Step 2 of 5</div><h2>🛏️ Linen Report</h2><p>Enter IN (brought in) and OUT (taken out) quantities</p></div>
-    <div id="linenList"></div>
-    <div class="recycle-section">
-      <div class="recycle-title">♻️ Recycle Linen Condition</div>
-      <div id="recycleList"></div>
-    </div>
-  </div>
-
-  <!-- STEP 3: Amenities -->
-  <div class="screen" id="step3">
-    <div class="s-head"><div class="s-tag amen">Step 3 of 5</div><h2>🧴 Amenities Report</h2><p>Enter IN and OUT quantities for each item</p></div>
-    <div id="amenList"></div>
-  </div>
-
-  <!-- STEP 4: Equipment -->
-  <div class="screen" id="step4">
-    <div class="s-head"><div class="s-tag equip">Step 4 of 5</div><h2>🛎️ Equipment Report</h2><p>Tap to check. +/− to adjust count.</p></div>
-    <div class="stats-bar">
-      <div class="sp"><div class="sn" style="color:var(--gold)" id="e_tot">0</div><div class="sl">Total Items</div></div>
-      <div class="sp"><div class="sn" style="color:var(--equip)" id="e_pres">0</div><div class="sl">Present</div></div>
-      <div class="sp"><div class="sn" style="color:var(--red)" id="e_miss">0</div><div class="sl">Not Present</div></div>
-    </div>
-    <div id="equipList"></div>
-  </div>
-
-  <!-- STEP 5: Remarks & Submit -->
-  <div class="screen" id="step5">
-    <div class="s-head"><div class="s-tag done">Step 5 of 5</div><h2>Review & Submit</h2><p>Add any remarks and submit the room report</p></div>
-    <div id="reviewSummary"></div>
-    <div class="remark-box">
-      <label>📝 Remarks / Notes</label>
-      <textarea id="f_remarks" placeholder="e.g. Found item in room, damage noted, guest request, lost & found item..."></textarea>
-    </div>
-    <div class="cloud-info">
-      <div class="ci">☁️</div>
-      <div>
-        <div class="ct">Saving to Cloud</div>
-        <div class="cs">Report saved to Irama KL system. Supervisor can view anytime in the dashboard.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SUCCESS -->
-  <div class="screen" id="stepSuc">
-    <div class="suc-wrap">
-      <div class="suc-icon">✅</div>
-      <h2>Room Report Submitted!</h2>
-      <div class="suc-room" id="suc_room">—</div>
-      <div class="suc-badges">
-        <span class="suc-badge">🛏️ Linen</span>
-        <span class="suc-badge">🧴 Amenities</span>
-        <span class="suc-badge">🛎️ Equipment</span>
-        <span class="suc-badge">☁️ Saved</span>
-      </div>
-      <p>All 3 reports saved in one submission</p>
-      <div class="id-box"><div class="id-lbl">Report ID</div><div class="id-val" id="suc_id">—</div></div>
-      <div class="suc-actions">
-        <button class="start-btn" style="min-width:160px" onclick="nextRoom()">🚪 Next Room</button>
-        <button class="sml-btn" onclick="showView('home')">🏠 Home</button>
-        <button class="sml-btn" onclick="showView('records')">📋 Records</button>
-      </div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="loginErr">Invalid Staff ID or password</div>
+    <div class="sup-link">
+      <a href="#" onclick="showSupervisor()">Supervisor Access →</a>
     </div>
   </div>
 </div>
 
-<!-- RECORDS -->
-<div class="view" id="recordsView">
-  <div class="rec-view">
-    <div class="rec-top">
-      <h2>📋 Records</h2>
-      <button class="back-btn" onclick="showView('home')">← Home</button>
+<!-- ════════════════════════════════════════════════════════
+     HOME SCREEN
+════════════════════════════════════════════════════════ -->
+<div id="homeScreen" class="screen">
+  <div class="app-header">
+    <div class="header-left">
+      <div class="hk-logo">IRAMA <span>KL</span></div>
+      <div class="staff-badge" id="staffBadge">IKL0000</div>
     </div>
-    <div class="filters">
-      <input type="date" class="fi" id="f_date" onchange="renderRec()">
-      <input type="text" class="fi" id="f_rroom" placeholder="Room no." oninput="renderRec()">
-      <select class="fi" id="f_rname" onchange="renderRec()"><option value="">All staff</option></select>
-      <button class="fi-clear" onclick="clearFilters()">✕</button>
+    <div class="header-right">
+      <div class="hdr-time" id="headerTime"></div>
+      <button class="hdr-btn" onclick="doLogout()">Sign Out</button>
     </div>
-    <div class="strip">
-      <div class="strip-pill"><div class="strip-num" style="color:var(--gold)" id="rs_tot">0</div><div class="strip-lbl">Reports</div></div>
-      <div class="strip-pill"><div class="strip-num" style="color:var(--teal)" id="rs_rooms">0</div><div class="strip-lbl">Rooms</div></div>
-      <div class="strip-pill"><div class="strip-num" style="color:var(--red)" id="rs_iss">0</div><div class="strip-lbl">Issues</div></div>
-    </div>
-    <div id="recList"></div>
   </div>
-</div>
+  <div class="body">
+    <div class="home-welcome">
+      <h2>Good <span id="greetTime">Morning</span>,</h2>
+      <h2 class="staff-name" id="staffNameDisplay">—</h2>
+      <p id="todayDate" style="color:var(--muted);font-size:12px;margin-top:6px;"></p>
+    </div>
 
-<!-- SUPERVISOR -->
-<div class="view" id="supervisorView">
-  <div id="supLogin" style="padding:40px 16px;text-align:center;">
-    <div style="font-size:48px;margin-bottom:16px">👔</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--white);margin-bottom:8px">Supervisor Access</h2>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Enter password to view dashboard</p>
-    <div style="max-width:280px;margin:0 auto">
-      <input type="password" id="supPass" placeholder="Password" onkeydown="if(event.key==='Enter')checkPass()"
-        style="width:100%;padding:15px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;outline:none;margin-bottom:12px;text-align:center;letter-spacing:0.2em;">
-      <button onclick="checkPass()" style="width:100%;padding:15px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:var(--r);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Unlock Dashboard</button>
-      <div id="supErr" style="color:var(--red);font-size:12px;margin-top:10px;display:none">Incorrect password.</div>
-      <button onclick="showView('home')" style="width:100%;padding:12px;background:transparent;border:1.5px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:8px;">← Back</button>
-    </div>
-  </div>
-  <div id="supDash" style="display:none">
-    <div style="background:linear-gradient(135deg,#F8F3EA,#EDE4D0);border-bottom:2px solid var(--gold);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:#6B4C1E;font-weight:700;">👔 Supervisor Dashboard</div>
-      <div style="display:flex;gap:7px;">
-        <button onclick="sendDigest()" style="background:#4A906022;border:1px solid var(--green);color:var(--green);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;padding:7px 11px;border-radius:20px;cursor:pointer;">📧 Send Digest</button>
-        <button onclick="exportPDF()" style="background:#C8A96E22;border:1px solid var(--gold3);color:#6B4C1E;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;padding:7px 11px;border-radius:20px;cursor:pointer;">🖨️ Export</button>
-        <button onclick="showView('home')" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;padding:7px 11px;border-radius:20px;cursor:pointer;">← Home</button>
+    <div class="today-summary">
+      <h3>Today's Progress</h3>
+      <div class="summary-stats">
+        <div class="sstat"><div class="sstat-num" id="statRooms">0</div><div class="sstat-lbl">Rooms Done</div></div>
+        <div class="sstat"><div class="sstat-num" id="statFlags">0</div><div class="sstat-lbl">Items Flagged</div></div>
+        <div class="sstat"><div class="sstat-num" id="statReuse">0</div><div class="sstat-lbl">Reuse</div></div>
       </div>
     </div>
-    <div style="padding:16px;">
-      <div style="display:flex;gap:7px;margin-bottom:14px;align-items:center;">
-        <input type="date" id="sup_date" onchange="loadDash()" style="flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:11px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
-        <button onclick="setDate('today')" style="background:var(--gold3)30;border:1px solid var(--gold3)55;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:9px 12px;border-radius:11px;cursor:pointer;">Today</button>
-        <button onclick="setDate('yesterday')" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:9px 12px;border-radius:11px;cursor:pointer;">Yesterday</button>
-      </div>
-      <div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:13px 15px;margin-bottom:13px;display:flex;align-items:center;gap:10px;">
-        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:3px;">📧 Digest Email</div><div style="font-size:11px;color:var(--muted);">Supervisor summary email</div></div>
-        <input type="email" id="sup_email" placeholder="supervisor@iramakl.com" style="flex:1;padding:9px 12px;background:var(--bg2);border:1.5px solid var(--border);border-radius:11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;">
-        <button onclick="saveEmail()" style="background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:11px;padding:9px 14px;color:var(--bg);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Save</button>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px;">
-        <div class="sup-kpi" id="k_rooms"><div class="kpi-num c-gold">0</div><div class="kpi-lbl">Rooms</div></div>
-        <div class="sup-kpi" id="k_maids"><div class="kpi-num c-teal">0</div><div class="kpi-lbl">Maids</div></div>
-        <div class="sup-kpi" id="k_reports"><div class="kpi-num" style="color:var(--amen)">0</div><div class="kpi-lbl">Reports</div></div>
-        <div class="sup-kpi" id="k_issues"><div class="kpi-num c-red">0</div><div class="kpi-lbl">Issues</div></div>
-      </div>
-      <div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:13px;">
-        <div style="background:var(--gold3)20;border-bottom:1px solid var(--border);padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);">👤 Maid Performance</div>
-        <div id="sup_maids" style="padding:13px 14px;"></div>
-      </div>
-      <div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:13px;" id="sup_issCard">
-        <div style="background:var(--red)20;border-bottom:1px solid var(--border);padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#FF9090;">⚠️ Equipment Issues</div>
-        <div id="sup_issues" style="padding:13px 14px;"></div>
-      </div>
-      <div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:13px;">
-        <div style="background:var(--linen3)20;border-bottom:1px solid var(--border);padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--linen);">🏨 Rooms Status</div>
-        <div id="sup_rooms" style="padding:13px 14px;"></div>
-      </div>
-      <div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:80px;">
-        <div style="background:var(--equip3)20;border-bottom:1px solid var(--border);padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--equip);">📋 Full Log</div>
-        <div id="sup_log" style="padding:13px 14px;"></div>
-      </div>
+
+    <div class="room-entry-box">
+      <label>Enter Room Number</label>
+      <input type="text" id="roomInput" class="room-num-input" placeholder="e.g. 1401" maxlength="4"
+        oninput="onRoomInput(this.value)" onkeydown="if(event.key==='Enter')startReport()">
+      <div class="room-type-badge" id="roomTypeBadge"></div>
+      <button class="start-btn" id="startBtn" onclick="startReport()" disabled>Start Room Report</button>
     </div>
   </div>
 </div>
 
-<!-- NAV BAR -->
-<div class="nav-bar" id="navBar" style="display:none">
-  <button class="btn-back" id="btnBack" style="display:none" onclick="goBack()">← Back</button>
-  <button class="btn-next gold" id="btnNext" onclick="goNext()">Next →</button>
+<!-- ════════════════════════════════════════════════════════
+     REPORT SCREEN  (5 steps)
+════════════════════════════════════════════════════════ -->
+<div id="reportScreen" class="screen">
+  <div class="app-header">
+    <div class="header-left">
+      <div class="hk-logo">IRAMA <span>KL</span></div>
+      <div id="reportRoomBadge" class="staff-badge">—</div>
+    </div>
+    <div class="header-right">
+      <button class="hdr-btn" onclick="cancelReport()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="step-tab active" id="tab0">Room</div>
+    <div class="step-tab" id="tab1">Linen</div>
+    <div class="step-tab" id="tab2">Amenities</div>
+    <div class="step-tab" id="tab3">Equipment</div>
+    <div class="step-tab" id="tab4">Submit</div>
+  </div>
+
+  <div class="body" id="reportBody">
+
+    <!-- STEP 0: Room Info -->
+    <div class="step-panel active" id="step0">
+      <div class="step-title">Room Details</div>
+      <div class="room-info-bar">
+        <div>
+          <div class="rib-room" id="ribRoom">—</div>
+          <div class="rib-type" id="ribType">—</div>
+        </div>
+        <div class="rib-time" id="ribTimeIn">Time In: —</div>
+      </div>
+      <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Room Status</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="linen-btn" id="statusOD" onclick="setStatus('OD')">Occupied Dirty</button>
+          <button class="linen-btn" id="statusVC" onclick="setStatus('VC')">Vacant Clean</button>
+          <button class="linen-btn" id="statusVD" onclick="setStatus('VD')">Vacant Dirty</button>
+          <button class="linen-btn" id="statusOC" onclick="setStatus('OC')">Occupied Clean</button>
+        </div>
+      </div>
+      <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Room Features</div>
+        <div style="font-size:13px;color:var(--muted);" id="roomFeatures">—</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: Linen -->
+    <div class="step-panel" id="step1">
+      <div class="step-title">Linen Report</div>
+      <div style="font-size:12px;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;">
+        ✓ = OK &nbsp;|&nbsp; REUSE = Send for laundry &nbsp;|&nbsp; MISSING = Not found in room
+      </div>
+      <div id="linenItems"></div>
+    </div>
+
+    <!-- STEP 2: Amenities -->
+    <div class="step-panel" id="step2">
+      <div class="step-title">Amenities Report</div>
+      <div style="font-size:12px;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;">
+        All items are preset. Tap MISSING only if item is not in room.
+      </div>
+      <div id="amenitiesItems"></div>
+    </div>
+
+    <!-- STEP 3: Equipment -->
+    <div class="step-panel" id="step3">
+      <div class="step-title">Equipment Check</div>
+      <div style="font-size:12px;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;">
+        All items shown as present. Tap MISSING if item is not found.
+      </div>
+      <div id="equipItems"></div>
+    </div>
+
+    <!-- STEP 4: Submit -->
+    <div class="step-panel" id="step4">
+      <div class="step-title">Submit Report</div>
+      <div class="room-info-bar" style="margin-bottom:14px;">
+        <div>
+          <div class="rib-room" id="submitRibRoom">—</div>
+          <div class="rib-type" id="submitRibType">—</div>
+        </div>
+        <div class="rib-time" id="submitTimes">—</div>
+      </div>
+      <div class="flag-summary">
+        <h3>Report Summary</h3>
+        <div id="flagSummaryContent"></div>
+      </div>
+      <div class="remarks-box">
+        <label>Closing Remarks</label>
+        <textarea id="closingRemarks" placeholder="Lost & found items, guest requests, room condition notes..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitReport()">✓ Submit Report</button>
+    </div>
+
+  </div>
+
+  <div class="nav-btns" id="navBtns">
+    <button class="nav-back" id="backBtn" onclick="goBack()" style="display:none">← Back</button>
+    <button class="nav-next" id="nextBtn" onclick="goNext()">Next →</button>
+  </div>
 </div>
+
+<!-- ════════════════════════════════════════════════════════
+     SUCCESS SCREEN
+════════════════════════════════════════════════════════ -->
+<div id="successScreen" class="screen">
+  <div class="success-icon">✅</div>
+  <div class="success-title">Report Submitted!</div>
+  <div class="success-sub">Room <span class="success-room" id="successRoom">—</span> completed.<br>Report saved to cloud.</div>
+  <div class="success-btns">
+    <button class="btn-next-room" onclick="nextRoom()">Start Next Room</button>
+    <button class="btn-done" onclick="goHome()">Back to Home</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SUPERVISOR SCREEN
+════════════════════════════════════════════════════════ -->
+<div id="supScreen" class="screen">
+  <div class="app-header">
+    <div class="header-left">
+      <div class="hk-logo">IRAMA <span>KL</span></div>
+      <div class="staff-badge">SUPERVISOR</div>
+    </div>
+    <div class="header-right">
+      <button class="hdr-btn" onclick="showScreen('loginScreen')">Exit</button>
+    </div>
+  </div>
+  <div class="body">
+    <div id="supLoginPanel" style="padding:16px;">
+      <div class="sup-login">
+        <h2>Supervisor Login</h2>
+        <div class="form-group">
+          <label>Supervisor Password</label>
+          <input type="password" id="supPw" placeholder="Enter supervisor password" autocomplete="off">
+        </div>
+        <button class="login-btn" onclick="supLogin()">Access Dashboard</button>
+        <div class="login-err" id="supErr">Incorrect password</div>
+      </div>
+    </div>
+    <div id="supDashboard" style="display:none;">
+      <div style="padding:12px 16px 8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <input type="date" id="supDate" style="background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--white);outline:none;" onchange="loadDashboard()">
+        <input type="text" id="supRoomFilter" placeholder="Room..." style="background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--white);outline:none;width:80px;" oninput="loadDashboard()">
+        <input type="text" id="supStaffFilter" placeholder="Staff ID..." style="background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--white);outline:none;width:100px;" oninput="loadDashboard()">
+        <div id="supRecordCount" style="font-size:12px;color:var(--muted);margin-left:auto;"></div>
+      </div>
+      <div id="supRecords" style="padding:0 16px 16px;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-// ── SUPABASE ──────────────────────────────────────────────────
-const SUPA_URL='https://vwirvqlhyufejpzhueba.supabase.co';
-const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXJ2cWxoeXVmZWpwemh1ZWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNTk2ODQsImV4cCI6MjA4ODkzNTY4NH0.CrGfXAv1K5RfkQOl3iKmBnm2pjmud7igAv9p9RI3YBA';
-async function supaFetch(method,path,body){
-  const res=await fetch(SUPA_URL+path,{method,headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':''},body:body?JSON.stringify(body):undefined});
-  if(!res.ok){const e=await res.text();throw new Error(e);}
-  return method==='DELETE'?null:res.json();
-}
-function getCached(){try{return JSON.parse(localStorage.getItem('hk_cache')||'[]');}catch(e){return[];}}
-function setCached(l){try{localStorage.setItem('hk_cache',JSON.stringify(l));}catch(e){}}
-async function saveLog(entry){
-  try{
-    await supaFetch('POST','/rest/v1/housekeeping_logs',{id:entry.id,type:'combined',timestamp:entry.timestamp,date:entry.date,room:entry.room,floor:entry.staff.floor,staff_name:entry.staff.name,staff_email:'',time_in:entry.tin,time_out:entry.tout,status_from:entry.sfrom,status_to:entry.sto,items:{linen:entry.linen,amenities:entry.amenities,equipment:entry.equipment,recycle:entry.recycle,remarks:entry.remarks}});
-    showToast('✅ Saved to cloud');
-  }catch(e){console.error(e);showToast('⚠️ Saved locally (offline)');}
-  const c=getCached();c.unshift(entry);setCached(c);
-}
-async function getLogs(){
-  try{
-    const data=await supaFetch('GET','/rest/v1/housekeeping_logs?select=*&order=created_at.desc&limit=500');
-    const mapped=data.map(r=>({id:r.id,type:r.type,timestamp:r.timestamp,date:r.date,room:r.room,sfrom:r.status_from,sto:r.status_to,tin:r.time_in,tout:r.time_out,staff:{name:r.staff_name,floor:r.floor},linen:r.items?.linen||{},amenities:r.items?.amenities||{},equipment:r.items?.equipment||{},recycle:r.items?.recycle||{},remarks:r.items?.remarks||''}));
-    setCached(mapped);return mapped;
-  }catch(e){console.error(e);showToast('⚠️ Offline mode');return getCached();}
-}
-async function delLog(id){
-  try{await supaFetch('DELETE',`/rest/v1/housekeeping_logs?id=eq.${id}`);showToast('🗑️ Deleted');}catch(e){console.error(e);}
-  setCached(getCached().filter(l=>l.id!==id));renderRec();
-}
-function showToast(msg){
-  let t=document.getElementById('toast');
-  if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1D2E42;border:1px solid #C8A96E;color:#EAE4D4;padding:10px 20px;border-radius:20px;font-size:13px;font-family:DM Sans,sans-serif;z-index:9999;transition:opacity 0.3s;white-space:nowrap;box-shadow:0 4px 20px #00000066';document.body.appendChild(t);}
-  t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',3000);
-}
+// ════════════════════════════════════════════════════════
+// ROOM DATABASE — all 766 rooms
+// ════════════════════════════════════════════════════════
+const ROOM_DB = {
+1401:'DLXK',1402:'DLXT',1403:'DLXK',1404:'DLXK',1405:'DLXT',1406:'DLXK',1407:'APRT_K',1408:'DLXK',1409:'DLXK',1410:'APRT_K',1411:'DLXK',1412:'DLXT',1413:'DLXK',1414:'DLXT',1415:'DLXK',1416:'DLXT',1417:'DLXT',1418:'DLXT',1419:'DLXT',1420:'DLXT',1421:'DLXT',1422:'DLXT',1423:'DLXT',1424:'DLXK',1425:'DLXK',1426:'DLXK',1427:'DLXT',1428:'DLXT',1429:'DLXT',1430:'DLXT',1431:'DLXT',1432:'DLXT',1433:'DLXT',1434:'DLXT',
+1501:'DLXK',1502:'DLXT',1503:'DLXK',1504:'DLXK',1505:'DLXT',1506:'DLXK',1507:'JRSU',1508:'DLXT',1509:'DLXT',1510:'JRSU',1511:'DLXK',1512:'DLXT',1513:'DLXK',1514:'DLXT',1515:'DLXK',1516:'DLXT',1517:'DLXT',1518:'DLXT',1519:'DLXT',1520:'DLXT',1521:'DLXT',1522:'DLXT',1523:'DLXT',1524:'DLXK',1525:'DLXK',1526:'DLXK',1527:'DLXK',1528:'DLXT',1529:'DLXT',1530:'DLXT',1531:'DLXT',1532:'DLXT',1533:'DLXT',1534:'DLXT',1535:'DLXT',
+1601:'DLXK',1602:'DLXT',1603:'DLXK',1604:'DLXK',1605:'DLXT',1606:'DLXK',1607:'JRSU',1608:'DLXT',1609:'DLXT',1610:'JRSU',1611:'DLXK',1612:'DLXT',1613:'DLXK',1614:'DLXT',1615:'DLXK',1616:'DLXT',1617:'DLXT',1618:'DLXT',1619:'DLXT',1620:'DLXT',1621:'DLXT',1622:'DLXT',1623:'DLXT',1624:'DLXK',1625:'DLXK',1626:'DLXK',1627:'DLXK',1628:'DLXT',1629:'DLXT',1630:'DLXT',1631:'DLXT',1632:'DLXT',1633:'DLXT',1634:'DLXT',1635:'DLXT',
+1701:'DLXK',1702:'DLXT',1703:'DLXK',1704:'DLXK',1705:'DLXT',1706:'DLXK',1707:'JRSU',1708:'DLXT',1709:'DLXT',1710:'JRSU',1711:'DLXK',1712:'DLXT',1713:'DLXK',1714:'DLXT',1715:'DLXK',1716:'DLXT',1717:'DLXT',1718:'DLXT',1719:'DLXT',1720:'DLXT',1721:'DLXT',1722:'DLXT',1723:'DLXT',1724:'DLXK',1725:'DLXK',1726:'DLXK',1727:'DLXK',1728:'DLXT',1729:'DLXT',1730:'DLXT',1731:'DLXT',1732:'DLXT',1733:'DLXT',1734:'DLXT',1735:'DLXT',
+1801:'DLXK',1802:'DLXT',1803:'DLXK',1804:'DLXK',1805:'DLXT',1806:'DLXK',1807:'JRSU',1808:'DLXT',1809:'DLXT',1810:'JRSU',1811:'DLXK',1812:'DLXT',1813:'DLXK',1814:'DLXT',1815:'DLXK',1816:'DLXT',1817:'DLXT',1818:'DLXT',1819:'DLXT',1820:'DLXT',1821:'DLXT',1822:'DLXT',1823:'DLXT',1824:'DLXK',1825:'DLXK',1826:'DLXK',1827:'DLXK',1828:'DLXT',1829:'DLXT',1830:'DLXT',1831:'DLXT',1832:'DLXT',1833:'DLXT',1834:'DLXT',1835:'DLXT',
+1901:'DLXK',1902:'DLXT',1903:'DLXK',1904:'DLXK',1905:'DLXT',1906:'DLXK',1907:'JRSU',1908:'DLXT',1909:'DLXT',1910:'JRSU',1911:'DLXK',1912:'DLXT',1913:'DLXK',1914:'DLXT',1915:'DLXK',1916:'DLXT',1917:'DLXT',1918:'DLXT',1919:'DLXT',1920:'DLXT',1921:'DLXT',1922:'DLXT',1923:'DLXT',1924:'DLXK',1925:'DLXK',1926:'DLXK',1927:'DLXK',1928:'DLXT',1929:'DLXT',1930:'DLXT',1931:'DLXT',1932:'DLXT',1933:'DLXT',1934:'DLXT',1935:'DLXT',
+2001:'DLXK',2002:'DLXT',2003:'DLXK',2004:'DLXK',2005:'DLXT',2006:'DLXK',2007:'JRSU',2008:'DLXT',2009:'DLXT',2010:'JRSU',2011:'DLXK',2012:'DLXT',2013:'DLXK',2014:'DLXT',2015:'DLXK',2016:'DLXT',2017:'DLXT',2018:'DLXT',2019:'DLXT',2020:'DLXT',2021:'DLXT',2022:'DLXT',2023:'DLXT',2024:'DLXK',2025:'DLXK',2026:'DLXK',2027:'DLXK',2028:'DLXT',2029:'DLXT',2030:'DLXT',2031:'DLXT',2032:'DLXT',2033:'DLXT',2034:'DLXT',2035:'DLXT',
+2101:'DLXK',2102:'DLXT',2103:'DLXK',2104:'DLXK',2105:'DLXT',2106:'DLXK',2107:'JRSU',2108:'DLXT',2109:'DLXT',2110:'JRSU',2111:'DLXK',2112:'DLXT',2113:'DLXK',2114:'DLXT',2115:'DLXK',2116:'DLXT',2117:'DLXT',2118:'DLXT',2119:'DLXT',2120:'DLXT',2121:'DLXT',2122:'DLXT',2123:'DLXT',2124:'DLXK',2125:'DLXK',2126:'DLXK',2127:'DLXK',2128:'DLXT',2129:'DLXT',2130:'DLXT',2131:'DLXT',2132:'DLXT',2133:'DLXT',2134:'DLXT',2135:'DLXT',
+2201:'DLXK',2202:'DLXT',2203:'DLXK',2204:'DLXK',2205:'DLXT',2206:'DLXK',2207:'JRSU',2208:'DLXT',2209:'DLXT',2210:'JRSU',2211:'DLXK',2212:'DLXT',2213:'DLXK',2214:'DLXT',2215:'DLXK',2216:'DLXT',2217:'DLXT',2218:'DLXT',2219:'DLXT',2220:'DLXT',2221:'DLXT',2222:'DLXT',2223:'DLXT',2224:'DLXK',2225:'DLXK',2226:'DLXK',2227:'DLXK',2228:'DLXT',2229:'DLXT',2230:'DLXT',2231:'DLXT',2232:'DLXT',2233:'DLXT',2234:'DLXT',2235:'DLXT',
+2301:'DLXK',2302:'DLXT',2303:'DLXK',2304:'DLXK',2305:'DLXT',2306:'DLXK',2307:'JRSU',2308:'DLXT',2309:'DLXT',2310:'JRSU',2311:'DLXK',2312:'DLXT',2313:'DLXK',2314:'DLXT',2315:'DLXK',2316:'DLXT',2317:'DLXT',2318:'DLXT',2319:'DLXT',2320:'DLXT',2321:'DLXT',2322:'DLXT',2323:'DLXT',2324:'DLXK',2325:'DLXK',2326:'DLXK',2327:'DLXK',2328:'DLXT',2329:'DLXT',2330:'DLXT',2331:'DLXT',2332:'DLXT',2333:'DLXT',2334:'DLXT',2335:'DLXT',
+2401:'DLXK',2402:'DLXT',2403:'DLXK',2404:'DLXK',2405:'DLXT',2406:'DLXK',2407:'JRSU',2408:'DLXT',2409:'DLXT',2410:'JRSU',2411:'DLXK',2412:'DLXT',2413:'DLXK',2414:'DLXT',2415:'DLXK',2416:'DLXT',2417:'DLXT',2418:'DLXT',2419:'DLXT',2420:'DLXT',2421:'DLXT',2422:'DLXT',2423:'DLXT',2424:'DLXK',2425:'DLXK',2426:'DLXK',2427:'DLXK',2428:'DLXT',2429:'DLXT',2430:'DLXT',2431:'DLXT',2432:'DLXT',2433:'DLXT',2434:'DLXT',2435:'DLXT',
+2501:'DLXK',2502:'DLXT',2503:'DLXK',2504:'DLXK',2505:'DLXT',2506:'DLXK',2507:'JRSU',2508:'DLXT',2509:'DLXT',2510:'JRSU',2511:'DLXK',2512:'DLXT',2513:'DLXK',2514:'DLXT',2515:'DLXK',2516:'DLXT',2517:'DLXT',2518:'DLXT',2519:'DLXT',2520:'DLXT',2521:'DLXT',2522:'DLXT',2523:'DLXT',2524:'DLXK',2525:'DLXK',2526:'DLXK',2527:'DLXK',2528:'DLXT',2529:'DLXT',2530:'DLXT',2531:'DLXT',2532:'DLXT',2533:'DLXT',2534:'DLXT',2535:'DLXT',
+2601:'DLXK',2602:'DLXT',2603:'DLXK',2604:'DLXK',2605:'DLXT',2606:'DLXK',2607:'JRSU',2608:'DLXT',2609:'DLXT',2610:'JRSU',2611:'DLXK',2612:'DLXT',2613:'DLXK',2614:'DLXT',2615:'DLXK',2616:'DLXT',2617:'DLXT',2618:'DLXT',2619:'DLXT',2620:'DLXT',2621:'DLXT',2622:'DLXT',2623:'DLXT',2624:'DLXK',2625:'DLXK',2626:'DLXK',2627:'DLXK',2628:'DLXT',2629:'DLXT',2630:'DLXT',2631:'DLXT',2632:'DLXT',2633:'DLXT',2634:'DLXT',2635:'DLXT',
+2701:'DLXK',2702:'DLXT',2703:'DLXK',2704:'DLXK',2705:'DLXT',2706:'DLXK',2707:'JRSU',2708:'DLXT',2709:'DLXT',2710:'JRSU',2711:'DLXK',2712:'DLXT',2713:'DLXK',2714:'DLXT',2715:'DLXK',
+2801:'DLXK',2802:'DLXT',2803:'DLXK',2804:'DLXK',2805:'DLXT',2806:'DLXK',2807:'JRSU',2808:'DLXT',2809:'DLXT',2810:'JRSU',2811:'DLXK',2812:'DLXT',2813:'DLXK',2814:'DLXT',2815:'DLXK',2816:'DLXT',2817:'DLXT',2818:'DLXT',2819:'DLXT',2820:'DLXT',2821:'DLXT',2822:'DLXT',2823:'DLXT',2824:'DLXK',2825:'DLXK',2826:'DLXK',2827:'DLXK',2828:'DLXT',2829:'DLXT',2830:'DLXT',2831:'DLXT',2832:'DLXT',2833:'DLXT',2834:'DLXT',2835:'DLXT',
+2901:'DLXK',2902:'DLXT',2903:'DLXK',2904:'DLXK',2905:'DLXT',2906:'DLXK',2907:'JRSU',2908:'DLXT',2909:'DLXT',2910:'JRSU',2911:'DLXK',2912:'DLXT',2913:'DLXK',2914:'DLXT',2915:'DLXK',2916:'DLXT',2917:'DLXT',2918:'DLXT',2919:'DLXT',2920:'DLXT',2921:'DLXT',2922:'DLXT',2923:'DLXT',2924:'DLXK',2925:'DLXK',2926:'DLXK',2927:'DLXK',2928:'DLXT',2929:'DLXT',2930:'DLXT',2931:'DLXT',2932:'DLXT',2933:'DLXT',2934:'DLXT',2935:'DLXT',
+3001:'DLXK',3002:'DLXT',3003:'DLXK',3004:'DLXK',3005:'DLXT',3006:'DLXK',3007:'JRSU',3008:'DLXT',3009:'DLXT',3010:'JRSU',3011:'DLXK',3012:'DLXT',3013:'DLXK',3014:'DLXT',3015:'DLXK',3016:'DLXT',3017:'DLXT',3018:'DLXT',3019:'DLXT',3020:'DLXT',3021:'DLXT',3022:'DLXT',3023:'DLXT',3024:'DLXK',3025:'DLXK',3026:'DLXK',3027:'DLXK',3028:'DLXT',3029:'DLXT',3030:'DLXT',3031:'DLXT',3032:'DLXT',3033:'DLXT',3034:'DLXT',3035:'DLXT',
+3101:'DLXK',3102:'DLXT',3103:'DLXK',3104:'DLXK',3105:'DLXT',3106:'DLXK',3107:'JRSU',3108:'DLXT',3109:'DLXT',3110:'JRSU',3111:'DLXK',3112:'DLXT',3113:'DLXK',3114:'DLXT',3115:'DLXK',3116:'DLXT',3117:'DLXT',3118:'DLXT',3119:'DLXT',3120:'DLXT',3121:'DLXT',3122:'DLXT',3123:'DLXT',3124:'DLXK',3125:'DLXK',3126:'DLXK',3127:'DLXK',3128:'DLXT',3129:'DLXT',3130:'DLXT',3131:'DLXT',3132:'DLXT',3133:'DLXT',3134:'DLXT',3135:'DLXT',
+3201:'DLXK',3202:'DLXT',3203:'DLXK',3204:'DLXK',3205:'DLXT',3206:'DLXK',3207:'JRSU',3208:'DLXT',3209:'DLXT',3210:'JRSU',3211:'DLXK',3212:'DLXT',3213:'DLXK',3214:'DLXT',3215:'DLXK',3216:'DLXT',3217:'DLXT',3218:'DLXT',3219:'DLXT',3220:'DLXT',3221:'DLXT',3222:'DLXT',3223:'DLXT',3224:'DLXK',3225:'DLXK',3226:'DLXK',3227:'DLXK',3228:'DLXT',3229:'DLXT',3230:'DLXT',3231:'DLXT',3232:'DLXT',3233:'DLXT',3234:'DLXT',3235:'DLXT',
+3301:'DLXK',3302:'DLXT',3303:'DLXK',3304:'DLXK',3305:'DLXT',3306:'DLXK',3307:'JRSU',3308:'DLXT',3309:'DLXT',3310:'JRSU',3311:'DLXK',3312:'DLXT',3313:'DLXK',3314:'DLXT',3315:'DLXK',3316:'DLXT',3317:'DLXT',3318:'DLXT',3319:'DLXT',3320:'DLXT',3321:'DLXT',3322:'DLXT',3323:'DLXT',3324:'DLXK',3325:'DLXK',3326:'DLXK',3327:'DLXK',3328:'DLXT',3329:'DLXT',3330:'DLXT',3331:'DLXT',3332:'DLXT',3333:'DLXT',3334:'DLXT',3335:'DLXT',
+3401:'DLXK',3402:'DLXT',3403:'DLXK',3404:'DLXK',3405:'DLXT',3406:'DLXK',3407:'JRSU',3408:'DLXT',3409:'DLXT',3410:'JRSU',3411:'DLXK',3412:'DLXT',3413:'DLXK',3414:'DLXT',3415:'DLXK',3416:'DLXT',3417:'DLXT',3418:'DLXT',3419:'DLXT',3420:'DLXT',3421:'DLXT',3422:'DLXT',3423:'DLXT',3424:'DLXK',3425:'DLXK',3426:'DLXK',3427:'DLXK',3428:'DLXT',3429:'DLXT',3430:'DLXT',3431:'DLXT',3432:'DLXT',3433:'DLXT',3434:'DLXT',3435:'DLXT',
+3501:'PRSU',3502:'CFDT',3503:'CFDK',3504:'CFDK',3505:'JRSU',3506:'CFDT',3507:'CFDT',3508:'JRSU',3509:'CFDK',3510:'CFDT',3511:'PRSU',3512:'CFDT',3513:'PRSU',3514:'CFDT',3515:'PRSU',3516:'EXSU',3517:'EXSU',3518:'CFDK',3519:'CFDK',3520:'CFDK',3521:'CFDK',3522:'CFDK',3523:'CFDK',3524:'CFDK',3525:'CFDK',
+3601:'PRSU',3602:'CFDT',3603:'CFDK',3604:'CFDK',3605:'JRSU',3606:'CFDT',3607:'CFDT',3608:'JRSU',3609:'CFDK',3610:'CFDT',3611:'PRSU',3612:'CFDT',3613:'PRSU',3614:'CFDT',3615:'PRSU',3616:'EXSU',3617:'EXSU',3618:'CFDK',3619:'CFDK',3620:'CFDK',3621:'CFDK',3622:'CFDK',3623:'CFDK',3624:'CFDK',3625:'CFDK',
+3701:'PRDST_K',3702:'IRSUT_K'
+};
 
-// ── DATA ──────────────────────────────────────────────────────
-const LINEN_CATS=[
-  {name:'Bedsheet',icon:'🛏️',items:['Super King','King','Twin','Pillow Case']},
-  {name:'Duvet Cover',icon:'🌙',items:['Super King','King','Twin']},
-  {name:'Towel',icon:'🧺',items:['Bath Towel (BT)','Hand Towel (HT)','Face Towel (FT)','Bath Mat','Bath Robe']}
-];
-const RECYCLE_ITEMS=['Bedsheet','Duvet Cover','Towel','Pillow Case','Bath Robe'];
-const AMEN_CATS=[
-  {name:'Coffee Facilities',icon:'☕',items:['Bottle Drinking Water','Coffee Sachet','Vintage - Pure Green Tea','Vintage - English Breakfast Tea','White Sugar Stick','Brown Sugar Stick','Creamer Stick','Coaster']},
-  {name:'Coffee Facilities – Club/Suite',icon:'⭐',items:['Coffee Capsule - Ristretto','Coffee Capsule - Livanto','Coffee Capsule - Ristretto Decaffeinato','Coffee Capsule - Rio De Janeiro Expresso','Harney & Son - Japanese Sengha Tea','Harney & Son - Jasmine Green Tea','Harney & Son - Paris Black Tea','Harney & Son - Green Tea']},
-  {name:'Amenities',icon:'🧴',items:['Dental Kit','Shaver Kit','Shower Cap','Vanity Kit','Sanitary Bag','Body Lotion Tube','Room Slipper','Facial Tissue Box','Toilet Roll Tissue','Shoe Shine','Comb','Sewing Kit']},
-  {name:'Amenities – Club/Suite',icon:'🌟',items:['Shoe Shine (Club)']},
-  {name:'Room Stationary',icon:'📝',items:['Laundry Bill','Laundry Bag','Memo Pad','Twist Ball Pen']},
-  {name:'Minibar',icon:'🧊',items:['Minibar']}
-];
-const EQUIP_CATS=[
-  {name:'Closet',icon:'🧺',items:['Wooden Hanger','Wooden Crib Hanger','Satin Hanger','Steam Iron','Ironing Board','Torch Light','Safe Box','Coat Hanger']},
-  {name:'Closet – Club/Suite',icon:'🎩',items:['Coat Hanger (Suite)']},
-  {name:'Minibar',icon:'🍵',items:['Mug','Tea Spoon','Glass Pilsner','Minibar','Kettle','Coffee Cup','Coffee Cup Saucer']},
-  {name:'Minibar – Club/Suite',icon:'🥃',items:['Tissue Box Compartment']},
-  {name:'Dressing Table',icon:'🪑',items:['Dustbin – Recycle','Smart TV','TV Remote Control']},
-  {name:'Bed Area',icon:'🛏️',items:['Alarm Clock','Note Pad Holder','Weight Scale']},
-  {name:'Bathroom',icon:'🛁',items:['Laundry Basket','Dustbin','Amenities Tray','Hair Dryer']}
-];
+const ROOM_TYPE_NAMES = {
+  DLXK:'Deluxe King',DLXT:'Deluxe Twin',
+  JRSU:'Junior Suite',
+  CFDK:'Club Room King',CFDT:'Club Room Twin',
+  PRSU:'Premier Suite',EXSU:'Executive Suite',
+  APRT_K:'Apartment Suite King',APRT_T:'Apartment Suite Twin',APRT_P:'Apartment Powder Room',
+  PRDST_K:'Presidential Suite',PRDST_T:'Presidential Twin',PRDST_P:'Presidential Powder',
+  IRSUT_K:'Irama Royal Suite',IRSUT_T:'Irama Royal Twin',IRSUT_P:'Irama Royal Powder'
+};
 
-// ── STATE ─────────────────────────────────────────────────────
-let staff={name:'',floor:''};
-let curStep=1;
-let formData={room:'',sfrom:'',sto:'',tin:'',tout:'',date:'',linen:{},amenities:{},equipment:{},recycle:{},remarks:''};
+// ════════════════════════════════════════════════════════
+// ROOM FEATURES
+// ════════════════════════════════════════════════════════
+const ROOM_FEATURES_DB = {
+1401:'AC, CN, NS, SS, CV, KB',1402:'CN, NS, SS, CV, TW',1403:'NS, SS, CV, KB',1404:'NS, SS, CV, KB',1405:'CN, NS, SS, CV, TW',1406:'CN, NS, SS, CV, KB',1407:'CN, BT, NS, SS, CV, KB',1408:'CN, NS, SS, CV, KB',1409:'NS, SS, CV, KB',1410:'BT, NS, SS, CV, KB',1411:'CN, NS, SS, CV, KB',1412:'CN, NS, SS, CV, TW',1413:'CN, NS, SS, CV, KB',1414:'CN, NS, SS, CV, TW',1415:'NS, SS, CV, KB',1416:'NS, AE, SS, CV, TW',1417:'NS, AE, SS, CV, TW',1418:'NS, AE, SS, CV, TW',1419:'NS, AE, SS, CV, TW',1420:'NS, AE, SS, CV, TW',1421:'NS, AE, SS, CV, TW',1422:'NS, AE, SS, CV, TW',1423:'NS, AE, SS, CV, TW',1424:'NS, NV, AE, KB',1425:'NS, NV, AE, KB',1426:'NS, NV, AE, KB',1427:'NS, AE, SS, NV, TW',1428:'NS, AE, SS, CV, TW',1429:'NS, AE, SS, CV, TW',1430:'NS, AE, SS, CV, TW',1431:'NS, AE, SS, CV, TW',1432:'NS, AE, SS, CV, TW',1433:'NS, AE, SS, CV, TW',1434:'NS, AE, SS, CV, TW',
+3701:'CV, NS, SS, KB, BT',3702:'CV, NS, SS, KB, BT'
+};
 
-function initFormData(){
-  formData={room:'',sfrom:'',sto:'',tin:'',tout:'',date:'',linen:{},amenities:{},equipment:{},recycle:{},remarks:''};
-  LINEN_CATS.forEach(c=>c.items.forEach(i=>formData.linen[i]={in:0,out:0}));
-  AMEN_CATS.forEach(c=>c.items.forEach(i=>formData.amenities[i]={in:0,out:0}));
-  EQUIP_CATS.forEach(c=>c.items.forEach(i=>formData.equipment[i]={checked:false,count:0}));
-  RECYCLE_ITEMS.forEach(i=>formData.recycle[i]='');
+// ════════════════════════════════════════════════════════
+// ITEMS DATABASE — preset quantities per room type
+// ════════════════════════════════════════════════════════
+const ITEMS_DB = {
+DLXK:{
+  linen:[
+    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:2},{s:'Coffee',n:'Creamer',q:4},{s:'Coffee',n:'Coaster',q:2},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (White Tea)',q:1},{s:'Bathroom',n:'Body Wash (White Tea)',q:1},{s:'Bathroom',n:'Conditioner (White Tea)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},{s:'Bathroom',n:'Body Lotion 30ml',q:2},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2}
+  ],
+  equipment:[
+    {n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},
+    {n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Extra Pillow'},{n:'Extra Blanket'}
+  ]
+},
+DLXT:{
+  linen:[
+    {n:'Bedsheet Twin',q:2},{n:'Duvet Cover Twin',q:2},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:2},{s:'Coffee',n:'Creamer',q:4},{s:'Coffee',n:'Coaster',q:2},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (White Tea)',q:1},{s:'Bathroom',n:'Body Wash (White Tea)',q:1},{s:'Bathroom',n:'Conditioner (White Tea)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},{s:'Bathroom',n:'Body Lotion 30ml',q:2},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2}
+  ],
+  equipment:[
+    {n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},
+    {n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Extra Pillow'},{n:'Extra Blanket'}
+  ]
+},
+JRSU:{
+  linen:[
+    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:4},{s:'Coffee',n:'Creamer',q:2},{s:'Coffee',n:'Coaster',q:2},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:2},
+    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
+  ],
+  equipment:[
+    {n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},
+    {n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Extra Pillow'},{n:'Extra Blanket'}
+  ]
+},
+CFDK:{
+  linen:[
+    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:2},{s:'Coffee',n:'Creamer',q:4},{s:'Coffee',n:'Coaster',q:2},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (Lagaia)',q:1},{s:'Bathroom',n:'Body Wash (Lagaia)',q:1},{s:'Bathroom',n:'Conditioner (Lagaia)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},
+    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+    {s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
+  ],
+  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
+},
+CFDT:{
+  linen:[
+    {n:'Bedsheet Twin',q:2},{n:'Duvet Cover Twin',q:2},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:2},{s:'Coffee',n:'Creamer',q:4},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (Lagaia)',q:1},{s:'Bathroom',n:'Body Wash (Lagaia)',q:1},{s:'Bathroom',n:'Conditioner (Lagaia)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},
+    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+    {s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
+  ],
+  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
+},
+PRSU:{
+  linen:[
+    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:4},{s:'Coffee',n:'Creamer',q:2},{s:'Coffee',n:'Coaster',q:2},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:2},
+    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
+  ],
+  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
+},
+EXSU:{
+  linen:[
+    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:4},{s:'Coffee',n:'Creamer',q:2},{s:'Coffee',n:'Coaster',q:2},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:2},
+    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
+  ],
+  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
+},
+APRT_K:{
+  linen:[
+    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:4},{s:'Coffee',n:'Brown Sugar',q:4},{s:'Coffee',n:'Creamer',q:4},{s:'Coffee',n:'Coaster',q:4},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (Lagaia)',q:1},{s:'Bathroom',n:'Body Wash (Lagaia)',q:1},{s:'Bathroom',n:'Conditioner (Lagaia)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},
+    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+    {s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
+  ],
+  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
+},
+PRDST_K:{
+  linen:[
+    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:2},{n:'Bath Towel',q:4},{n:'Hand Towel',q:4},{n:'Face Towel',q:4},{n:'Bath Mat',q:2}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:4},{s:'Stationary',n:'Laundry Bag',q:4},{s:'Stationary',n:'Memo Pad',q:2},{s:'Stationary',n:'Ballpoint Pen',q:2},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:4},{s:'Coffee',n:'Nescafe Classic',q:4},{s:'Coffee',n:'Green Tea',q:4},{s:'Coffee',n:'English Breakfast Tea',q:4},{s:'Coffee',n:'White Sugar',q:8},{s:'Coffee',n:'Brown Sugar',q:8},{s:'Coffee',n:'Creamer',q:8},{s:'Coffee',n:'Coaster',q:4},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:4},
+    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:2},{s:'Minibar',n:'Coffee Capsule Livanto',q:2},{s:'Minibar',n:'Coffee Capsule Decaf',q:2},{s:'Minibar',n:'Coffee Capsule Rio',q:2},{s:'Minibar',n:'Harney & Son Sencha Tea',q:4},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:4},{s:'Minibar',n:'Harney & Son Paris Tea',q:4},{s:'Minibar',n:'Harney & Son Green Tea',q:4},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:2},{s:'Guest Supplies',n:'Shower Cap',q:2},{s:'Guest Supplies',n:'Vanity Kit',q:2},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:4},{s:'Guest Supplies',n:'Facial Tissue Box',q:4},{s:'Guest Supplies',n:'Toilet Roll',q:4},{s:'Guest Supplies',n:'Shoe Shine',q:2},{s:'Guest Supplies',n:'Comb',q:2},{s:'Guest Supplies',n:'Sewing Kit',q:2}
+  ],
+  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
+},
+IRSUT_K:{
+  linen:[
+    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
+    {n:'Bath Robe',q:4},{n:'Bath Towel',q:4},{n:'Hand Towel',q:4},{n:'Face Towel',q:4},{n:'Bath Mat',q:2}
+  ],
+  amenities:[
+    {s:'Stationary',n:'Laundry Bill',q:4},{s:'Stationary',n:'Laundry Bag',q:4},{s:'Stationary',n:'Memo Pad',q:2},{s:'Stationary',n:'Ballpoint Pen',q:2},{s:'Stationary',n:'Shopping Bag',q:1},
+    {s:'Coffee',n:'Drinking Water 500ml',q:4},{s:'Coffee',n:'Nescafe Classic',q:4},{s:'Coffee',n:'Green Tea',q:4},{s:'Coffee',n:'English Breakfast Tea',q:4},{s:'Coffee',n:'White Sugar',q:8},{s:'Coffee',n:'Brown Sugar',q:8},{s:'Coffee',n:'Creamer',q:8},{s:'Coffee',n:'Coaster',q:4},
+    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
+    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:4},
+    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:2},{s:'Minibar',n:'Coffee Capsule Livanto',q:2},{s:'Minibar',n:'Coffee Capsule Decaf',q:2},{s:'Minibar',n:'Coffee Capsule Rio',q:2},{s:'Minibar',n:'Harney & Son Sencha Tea',q:4},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:4},{s:'Minibar',n:'Harney & Son Paris Tea',q:4},{s:'Minibar',n:'Harney & Son Green Tea',q:4},
+    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:2},{s:'Guest Supplies',n:'Shower Cap',q:2},{s:'Guest Supplies',n:'Vanity Kit',q:2},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:4},{s:'Guest Supplies',n:'Facial Tissue Box',q:4},{s:'Guest Supplies',n:'Toilet Roll',q:4},{s:'Guest Supplies',n:'Shoe Shine',q:2},{s:'Guest Supplies',n:'Comb',q:2},{s:'Guest Supplies',n:'Sewing Kit',q:2}
+  ],
+  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
 }
+};
+// Fallback same config for variants
+ITEMS_DB.APRT_T = ITEMS_DB.APRT_K;
+ITEMS_DB.PRDST_T = ITEMS_DB.PRDST_K;
+ITEMS_DB.IRSUT_T = ITEMS_DB.IRSUT_K;
 
-// ── CLOCK ─────────────────────────────────────────────────────
-function getGreeting(){const h=new Date().getHours();if(h>=5&&h<12)return'Good Morning 🌅';if(h>=12&&h<15)return'Good Afternoon ☀️';if(h>=15&&h<19)return'Good Evening 🌇';return'Good Night 🌙';}
-function tick(){
-  const n=new Date();
-  document.getElementById('clockEl').textContent=n.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit',hour12:false});
-  document.getElementById('dateEl').textContent=n.toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short'});
-  const g=document.getElementById('greeting');if(g)g.textContent=getGreeting();
-}
-tick();setInterval(tick,1000);
+// ════════════════════════════════════════════════════════
+// SUPABASE CONFIG
+// ════════════════════════════════════════════════════════
+const SUPA_URL = 'https://vwirvqlhyufejpzhueba.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXJ2cWxoeXVmZWpwemh1ZWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNTk2ODQsImV4cCI6MjA4ODkzNTY4NH0.CrGfXAv1K5RfkQOl3iKmBnm2pjmud7igAv9p9RI3YBA';
+const SUP_PASS = 'irama2026';
 
-// ── VIEWS ─────────────────────────────────────────────────────
-function showView(v){
-  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.form-view').forEach(el=>el.classList.remove('active'));
-  document.getElementById('navBar').style.display='none';
-  window.scrollTo(0,0);
-  if(v==='home'){document.getElementById('homeView').classList.add('active');updateHome();}
-  else if(v==='records'){document.getElementById('recordsView').classList.add('active');renderRec();}
-  else if(v==='supervisor'){document.getElementById('supervisorView').classList.add('active');}
-  else if(v==='form'){document.getElementById('roomForm').classList.add('active');document.getElementById('navBar').style.display='flex';updateNav();updateProg();}
-}
-
-// ── HOME ──────────────────────────────────────────────────────
-async function updateHome(){
-  const saved=localStorage.getItem('maid_name')||'';
-  const savedF=localStorage.getItem('maid_floor')||'';
-  if(saved)document.getElementById('h_name').value=saved;
-  if(savedF)document.getElementById('h_floor').value=savedF;
-  const today=new Date().toLocaleDateString('en-MY',{day:'2-digit',month:'short',year:'numeric'});
-  const logs=await getLogs();
-  const todayLogs=logs.filter(l=>l.date===today);
-  document.getElementById('t_rooms').textContent=new Set(todayLogs.map(l=>l.room)).size;
-  document.getElementById('t_reports').textContent=todayLogs.length;
-  document.getElementById('t_issues').textContent=todayLogs.filter(l=>Object.values(l.equipment||{}).some(v=>v.count===0)).length;
-}
-
-function newMaid(){
-  if(!confirm('End current shift and clear maid details?'))return;
-  localStorage.removeItem('maid_name');localStorage.removeItem('maid_floor');
-  document.getElementById('h_name').value='';document.getElementById('h_floor').value='';
-  staff={name:'',floor:''};showToast('✅ Ready for next maid');
-}
-
-function startReport(){
-  staff.name=document.getElementById('h_name').value.trim();
-  staff.floor=document.getElementById('h_floor').value;
-  if(!staff.name){alert('Please enter your name.');return;}
-  if(!staff.floor){alert('Please select your floor.');return;}
-  localStorage.setItem('maid_name',staff.name);
-  localStorage.setItem('maid_floor',staff.floor);
-  initFormData();
-  curStep=1;
-  // Auto time in
-  const now=new Date();
-  formData.tin=now.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit',hour12:false});
-  formData.date=now.toLocaleDateString('en-MY',{day:'2-digit',month:'short',year:'numeric'});
-  document.getElementById('f_tin_display').textContent=formData.tin;
-  document.getElementById('f_room').textContent='–';
-  document.getElementById('f_sfrom').value='';
-  document.getElementById('f_sto').value='';
-  buildLinenList();buildAmenList();buildEquipList();buildRecycleList();
-  showStep(1);showView('form');
-}
-
-function openSupervisor(){
-  document.getElementById('supLogin').style.display='block';
-  document.getElementById('supDash').style.display='none';
-  document.getElementById('supPass').value='';
-  document.getElementById('supErr').style.display='none';
-  showView('supervisor');
-}
-
-// ── NUMPAD ────────────────────────────────────────────────────
-function np(v){
-  let d=document.getElementById('f_room').textContent.replace('–','');
-  if(v==='C')d='';else if(v==='D')d=d.slice(0,-1);else if(d.length<5)d+=v;
-  document.getElementById('f_room').textContent=d||'–';
-}
-
-// ── LINEN ─────────────────────────────────────────────────────
-function ek(s){return s.replace(/[^a-zA-Z0-9]/g,'_');}
-function buildIORow(item,cat,type){
-  const k=ek(cat+item+type);
-  return `<div class="io-row" id="ior_${k}">
-    <div class="io-name">${item}</div>
-    <div class="io-cols">
-      <div class="io-col"><div class="io-col-lbl">IN</div><div class="io-ctrl">
-        <button class="io-btn" onclick="chIO('${item}','${cat}','${type}','in',-1)">−</button>
-        <div class="io-val z" id="iov_${k}_in">0</div>
-        <button class="io-btn" onclick="chIO('${item}','${cat}','${type}','in',1)">+</button>
-      </div></div>
-      <div class="io-col"><div class="io-col-lbl">OUT</div><div class="io-ctrl">
-        <button class="io-btn" onclick="chIO('${item}','${cat}','${type}','out',-1)">−</button>
-        <div class="io-val z" id="iov_${k}_out">0</div>
-        <button class="io-btn" onclick="chIO('${item}','${cat}','${type}','out',1)">+</button>
-      </div></div>
-    </div></div>`;
-}
-function chIO(item,cat,type,dir,delta){
-  const store=type==='linen'?formData.linen:formData.amenities;
-  let v=store[item][dir]+delta;if(v<0)v=0;store[item][dir]=v;
-  const k=ek(cat+item+type);
-  const el=document.getElementById('iov_'+k+'_'+dir);
-  el.textContent=v;el.classList.toggle('z',v===0);
-  document.getElementById('ior_'+k).classList.toggle('has-data',type==='linen'&&(store[item].in>0||store[item].out>0));
-  document.getElementById('ior_'+k).classList.toggle('amen-data',type==='amenities'&&(store[item].in>0||store[item].out>0));
-}
-function buildLinenList(){
-  let h='';
-  LINEN_CATS.forEach(cat=>{
-    h+=`<div class="cat-hdr linen"><div class="ci">${cat.icon}</div><div><div class="cn">${cat.name}</div><div class="cc">${cat.items.length} items</div></div></div>`;
-    cat.items.forEach(item=>h+=buildIORow(item,cat.name,'linen'));
-  });
-  document.getElementById('linenList').innerHTML=h;
-}
-function buildAmenList(){
-  let h='';
-  AMEN_CATS.forEach(cat=>{
-    h+=`<div class="cat-hdr amen"><div class="ci">${cat.icon}</div><div><div class="cn">${cat.name}</div><div class="cc">${cat.items.length} items</div></div></div>`;
-    cat.items.forEach(item=>h+=buildIORow(item,cat.name,'amenities'));
-  });
-  document.getElementById('amenList').innerHTML=h;
-}
-
-// ── RECYCLE ───────────────────────────────────────────────────
-function buildRecycleList(){
-  const opts=['Clean','Stained','Torn','Missing'];
-  const colors={Clean:'clean',Stained:'stained',Torn:'torn',Missing:'missing'};
-  let h='';
-  RECYCLE_ITEMS.forEach(item=>{
-    h+=`<div class="recycle-row">
-      <div class="recycle-name">${item}</div>
-      <div class="recycle-opts">
-        ${opts.map(o=>`<div class="rec-opt ${colors[o]}" id="rec_${ek(item)}_${o}" onclick="setRecycle('${item}','${o}')">${o}</div>`).join('')}
-      </div></div>`;
-  });
-  document.getElementById('recycleList').innerHTML=h;
-}
-function setRecycle(item,val){
-  formData.recycle[item]=formData.recycle[item]===val?'':val;
-  const opts=['Clean','Stained','Torn','Missing'];
-  const colors={Clean:'clean',Stained:'stained',Torn:'torn',Missing:'missing'};
-  opts.forEach(o=>{
-    const el=document.getElementById('rec_'+ek(item)+'_'+o);
-    if(el)el.classList.toggle('sel',formData.recycle[item]===o);
-  });
-}
-
-// ── EQUIPMENT ─────────────────────────────────────────────────
-function buildEquipList(){
-  const all=EQUIP_CATS.flatMap(c=>c.items);
-  document.getElementById('e_tot').textContent=all.length;
-  document.getElementById('e_pres').textContent=0;
-  document.getElementById('e_miss').textContent=all.length;
-  let h='';
-  EQUIP_CATS.forEach(cat=>{
-    h+=`<div class="cat-hdr equip"><div class="ci">${cat.icon}</div><div><div class="cn">${cat.name}</div><div class="cc">${cat.items.length} items</div></div></div>`;
-    cat.items.forEach(item=>{
-      const k=ek(item);
-      h+=`<div class="eq-row missing" id="eqrow_${k}">
-        <div class="eq-chk" id="eqchk_${k}" onclick="toggleEq('${item}')">✗</div>
-        <div class="eq-name">${item}</div>
-        <div class="eq-badge" id="eqbadge_${k}">NOT PRESENT</div>
-        <div class="eq-ctrl">
-          <button class="eq-btn" onclick="chEq('${item}',-1)">−</button>
-          <div class="eq-val z" id="eqval_${k}">0</div>
-          <button class="eq-btn" onclick="chEq('${item}',1)">+</button>
-        </div></div>`;
+async function supaFetch(method, path, body) {
+  try {
+    const res = await fetch(SUPA_URL + path, {
+      method,
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': method === 'POST' ? 'return=representation' : '' },
+      body: body ? JSON.stringify(body) : undefined
     });
-  });
-  document.getElementById('equipList').innerHTML=h;
-}
-function toggleEq(item){
-  const d=formData.equipment;d.items=d.items||{};
-  formData.equipment[item].checked=!formData.equipment[item].checked;
-  if(formData.equipment[item].checked&&formData.equipment[item].count===0)formData.equipment[item].count=1;
-  if(!formData.equipment[item].checked)formData.equipment[item].count=0;
-  updateEqUI(item);updateEqStats();
-}
-function chEq(item,delta){
-  let c=formData.equipment[item].count+delta;if(c<0)c=0;
-  formData.equipment[item].count=c;formData.equipment[item].checked=c>0;
-  updateEqUI(item);updateEqStats();
-}
-function updateEqUI(item){
-  const k=ek(item),ok=formData.equipment[item].count>0;
-  const row=document.getElementById('eqrow_'+k);
-  if(!row)return;
-  row.classList.toggle('present',ok);row.classList.toggle('missing',!ok);
-  document.getElementById('eqchk_'+k).textContent=ok?'✓':'✗';
-  document.getElementById('eqbadge_'+k).textContent=ok?'PRESENT':'NOT PRESENT';
-  const v=document.getElementById('eqval_'+k);v.textContent=formData.equipment[item].count;v.classList.toggle('z',formData.equipment[item].count===0);
-}
-function updateEqStats(){
-  const all=EQUIP_CATS.flatMap(c=>c.items),p=all.filter(i=>formData.equipment[i].count>0);
-  document.getElementById('e_pres').textContent=p.length;
-  document.getElementById('e_miss').textContent=all.length-p.length;
+    if (!res.ok) throw new Error(await res.text());
+    return method === 'DELETE' ? null : res.json();
+  } catch(e) { console.warn('Supabase:', e); return null; }
 }
 
-// ── NAVIGATION ────────────────────────────────────────────────
-function showStep(n){
-  document.querySelectorAll('#roomForm .screen').forEach(s=>s.classList.remove('active'));
-  if(n==='suc')document.getElementById('stepSuc').classList.add('active');
-  else document.getElementById('step'+n).classList.add('active');
-  curStep=n;window.scrollTo(0,0);
+// ════════════════════════════════════════════════════════
+// STAFF DATABASE (demo — in production loaded from Supabase)
+// ════════════════════════════════════════════════════════
+const STAFF_DB = {
+  'IKL0050': { name: 'Karthikesu', pw: 'irama123', role: 'staff' },
+  'IKL0001': { name: 'Lisa Ahmad', pw: 'irama123', role: 'staff' },
+  'IKL0002': { name: 'Mary Lim', pw: 'irama123', role: 'staff' },
+  'IKL0003': { name: 'Sarah Tan', pw: 'irama123', role: 'staff' },
+  'IKL0004': { name: 'Aini Binti Aziz', pw: 'irama123', role: 'staff' },
+  'IKL0005': { name: 'Nurul Huda', pw: 'irama123', role: 'staff' },
+  'IKL9999': { name: 'HK Manager', pw: 'manager2026', role: 'supervisor' },
+};
+
+// ════════════════════════════════════════════════════════
+// APP STATE
+// ════════════════════════════════════════════════════════
+let currentStaff = null;
+let currentRoom = null;
+let currentRoomType = null;
+let currentStep = 0;
+let timeIn = null;
+let roomStatus = null;
+let linenState = {};   // {itemName: 'ok'|'reuse'|'missing'}
+let amenityState = {}; // {itemName: 'ok'|'missing'}
+let equipState = {};   // {itemName: 'ok'|'missing'}
+let todayStats = { rooms: 0, flags: 0, reuse: 0 };
+
+// ════════════════════════════════════════════════════════
+// CLOCK
+// ════════════════════════════════════════════════════════
+function tick() {
+  const now = new Date();
+  const ts = now.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
+  const el = document.getElementById('headerTime');
+  if (el) el.textContent = ts;
+  const hr = now.getHours();
+  const greet = hr < 12 ? 'Morning' : hr < 18 ? 'Afternoon' : 'Evening';
+  const gel = document.getElementById('greetTime');
+  if (gel) gel.textContent = greet;
+  const del = document.getElementById('todayDate');
+  if (del) del.textContent = now.toLocaleDateString('en-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 }
-function updateProg(){
-  const total=5;const step=typeof curStep==='number'?curStep:5;
-  let h='';
-  for(let i=1;i<=total;i++)h+=`<div class="prog-seg ${i<step?'done':i===step?'active':''}"></div>`;
-  document.getElementById('progTrack').innerHTML=h;
-  const labels={1:'Room & Status',2:'Linen',3:'Amenities',4:'Equipment',5:'Review & Submit'};
-  document.getElementById('progInfo').innerHTML=`Step <span>${step}</span> of ${total} — ${labels[step]||''}`;
+tick(); setInterval(tick, 10000);
+
+// ════════════════════════════════════════════════════════
+// SCREENS
+// ════════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
 }
-function updateNav(){
-  const back=document.getElementById('btnBack'),next=document.getElementById('btnNext');
-  back.style.display=curStep>1&&curStep!=='suc'?'block':'none';
-  if(curStep===5){next.textContent='✅ Submit Report';next.className='btn-next green';}
-  else{next.textContent='Next →';next.className='btn-next gold';}
-  if(curStep==='suc')document.getElementById('navBar').style.display='none';
-}
-function goBack(){
-  if(curStep<=1){showView('home');return;}
-  showStep(curStep-1);updateProg();updateNav();
-}
-async function goNext(){
-  if(curStep===1){
-    const room=document.getElementById('f_room').textContent.replace('–','').trim();
-    if(!room){alert('Please enter room number.');return;}
-    formData.room=room;
-    formData.sfrom=document.getElementById('f_sfrom').value;
-    formData.sto=document.getElementById('f_sto').value;
+
+// ════════════════════════════════════════════════════════
+// LOGIN
+// ════════════════════════════════════════════════════════
+function doLogin() {
+  const id = document.getElementById('loginId').value.trim().toUpperCase();
+  const pw = document.getElementById('loginPw').value;
+  const staff = STAFF_DB[id];
+  if (!staff || staff.pw !== pw) {
+    document.getElementById('loginErr').style.display = 'block';
+    return;
   }
-  if(curStep===5){await submitReport();return;}
-  showStep(curStep+1);
-  if(curStep===5)buildReview();
-  updateProg();updateNav();
+  document.getElementById('loginErr').style.display = 'none';
+  currentStaff = { id, ...staff };
+  document.getElementById('staffBadge').textContent = id;
+  document.getElementById('staffNameDisplay').textContent = staff.name;
+  loadTodayStats();
+  showScreen('homeScreen');
 }
 
-// ── REVIEW ────────────────────────────────────────────────────
-function buildReview(){
-  const linenActive=LINEN_CATS.flatMap(c=>c.items).filter(i=>formData.linen[i].in>0||formData.linen[i].out>0);
-  const amenActive=AMEN_CATS.flatMap(c=>c.items).filter(i=>formData.amenities[i].in>0||formData.amenities[i].out>0);
-  const allEquip=EQUIP_CATS.flatMap(c=>c.items);
-  const missing=allEquip.filter(i=>formData.equipment[i].count===0);
-  const recycleActive=RECYCLE_ITEMS.filter(i=>formData.recycle[i]);
-  let h=`<div class="sum-card"><div class="sum-h room">🏨 Room ${formData.room}</div><div class="sum-b">
-    <div class="sr"><span class="sk">Maid</span><span class="sv">${staff.name} · ${staff.floor}</span></div>
-    <div class="sr"><span class="sk">Date</span><span class="sv">${formData.date}</span></div>
-    <div class="sr"><span class="sk">Time In</span><span class="sv">${formData.tin}</span></div>
-    <div class="sr"><span class="sk">Status</span><span class="sv">${formData.sfrom||'—'} → ${formData.sto||'—'}</span></div>
-  </div></div>`;
-  h+=`<div class="sum-card"><div class="sum-h linen">🛏️ Linen (${linenActive.length} items active)</div><div class="sum-b">
-    ${linenActive.length===0?'<div style="font-size:12px;color:var(--muted)">No items entered</div>':linenActive.map(i=>`<div class="sr"><span class="sk">${i}</span><span class="sv">IN ${formData.linen[i].in} / OUT ${formData.linen[i].out}</span></div>`).join('')}
-    ${recycleActive.length>0?'<div style="font-size:10px;font-weight:700;color:var(--linen);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em">♻️ Recycle</div>'+recycleActive.map(i=>`<div class="sr"><span class="sk">${i}</span><span class="sv">${formData.recycle[i]}</span></div>`).join(''):''}
-  </div></div>`;
-  h+=`<div class="sum-card"><div class="sum-h amen">🧴 Amenities (${amenActive.length} items active)</div><div class="sum-b">
-    ${amenActive.length===0?'<div style="font-size:12px;color:var(--muted)">No items entered</div>':amenActive.map(i=>`<div class="sr"><span class="sk">${i}</span><span class="sv">IN ${formData.amenities[i].in} / OUT ${formData.amenities[i].out}</span></div>`).join('')}
-  </div></div>`;
-  h+=`<div class="sum-card"><div class="sum-h equip">🛎️ Equipment — ${missing.length} Not Present</div><div class="sum-b">
-    <div class="sr"><span class="sk">Total Items</span><span class="sv">${allEquip.length}</span></div>
-    <div class="sr"><span class="sk" style="color:var(--equip)">✅ Present</span><span class="sv" style="color:var(--equip)">${allEquip.length-missing.length}</span></div>
-    <div class="sr"><span class="sk" style="color:#FF9090">❌ Not Present</span><span class="sv" style="color:#FF9090">${missing.length}</span></div>
-    ${missing.map(i=>`<div class="sr"><span class="sk" style="color:#FF9090">❌ ${i}</span><span class="sv"></span></div>`).join('')}
-  </div></div>`;
-  document.getElementById('reviewSummary').innerHTML=h;
+function doLogout() {
+  currentStaff = null;
+  document.getElementById('loginId').value = '';
+  document.getElementById('loginPw').value = '';
+  showScreen('loginScreen');
 }
 
-// ── SUBMIT ────────────────────────────────────────────────────
-async function submitReport(){
-  const now=new Date();
-  formData.tout=now.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit',hour12:false});
-  formData.remarks=document.getElementById('f_remarks').value.trim();
-  const id='RM-'+Date.now().toString(36).toUpperCase();
-  const entry={id,type:'combined',timestamp:now.toISOString(),date:formData.date,room:formData.room,sfrom:formData.sfrom,sto:formData.sto,tin:formData.tin,tout:formData.tout,staff:{name:staff.name,floor:staff.floor},linen:JSON.parse(JSON.stringify(formData.linen)),amenities:JSON.parse(JSON.stringify(formData.amenities)),equipment:JSON.parse(JSON.stringify(formData.equipment)),recycle:JSON.parse(JSON.stringify(formData.recycle)),remarks:formData.remarks};
-  await saveLog(entry);
-  document.getElementById('suc_room').textContent='Room '+formData.room;
-  document.getElementById('suc_id').textContent=id;
-  showStep('suc');updateNav();updateHome();
+function showSupervisor() { showScreen('supScreen'); }
+
+// ════════════════════════════════════════════════════════
+// HOME — ROOM INPUT
+// ════════════════════════════════════════════════════════
+function onRoomInput(val) {
+  const badge = document.getElementById('roomTypeBadge');
+  const btn = document.getElementById('startBtn');
+  if (val.length === 4) {
+    const rn = parseInt(val);
+    const rt = ROOM_DB[rn];
+    if (rt) {
+      const name = ROOM_TYPE_NAMES[rt] || rt;
+      badge.innerHTML = `<span class="room-type-pill">${val} — ${name}</span>`;
+      btn.disabled = false;
+      currentRoom = val;
+      currentRoomType = rt;
+    } else {
+      badge.innerHTML = `<span class="room-type-err">Room ${val} not found</span>`;
+      btn.disabled = true;
+    }
+  } else {
+    badge.innerHTML = '';
+    btn.disabled = true;
+  }
 }
 
-function nextRoom(){
-  initFormData();curStep=1;
-  const now=new Date();
-  formData.tin=now.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit',hour12:false});
-  formData.date=now.toLocaleDateString('en-MY',{day:'2-digit',month:'short',year:'numeric'});
-  document.getElementById('f_tin_display').textContent=formData.tin;
-  document.getElementById('f_room').textContent='–';
-  document.getElementById('f_sfrom').value='';
-  document.getElementById('f_sto').value='';
-  document.getElementById('f_remarks').value='';
-  buildLinenList();buildAmenList();buildEquipList();buildRecycleList();
-  showStep(1);document.getElementById('navBar').style.display='flex';updateNav();updateProg();
+function startReport() {
+  if (!currentRoom || !currentRoomType) return;
+  timeIn = new Date();
+  roomStatus = null;
+  linenState = {};
+  amenityState = {};
+  equipState = {};
+  currentStep = 0;
+
+  // Set room info bar
+  document.getElementById('reportRoomBadge').textContent = currentRoom;
+  document.getElementById('ribRoom').textContent = currentRoom;
+  document.getElementById('ribType').textContent = ROOM_TYPE_NAMES[currentRoomType] || currentRoomType;
+  document.getElementById('ribTimeIn').textContent = 'Time In: ' + timeIn.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('roomFeatures').textContent = ROOM_FEATURES_DB[parseInt(currentRoom)] || 'Standard room features';
+
+  // Reset status buttons
+  ['OD','VC','VD','OC'].forEach(s => document.getElementById('status'+s).className = 'linen-btn');
+
+  // Build linen items
+  buildLinenItems();
+  buildAmenityItems();
+  buildEquipItems();
+
+  goToStep(0);
+  showScreen('reportScreen');
 }
 
-// ── RECORDS ───────────────────────────────────────────────────
-async function renderRec(){
-  showToast('⏳ Loading...');
-  let logs=await getLogs();
-  const fDate=document.getElementById('f_date').value;
-  const fRoom=document.getElementById('f_rroom').value.trim().toLowerCase();
-  const fName=document.getElementById('f_rname').value;
-  const names=[...new Set(logs.map(l=>l.staff?.name||''))].filter(Boolean).sort();
-  const ns=document.getElementById('f_rname'),cv=ns.value;
-  ns.innerHTML='<option value="">All staff</option>'+names.map(n=>`<option ${n===cv?'selected':''}>${n}</option>`).join('');
-  if(fDate)logs=logs.filter(l=>l.date===new Date(fDate).toLocaleDateString('en-MY',{day:'2-digit',month:'short',year:'numeric'}));
-  if(fRoom)logs=logs.filter(l=>l.room.toLowerCase().includes(fRoom));
-  if(fName)logs=logs.filter(l=>(l.staff?.name||'')===fName);
-  const issues=logs.filter(l=>Object.values(l.equipment||{}).some(v=>v.count===0));
-  document.getElementById('rs_tot').textContent=logs.length;
-  document.getElementById('rs_rooms').textContent=new Set(logs.map(l=>l.room)).size;
-  document.getElementById('rs_iss').textContent=issues.length;
-  const c=document.getElementById('recList');
-  if(logs.length===0){c.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No records found</h3></div>';return;}
-  c.innerHTML=logs.map(log=>{
-    const hasIss=Object.values(log.equipment||{}).some(v=>v.count===0);
-    const missItems=Object.keys(log.equipment||{}).filter(i=>log.equipment[i].count===0);
-    const linenActive=Object.keys(log.linen||{}).filter(i=>log.linen[i].in>0||log.linen[i].out>0);
-    const amenActive=Object.keys(log.amenities||{}).filter(i=>log.amenities[i].in>0||log.amenities[i].out>0);
-    return `<div class="rc ${hasIss?'has-issue':''}" id="rc_${log.id}">
-      <div class="rc-top" onclick="document.getElementById('rc_${log.id}').classList.toggle('expanded')">
-        <div class="rc-room">${log.room}</div>
-        <div class="rc-info">
-          <div class="rc-name">${log.staff?.name||'—'}</div>
-          <div class="rc-meta">${log.staff?.floor||'—'} · ${log.date} · ${log.tin||'—'}→${log.tout||'—'}</div>
-          <div class="rc-meta">${log.sfrom||'—'}→${log.sto||'—'}</div>
-        </div>
-        <div class="rc-right">
-          ${hasIss?`<span class="miss-badge">❌ ${missItems.length} missing</span>`:'<span class="ok-badge">✅ All OK</span>'}
-          <span style="font-size:9px;color:var(--muted);">🛏️🧴🛎️</span>
-        </div>
+// ════════════════════════════════════════════════════════
+// BUILD ITEMS
+// ════════════════════════════════════════════════════════
+function buildLinenItems() {
+  const items = (ITEMS_DB[currentRoomType] || ITEMS_DB['DLXK']).linen;
+  const container = document.getElementById('linenItems');
+  container.innerHTML = '';
+  items.forEach(item => {
+    linenState[item.n] = 'ok';
+    const div = document.createElement('div');
+    div.className = 'linen-row';
+    div.id = 'linen_' + item.n.replace(/\s/g,'_');
+    div.innerHTML = `
+      <div class="linen-top">
+        <span class="linen-name">${item.n}</span>
+        <span class="linen-std-badge">Std: ${item.q}</span>
       </div>
-      <div class="rc-expand">
-        ${log.remarks?`<div style="background:var(--gold3)15;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--gold2);">📝 ${log.remarks}</div>`:''}
-        ${hasIss?`<div class="exp-section"><div class="exp-title">⚠️ Not Present Equipment</div>${missItems.map(i=>`<div style="font-size:12px;color:#FF9090;padding:3px 0;">❌ ${i}</div>`).join('')}</div>`:''}
-        <div class="exp-section"><div class="exp-title">🛏️ Linen (${linenActive.length} active)</div>
-          ${linenActive.slice(0,6).map(i=>`<div style="font-size:11px;padding:2px 0;">${i}: IN ${log.linen[i].in} / OUT ${log.linen[i].out}</div>`).join('')}
-          ${linenActive.length>6?`<div style="font-size:11px;color:var(--muted)">...and ${linenActive.length-6} more</div>`:''}
+      <div class="linen-actions">
+        <button class="linen-btn sel-ok" onclick="setLinen('${item.n}','ok',this)">✓ OK</button>
+        <button class="linen-btn" onclick="setLinen('${item.n}','reuse',this)">REUSE</button>
+        <button class="linen-btn" onclick="setLinen('${item.n}','missing',this)">MISSING</button>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function setLinen(name, status, btn) {
+  linenState[name] = status;
+  const row = document.getElementById('linen_' + name.replace(/\s/g,'_'));
+  const btns = row.querySelectorAll('.linen-btn');
+  btns.forEach(b => b.className = 'linen-btn');
+  btn.className = 'linen-btn sel-' + status;
+}
+
+function buildAmenityItems() {
+  const items = (ITEMS_DB[currentRoomType] || ITEMS_DB['DLXK']).amenities;
+  const container = document.getElementById('amenitiesItems');
+  container.innerHTML = '';
+  let lastSection = '';
+  items.forEach(item => {
+    amenityState[item.n] = 'ok';
+    if (item.s !== lastSection) {
+      const hdr = document.createElement('div');
+      hdr.className = 'section-hdr';
+      hdr.textContent = item.s;
+      container.appendChild(hdr);
+      lastSection = item.s;
+    }
+    const div = document.createElement('div');
+    div.className = 'item-row ok';
+    div.id = 'am_' + item.n.replace(/[^a-z0-9]/gi,'_');
+    div.innerHTML = `
+      <div class="item-info">
+        <div class="item-name">${item.n}</div>
+        <div class="item-std">Standard: <span>${item.q}</span></div>
+      </div>
+      <div class="item-status">
+        <span class="status-ok" id="amok_${item.n.replace(/[^a-z0-9]/gi,'_')}">✓</span>
+        <button class="flag-btn" id="amflag_${item.n.replace(/[^a-z0-9]/gi,'_')}" onclick="flagAmenity('${item.n}')">MISSING</button>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function flagAmenity(name) {
+  const key = name.replace(/[^a-z0-9]/gi,'_');
+  const row = document.getElementById('am_' + key);
+  const btn = document.getElementById('amflag_' + key);
+  const ok = document.getElementById('amok_' + key);
+  if (amenityState[name] === 'ok') {
+    amenityState[name] = 'missing';
+    row.className = 'item-row flagged';
+    btn.className = 'flag-btn missing';
+    btn.textContent = '✓ RESTORE';
+    ok.style.display = 'none';
+  } else {
+    amenityState[name] = 'ok';
+    row.className = 'item-row ok';
+    btn.className = 'flag-btn';
+    btn.textContent = 'MISSING';
+    ok.style.display = '';
+  }
+}
+
+function buildEquipItems() {
+  const equip = (ITEMS_DB[currentRoomType] || ITEMS_DB['DLXK']).equipment;
+  const container = document.getElementById('equipItems');
+  container.innerHTML = '';
+  equip.forEach(item => {
+    equipState[item.n] = 'ok';
+    const div = document.createElement('div');
+    div.className = 'item-row ok';
+    div.id = 'eq_' + item.n.replace(/[^a-z0-9]/gi,'_');
+    div.innerHTML = `
+      <div class="item-info">
+        <div class="item-name">${item.n}</div>
+        <div class="item-std" style="color:var(--green)">Present ✓</div>
+      </div>
+      <div class="item-status">
+        <button class="flag-btn" id="eqflag_${item.n.replace(/[^a-z0-9]/gi,'_')}" onclick="flagEquip('${item.n}')">MISSING</button>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function flagEquip(name) {
+  const key = name.replace(/[^a-z0-9]/gi,'_');
+  const row = document.getElementById('eq_' + key);
+  const btn = document.getElementById('eqflag_' + key);
+  const lbl = row.querySelector('.item-std');
+  if (equipState[name] === 'ok') {
+    equipState[name] = 'missing';
+    row.className = 'item-row flagged';
+    btn.className = 'flag-btn missing';
+    btn.textContent = '✓ RESTORE';
+    lbl.style.color = 'var(--red)';
+    lbl.textContent = 'Not Found ✗';
+  } else {
+    equipState[name] = 'ok';
+    row.className = 'item-row ok';
+    btn.className = 'flag-btn';
+    btn.textContent = 'MISSING';
+    lbl.style.color = 'var(--green)';
+    lbl.textContent = 'Present ✓';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// ROOM STATUS
+// ════════════════════════════════════════════════════════
+function setStatus(s) {
+  ['OD','VC','VD','OC'].forEach(x => document.getElementById('status'+x).className = 'linen-btn');
+  document.getElementById('status'+s).className = 'linen-btn sel-ok';
+  roomStatus = s;
+}
+
+// ════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════
+function goToStep(n) {
+  currentStep = n;
+  document.querySelectorAll('.step-panel').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.step-tab').forEach((t,i) => {
+    t.classList.remove('active','done');
+    if (i === n) t.classList.add('active');
+    else if (i < n) t.classList.add('done');
+  });
+  document.getElementById('backBtn').style.display = n > 0 ? '' : 'none';
+  document.getElementById('nextBtn').textContent = n < 4 ? 'Next →' : 'Review';
+  document.getElementById('navBtns').style.display = n === 4 ? 'none' : '';
+  if (n === 4) buildSummary();
+  document.getElementById('reportBody').scrollTop = 0;
+}
+function goNext() { if (currentStep < 4) goToStep(currentStep + 1); }
+function goBack() { if (currentStep > 0) goToStep(currentStep - 1); }
+function cancelReport() {
+  if (confirm('Cancel this report?')) { showScreen('homeScreen'); }
+}
+
+// ════════════════════════════════════════════════════════
+// SUMMARY
+// ════════════════════════════════════════════════════════
+function buildSummary() {
+  const timeOut = new Date();
+  document.getElementById('submitRibRoom').textContent = currentRoom;
+  document.getElementById('submitRibType').textContent = ROOM_TYPE_NAMES[currentRoomType] || currentRoomType;
+  document.getElementById('submitTimes').innerHTML = `In: ${timeIn.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'})}<br>Out: ${timeOut.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'})}`;
+
+  const flags = [];
+  Object.entries(linenState).forEach(([k,v]) => { if(v!=='ok') flags.push({name:k,type:v}); });
+  Object.entries(amenityState).forEach(([k,v]) => { if(v!=='ok') flags.push({name:k,type:v}); });
+  Object.entries(equipState).forEach(([k,v]) => { if(v!=='ok') flags.push({name:k,type:v}); });
+
+  const el = document.getElementById('flagSummaryContent');
+  if (flags.length === 0) {
+    el.innerHTML = '<div class="no-flags">✓ All items OK — no issues found</div>';
+  } else {
+    el.innerHTML = flags.map(f => `
+      <div class="flag-item">
+        <div class="flag-dot ${f.type}"></div>
+        <span>${f.name}</span>
+        <span style="margin-left:auto;font-size:10px;text-transform:uppercase;color:${f.type==='missing'?'var(--red)':'var(--amber)'};">${f.type}</span>
+      </div>`).join('');
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// SUBMIT
+// ════════════════════════════════════════════════════════
+async function submitReport() {
+  const timeOut = new Date();
+  const flags = [];
+  Object.entries(linenState).forEach(([k,v]) => { if(v!=='ok') flags.push({item:k,type:v,category:'linen'}); });
+  Object.entries(amenityState).forEach(([k,v]) => { if(v!=='ok') flags.push({item:k,type:v,category:'amenity'}); });
+  Object.entries(equipState).forEach(([k,v]) => { if(v!=='ok') flags.push({item:k,type:v,category:'equipment'}); });
+
+  const report = {
+    room: currentRoom,
+    room_type: currentRoomType,
+    room_type_name: ROOM_TYPE_NAMES[currentRoomType] || currentRoomType,
+    staff_id: currentStaff.id,
+    staff_name: currentStaff.name,
+    room_status: roomStatus || 'OD',
+    time_in: timeIn.toISOString(),
+    time_out: timeOut.toISOString(),
+    linen: JSON.stringify(linenState),
+    amenities: JSON.stringify(amenityState),
+    equipment: JSON.stringify(equipState),
+    flags: JSON.stringify(flags),
+    flag_count: flags.length,
+    reuse_count: Object.values(linenState).filter(v=>v==='reuse').length,
+    remarks: document.getElementById('closingRemarks').value,
+    date: new Date().toISOString().split('T')[0]
+  };
+
+  // Save to localStorage
+  const key = 'hk_' + Date.now();
+  const existing = JSON.parse(localStorage.getItem('hk_reports') || '[]');
+  existing.push({ key, ...report });
+  localStorage.setItem('hk_reports', JSON.stringify(existing));
+
+  // Try Supabase
+  await supaFetch('POST', '/rest/v1/housekeeping_reports', report);
+
+  // Update stats
+  todayStats.rooms++;
+  todayStats.flags += flags.length;
+  todayStats.reuse += report.reuse_count;
+  document.getElementById('statRooms').textContent = todayStats.rooms;
+  document.getElementById('statFlags').textContent = todayStats.flags;
+  document.getElementById('statReuse').textContent = todayStats.reuse;
+
+  document.getElementById('successRoom').textContent = currentRoom;
+  showScreen('successScreen');
+}
+
+function nextRoom() {
+  document.getElementById('roomInput').value = '';
+  document.getElementById('roomTypeBadge').innerHTML = '';
+  document.getElementById('startBtn').disabled = true;
+  currentRoom = null;
+  currentRoomType = null;
+  showScreen('homeScreen');
+}
+function goHome() {
+  document.getElementById('roomInput').value = '';
+  document.getElementById('roomTypeBadge').innerHTML = '';
+  document.getElementById('startBtn').disabled = true;
+  currentRoom = null;
+  showScreen('homeScreen');
+}
+
+// ════════════════════════════════════════════════════════
+// TODAY STATS
+// ════════════════════════════════════════════════════════
+function loadTodayStats() {
+  const today = new Date().toISOString().split('T')[0];
+  const all = JSON.parse(localStorage.getItem('hk_reports') || '[]');
+  const mine = all.filter(r => r.staff_id === currentStaff.id && r.date === today);
+  todayStats = {
+    rooms: mine.length,
+    flags: mine.reduce((s,r) => s + (r.flag_count||0), 0),
+    reuse: mine.reduce((s,r) => s + (r.reuse_count||0), 0)
+  };
+  document.getElementById('statRooms').textContent = todayStats.rooms;
+  document.getElementById('statFlags').textContent = todayStats.flags;
+  document.getElementById('statReuse').textContent = todayStats.reuse;
+}
+
+// ════════════════════════════════════════════════════════
+// SUPERVISOR
+// ════════════════════════════════════════════════════════
+function supLogin() {
+  if (document.getElementById('supPw').value === SUP_PASS) {
+    document.getElementById('supLoginPanel').style.display = 'none';
+    document.getElementById('supDashboard').style.display = '';
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('supDate').value = today;
+    loadDashboard();
+  } else {
+    document.getElementById('supErr').style.display = 'block';
+  }
+}
+
+function loadDashboard() {
+  const date = document.getElementById('supDate').value;
+  const roomF = document.getElementById('supRoomFilter').value.toLowerCase();
+  const staffF = document.getElementById('supStaffFilter').value.toLowerCase();
+  const all = JSON.parse(localStorage.getItem('hk_reports') || '[]');
+  let records = all.filter(r => r.date === date);
+  if (roomF) records = records.filter(r => r.room && r.room.toLowerCase().includes(roomF));
+  if (staffF) records = records.filter(r => r.staff_id && r.staff_id.toLowerCase().includes(staffF));
+  records.sort((a,b) => new Date(b.time_out||b.time_in) - new Date(a.time_out||a.time_in));
+  document.getElementById('supRecordCount').textContent = records.length + ' records';
+  const el = document.getElementById('supRecords');
+  if (records.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No records found for this date</div>';
+    return;
+  }
+  el.innerHTML = records.map(r => {
+    const flags = JSON.parse(r.flags || '[]');
+    const flagHtml = flags.length > 0
+      ? flags.map(f => `<span class="rc-flag ${f.type}">${f.item}: ${f.type}</span>`).join('')
+      : '<span class="rc-flag ok">All OK</span>';
+    const tin = r.time_in ? new Date(r.time_in).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'}) : '—';
+    const tout = r.time_out ? new Date(r.time_out).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'}) : '—';
+    return `<div class="record-card">
+      <div class="rc-header">
+        <div>
+          <div class="rc-room">Room ${r.room}</div>
+          <div class="rc-type">${r.room_type_name||r.room_type} · ${r.room_status||'—'}</div>
+          <div class="rc-staff">${r.staff_name||r.staff_id}</div>
         </div>
-        <div class="exp-section"><div class="exp-title">🧴 Amenities (${amenActive.length} active)</div>
-          ${amenActive.slice(0,4).map(i=>`<div style="font-size:11px;padding:2px 0;">${i}: IN ${log.amenities[i].in} / OUT ${log.amenities[i].out}</div>`).join('')}
-          ${amenActive.length>4?`<div style="font-size:11px;color:var(--muted)">...and ${amenActive.length-4} more</div>`:''}
-        </div>
-        <div style="font-size:10px;color:var(--muted);margin:8px 0 6px">ID: ${log.id}</div>
-        <div class="rc-actions">
-          <button class="act act-p" onclick="printRec('${log.id}')">🖨️ Print</button>
-          <button class="act act-d" onclick="if(confirm('Delete?'))delLog('${log.id}')">🗑️ Delete</button>
-        </div>
-      </div></div>`;
+        <div class="rc-time">${tin} → ${tout}</div>
+      </div>
+      ${r.remarks ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);">📝 ${r.remarks}</div>` : ''}
+      <div class="rc-flags">${flagHtml}</div>
+    </div>`;
   }).join('');
 }
 
-function clearFilters(){
-  document.getElementById('f_date').value='';
-  document.getElementById('f_rroom').value='';
-  document.getElementById('f_rname').value='';
-  renderRec();
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-async function printRec(id){
-  const logs=await getLogs();const log=logs.find(l=>l.id===id);if(!log)return;
-  const allEquip=EQUIP_CATS.flatMap(c=>c.items);
-  const missing=allEquip.filter(i=>log.equipment[i]&&log.equipment[i].count===0);
-  const pw=window.open('','_blank');
-  pw.document.write(`<!DOCTYPE html><html><head><title>Room ${log.room} Report</title>
-  <style>body{font-family:Arial,sans-serif;padding:20px;max-width:750px;margin:0 auto;color:#222;}h1{font-size:16px;}h2{font-size:13px;color:#888;margin-bottom:16px;font-weight:normal;}table{width:100%;border-collapse:collapse;margin-bottom:16px;}th{background:#0B1520;color:#C8A96E;padding:7px 10px;font-size:11px;text-align:left;}td{padding:6px 10px;font-size:12px;border-bottom:1px solid #eee;}.sec{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:#f5f0e8;padding:7px 10px;border-bottom:2px solid #C8A96E;color:#6B4C1E;}.miss{color:#c05050;font-weight:700;}.ok{color:#2a7a5a;}@media print{button{display:none;}}</style></head>
-  <body><h1>🏨 IRAMA KUALA LUMPUR — Room Report</h1><h2>Room ${log.room} · ${log.date} · ${log.tin||'—'} → ${log.tout||'—'}</h2>
-  <table><tr><td><b>Maid</b></td><td>${log.staff?.name||'—'}</td><td><b>Floor</b></td><td>${log.staff?.floor||'—'}</td></tr>
-  <tr><td><b>Status</b></td><td>${log.sfrom||'—'} → ${log.sto||'—'}</td><td><b>Report ID</b></td><td>${log.id}</td></tr>
-  ${log.remarks?`<tr><td><b>Remarks</b></td><td colspan="3" style="color:#9A7240">${log.remarks}</td></tr>`:''}</table>
-  <div class="sec">🛏️ LINEN REPORT</div>
-  <table><tr><th>Item</th><th>IN</th><th>OUT</th><th>Recycle Condition</th></tr>
-  ${LINEN_CATS.flatMap(c=>c.items).map(i=>`<tr><td>${i}</td><td>${log.linen[i]?.in||0}</td><td>${log.linen[i]?.out||0}</td><td>${log.recycle?.[i]||'—'}</td></tr>`).join('')}</table>
-  <div class="sec">🧴 AMENITIES REPORT</div>
-  <table><tr><th>Item</th><th>IN</th><th>OUT</th></tr>
-  ${AMEN_CATS.flatMap(c=>c.items).map(i=>`<tr><td>${i}</td><td>${log.amenities[i]?.in||0}</td><td>${log.amenities[i]?.out||0}</td></tr>`).join('')}</table>
-  <div class="sec">🛎️ EQUIPMENT REPORT — ${missing.length} Not Present</div>
-  <table><tr><th>Item</th><th>Status</th><th>Count</th></tr>
-  ${EQUIP_CATS.flatMap(c=>c.items).map(i=>{const ok=log.equipment[i]?.count>0;return`<tr><td>${i}</td><td class="${ok?'ok':'miss'}">${ok?'✅ Present':'❌ Not Present'}</td><td>${log.equipment[i]?.count||0}</td></tr>`;}).join('')}</table>
-  <div style="text-align:center;margin-top:16px"><button onclick="window.print()" style="background:#0B1520;color:#C8A96E;border:none;padding:10px 24px;border-radius:8px;font-size:13px;cursor:pointer">🖨️ Print / Save PDF</button></div>
-  
-<!-- EDIT MODAL -->
-<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#00000088;z-index:1000;overflow-y:auto;">
-  <div style="background:var(--bg2);margin:20px auto;max-width:600px;border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#F8F3EA,#EDE4D0);border-bottom:2px solid var(--gold);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#6B4C1E;font-weight:700;">✏️ Amend Report — Room <span id="edit_room_title"></span></div>
-      <button onclick="closeEdit()" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;border-radius:20px;cursor:pointer;">✕ Close</button>
-    </div>
-    <div style="padding:16px;" id="editBody"></div>
-    <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;">
-      <button onclick="saveEdit()" style="flex:1;padding:14px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:var(--r);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">💾 Save Changes</button>
-      <button onclick="closeEdit()" style="padding:14px 20px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Cancel</button>
-    </div>
-  </div>
-</div>
-
-</body></html>`);pw.document.close();
-}
-
-// ── SUPERVISOR ────────────────────────────────────────────────
-const SUP_PASS='irama2026';
-function checkPass(){
-  if(document.getElementById('supPass').value===SUP_PASS){
-    document.getElementById('supLogin').style.display='none';
-    document.getElementById('supDash').style.display='block';
-    const saved=localStorage.getItem('sup_email')||'';
-    document.getElementById('sup_email').value=saved;
-    setDate('today');loadDash();
-  }else{document.getElementById('supErr').style.display='block';document.getElementById('supPass').value='';}
-}
-function saveEmail(){const e=document.getElementById('sup_email').value.trim();if(!e){showToast('⚠️ Enter email');return;}localStorage.setItem('sup_email',e);showToast('✅ Email saved');}
-function setDate(w){
-  const d=new Date();if(w==='yesterday')d.setDate(d.getDate()-1);
-  document.getElementById('sup_date').value=d.toISOString().split('T')[0];
-  loadDash();
-}
-function isoToDisplay(iso){if(!iso)return'—';const d=new Date(iso);return d.toLocaleDateString('en-MY',{day:'2-digit',month:'short',year:'numeric'});}
-async function loadDash(){
-  const dateIso=document.getElementById('sup_date').value;
-  const displayDate=isoToDisplay(dateIso+'T00:00:00');
-  let logs=[];
-  try{
-    const data=await supaFetch('GET',`/rest/v1/housekeeping_logs?select=*&date=eq.${encodeURIComponent(displayDate)}&order=created_at.desc&limit=1000`);
-    logs=data.map(r=>({id:r.id,type:r.type,timestamp:r.timestamp,date:r.date,room:r.room,sfrom:r.status_from,sto:r.status_to,tin:r.time_in,tout:r.time_out,staff:{name:r.staff_name,floor:r.floor},linen:r.items?.linen||{},amenities:r.items?.amenities||{},equipment:r.items?.equipment||{},recycle:r.items?.recycle||{},remarks:r.items?.remarks||''}));
-  }catch(e){showToast('⚠️ Could not load');return;}
-  // KPIs
-  document.getElementById('k_rooms').querySelector('.kpi-num').textContent=new Set(logs.map(l=>l.room)).size;
-  document.getElementById('k_maids').querySelector('.kpi-num').textContent=new Set(logs.map(l=>l.staff?.name)).size;
-  document.getElementById('k_reports').querySelector('.kpi-num').textContent=logs.length;
-  const issCount=logs.filter(l=>Object.values(l.equipment||{}).some(v=>v.count===0)).length;
-  document.getElementById('k_issues').querySelector('.kpi-num').textContent=issCount;
-  // Maid table
-  const maids={};
-  logs.forEach(l=>{
-    const n=l.staff?.name||'—';
-    if(!maids[n])maids[n]={floor:l.staff?.floor||'—',rooms:new Set(),reports:0,tins:[],touts:[],issues:0};
-    maids[n].rooms.add(l.room);maids[n].reports++;
-    if(l.tin)maids[n].tins.push(l.tin);if(l.tout)maids[n].touts.push(l.tout);
-    if(Object.values(l.equipment||{}).some(v=>v.count===0))maids[n].issues++;
-  });
-  document.getElementById('sup_maids').innerHTML=Object.keys(maids).length===0?'<div style="font-size:12px;color:var(--muted);text-align:center;padding:12px">No activity</div>':
-    Object.entries(maids).map(([name,m])=>{
-      const ini=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-      return`<div class="maid-row">
-        <div class="maid-avatar">${ini}</div>
-        <div class="maid-info"><div class="maid-name">${name}</div><div class="maid-meta">${m.floor} · ${m.tins.sort()[0]||'—'} → ${m.touts.sort().reverse()[0]||'—'}</div></div>
-        <div class="maid-stats">
-          <div class="maid-stat"><strong>${m.rooms.size}</strong>Rooms</div>
-          <div class="maid-stat"><strong>${m.reports}</strong>Reports</div>
-          <div class="maid-stat" style="${m.issues>0?'border-color:var(--red)55;':''}"><strong style="${m.issues>0?'color:var(--red)':''}">${m.issues}</strong><span style="${m.issues>0?'color:#FF9090':''}">Issues</span></div>
-        </div></div>`;
-    }).join('');
-  // Issues
-  const issArr=[];
-  logs.forEach(l=>Object.keys(l.equipment||{}).forEach(item=>{if(l.equipment[item].count===0)issArr.push({room:l.room,item,maid:l.staff?.name||'—'});}));
-  document.getElementById('sup_issCard').style.display=issArr.length===0?'none':'block';
-  document.getElementById('sup_issues').innerHTML=issArr.map(i=>`<div class="log-row"><div style="width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0"></div><div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#FF9090;min-width:44px">Rm ${i.room}</div><div style="flex:1">${i.item}</div><div style="font-size:11px;color:var(--muted)">${i.maid}</div></div>`).join('');
-  // Rooms
-  const rooms={};
-  logs.forEach(l=>{if(!rooms[l.room])rooms[l.room]={hasIss:false,maid:l.staff?.name||'—',tin:l.tin,tout:l.tout};if(Object.values(l.equipment||{}).some(v=>v.count===0))rooms[l.room].hasIss=true;});
-  document.getElementById('sup_rooms').innerHTML=Object.keys(rooms).length===0?'<div style="font-size:12px;color:var(--muted);text-align:center;padding:12px">No rooms</div>':
-    Object.entries(rooms).sort((a,b)=>parseInt(a[0])-parseInt(b[0])).map(([room,r])=>`<div class="room-chip ${r.hasIss?'issue':'done'}">${r.hasIss?'⚠️':'✅'} <strong>Rm ${room}</strong> ${r.maid}</div>`).join('');
-  // Full log
-  document.getElementById('sup_log').innerHTML=logs.length===0?'<div style="font-size:12px;color:var(--muted);text-align:center;padding:12px">No records</div>':
-    logs.map(l=>{
-      const hasIss=Object.values(l.equipment||{}).some(v=>v.count===0);
-      const linenActive=Object.keys(l.linen||{}).filter(i=>l.linen[i].in>0||l.linen[i].out>0);
-      const amenActive=Object.keys(l.amenities||{}).filter(i=>l.amenities[i].in>0||l.amenities[i].out>0);
-      return`<div class="log-row" style="flex-direction:column;align-items:flex-start;padding:10px 0;">
-        <div style="display:flex;align-items:center;gap:8px;width:100%;">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold);min-width:54px">Rm ${l.room}</div>
-          <div style="flex:1"><div style="font-size:12px;font-weight:600">${l.staff?.name||'—'}</div><div style="font-size:10px;color:var(--muted)">${l.tin||'—'}→${l.tout||'—'} · ${l.sfrom||'—'}→${l.sto||'—'}</div></div>
-          ${hasIss?'<div style="font-size:10px;background:var(--red)15;color:#FF9090;padding:3px 8px;border-radius:8px">⚠️ Issues</div>':'<div style="font-size:10px;background:var(--teal)12;color:var(--teal);padding:3px 8px;border-radius:8px">✅ OK</div>'}
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">🛏️ ${linenActive.length} linen · 🧴 ${amenActive.length} amenities · 🛎️ ${EQUIP_CATS.flatMap(c=>c.items).length-Object.values(l.equipment||{}).filter(v=>v.count===0).length}/${EQUIP_CATS.flatMap(c=>c.items).length} equip</div>
-        ${l.remarks?`<div style="font-size:11px;color:var(--gold2);margin-top:3px">📝 ${l.remarks}</div>`:''}
-        <button onclick="openEdit('${l.id}')" style="margin-top:6px;background:var(--gold3)20;border:1px solid var(--gold3)44;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;padding:5px 12px;border-radius:8px;cursor:pointer;">✏️ Amend Report</button>
-      </div>`;
-    }).join('');
-}
-
-// ── DIGEST EMAIL ──────────────────────────────────────────────
-async function sendDigest(){
-  const email=localStorage.getItem('sup_email')||document.getElementById('sup_email').value.trim();
-  if(!email){showToast('⚠️ Set digest email first');return;}
-  const dateIso=document.getElementById('sup_date').value;
-  const displayDate=isoToDisplay(dateIso+'T00:00:00');
-  let logs=[];
-  try{
-    const data=await supaFetch('GET',`/rest/v1/housekeeping_logs?select=*&date=eq.${encodeURIComponent(displayDate)}&order=created_at.desc&limit=1000`);
-    logs=data.map(r=>({id:r.id,room:r.room,date:r.date,sfrom:r.status_from,sto:r.status_to,tin:r.time_in,tout:r.time_out,staff:{name:r.staff_name,floor:r.floor},linen:r.items?.linen||{},amenities:r.items?.amenities||{},equipment:r.items?.equipment||{},recycle:r.items?.recycle||{},remarks:r.items?.remarks||''}));
-  }catch(e){showToast('⚠️ Could not load');return;}
-  const maids={};
-  logs.forEach(l=>{const n=l.staff?.name||'—';if(!maids[n])maids[n]={floor:l.staff?.floor||'—',rooms:new Set(),issues:0};maids[n].rooms.add(l.room);if(Object.values(l.equipment||{}).some(v=>v.count===0))maids[n].issues++;});
-  const issues=[];
-  logs.forEach(l=>Object.keys(l.equipment||{}).forEach(i=>{if(l.equipment[i].count===0)issues.push(`  ❌ Rm ${l.room} – ${i} (${l.staff?.name||'—'})`)}));
-  let body=`IRAMA KUALA LUMPUR\nHOUSEKEEPING DAILY DIGEST\n${'='.repeat(45)}\nDate: ${displayDate}\nGenerated: ${new Date().toLocaleString('en-MY')}\n\n`;
-  body+=`SUMMARY\n${'-'.repeat(30)}\nRooms Done   : ${new Set(logs.map(l=>l.room)).size}\nMaids Active : ${Object.keys(maids).length}\nTotal Reports: ${logs.length}\nIssues Found : ${issues.length}\n\n`;
-  body+=`MAID PERFORMANCE\n${'-'.repeat(30)}\n`;
-  Object.entries(maids).forEach(([n,m])=>{body+=`${n} (${m.floor}) — ${m.rooms.size} rooms, ${m.issues} issues\n`;});
-  body+=`\nROOM DETAILS\n${'-'.repeat(30)}\n`;
-  logs.forEach(l=>{
-    const linenActive=Object.keys(l.linen||{}).filter(i=>l.linen[i].in>0||l.linen[i].out>0);
-    const amenActive=Object.keys(l.amenities||{}).filter(i=>l.amenities[i].in>0||l.amenities[i].out>0);
-    const missEquip=Object.keys(l.equipment||{}).filter(i=>l.equipment[i].count===0);
-    body+=`\nRm ${l.room} – ${l.staff?.name||'—'} (${l.tin||'—'}→${l.tout||'—'}) ${l.sfrom||'—'}→${l.sto||'—'}\n`;
-    if(linenActive.length>0)body+=`  Linen: ${linenActive.map(i=>`${i} IN${l.linen[i].in}/OUT${l.linen[i].out}`).join(', ')}\n`;
-    if(amenActive.length>0)body+=`  Amenities: ${amenActive.length} items used\n`;
-    if(missEquip.length>0)body+=`  ❌ Missing: ${missEquip.join(', ')}\n`;
-    if(l.remarks)body+=`  📝 Remarks: ${l.remarks}\n`;
-  });
-  if(issues.length>0){body+=`\nEQUIPMENT ISSUES\n${'-'.repeat(30)}\n${issues.join('\n')}\n`;}
-  body+=`\n${'='.repeat(45)}\nIrama KL Housekeeping System\n`;
-  const subj=encodeURIComponent(`[Irama KL] Daily Housekeeping Digest – ${displayDate}`);
-  window.location.href=`mailto:${email}?subject=${subj}&body=${encodeURIComponent(body)}`;
-  showToast('📧 Digest email opened!');
-}
-
-async function exportPDF(){
-  const dateIso=document.getElementById('sup_date').value;
-  const displayDate=isoToDisplay(dateIso+'T00:00:00');
-  let logs=[];
-  try{const data=await supaFetch('GET',`/rest/v1/housekeeping_logs?select=*&date=eq.${encodeURIComponent(displayDate)}&order=created_at.desc&limit=1000`);
-  logs=data.map(r=>({room:r.room,date:r.date,tin:r.time_in,tout:r.time_out,sfrom:r.status_from,sto:r.status_to,staff:{name:r.staff_name,floor:r.floor},linen:r.items?.linen||{},amenities:r.items?.amenities||{},equipment:r.items?.equipment||{},remarks:r.items?.remarks||''}));}catch(e){showToast('⚠️ Error');return;}
-  const pw=window.open('','_blank');
-  const issues=[];logs.forEach(l=>Object.keys(l.equipment||{}).forEach(i=>{if(l.equipment[i].count===0)issues.push({room:l.room,item:i,maid:l.staff?.name||'—'});}));
-  pw.document.write(`<!DOCTYPE html><html><head><title>Daily Report ${displayDate}</title>
-  <style>body{font-family:Arial,sans-serif;padding:20px;max-width:800px;margin:0 auto;}h1{font-size:17px;}h2{font-size:12px;color:#888;margin-bottom:16px;}table{width:100%;border-collapse:collapse;margin-bottom:14px;}th{background:#0B1520;color:#C8A96E;padding:7px 10px;font-size:11px;text-align:left;}td{padding:6px 10px;font-size:11px;border-bottom:1px solid #eee;}.sec{background:#f5f0e8;padding:7px 10px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6B4C1E;border-bottom:2px solid #C8A96E;margin-top:14px;}.miss{color:#c05050;}.ok{color:#2a7a5a;}@media print{button{display:none;}}</style></head>
-  <body><h1>🏨 IRAMA KL — Daily Housekeeping Report</h1><h2>${displayDate} · ${logs.length} reports · ${new Set(logs.map(l=>l.room)).size} rooms</h2>
-  <div class="sec">👤 Maid Summary</div>
-  <table><tr><th>Name</th><th>Floor</th><th>Rooms</th><th>Issues</th></tr>
-  ${Object.entries(logs.reduce((a,l)=>{const n=l.staff?.name||'—';if(!a[n])a[n]={floor:l.staff?.floor||'—',rooms:new Set(),iss:0};a[n].rooms.add(l.room);if(Object.values(l.equipment||{}).some(v=>v.count===0))a[n].iss++;return a;},{})).map(([n,m])=>`<tr><td><b>${n}</b></td><td>${m.floor}</td><td>${m.rooms.size}</td><td class="${m.iss>0?'miss':'ok'}">${m.iss>0?'⚠️ '+m.iss:'✅ None'}</td></tr>`).join('')}
-  </table>
-  ${issues.length>0?`<div class="sec">⚠️ Equipment Issues</div><table><tr><th>Room</th><th>Missing Item</th><th>Maid</th></tr>${issues.map(i=>`<tr><td><b>Rm ${i.room}</b></td><td class="miss">${i.item}</td><td>${i.maid}</td></tr>`).join('')}</table>`:''}
-  <div class="sec">📋 Room by Room</div>
-  <table><tr><th>Room</th><th>Maid</th><th>Time</th><th>Status</th><th>Linen</th><th>Amenities</th><th>Equip</th><th>Remarks</th></tr>
-  ${logs.map(l=>{const li=Object.values(l.linen||{}).filter(v=>v.in>0||v.out>0).length;const am=Object.values(l.amenities||{}).filter(v=>v.in>0||v.out>0).length;const eq=EQUIP_CATS.flatMap(c=>c.items).filter(i=>l.equipment[i]?.count>0).length;const tot=EQUIP_CATS.flatMap(c=>c.items).length;return`<tr><td><b>Rm ${l.room}</b></td><td>${l.staff?.name||'—'}</td><td>${l.tin||'—'}→${l.tout||'—'}</td><td>${l.sfrom||'—'}→${l.sto||'—'}</td><td>${li} items</td><td>${am} items</td><td class="${eq<tot?'miss':'ok'}">${eq}/${tot}</td><td style="font-size:10px;color:#9A7240">${l.remarks||'—'}</td></tr>`;}).join('')}
-  </table>
-  <div style="text-align:center;margin-top:16px"><button onclick="window.print()" style="background:#0B1520;color:#C8A96E;border:none;padding:10px 24px;border-radius:8px;font-size:13px;cursor:pointer">🖨️ Print / Save PDF</button></div>
-  
-<!-- EDIT MODAL -->
-<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#00000088;z-index:1000;overflow-y:auto;">
-  <div style="background:var(--bg2);margin:20px auto;max-width:600px;border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#F8F3EA,#EDE4D0);border-bottom:2px solid var(--gold);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#6B4C1E;font-weight:700;">✏️ Amend Report — Room <span id="edit_room_title"></span></div>
-      <button onclick="closeEdit()" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;border-radius:20px;cursor:pointer;">✕ Close</button>
-    </div>
-    <div style="padding:16px;" id="editBody"></div>
-    <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;">
-      <button onclick="saveEdit()" style="flex:1;padding:14px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:var(--r);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">💾 Save Changes</button>
-      <button onclick="closeEdit()" style="padding:14px 20px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Cancel</button>
-    </div>
-  </div>
-</div>
-
-</body></html>`);pw.document.close();
-}
-
-
-// ── SUPERVISOR EDIT ───────────────────────────────────────────
-let editingLog = null;
-
-async function openEdit(id) {
-  const logs = await getLogs();
-  editingLog = logs.find(l => l.id === id);
-  if (!editingLog) return;
-
-  document.getElementById('edit_room_title').textContent = editingLog.room;
-  document.getElementById('editModal').style.display = 'block';
-  document.body.style.overflow = 'hidden';
-
-  let h = '';
-
-  // Room info
-  h += `<div style="background:var(--bg3);border:1.5px solid var(--gold3)44;border-radius:var(--r);padding:13px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">🏨 Room Info</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">STATUS FROM</div>
-        <select id="ed_sfrom" style="width:100%;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
-          ${['','VC','VD','OC','OD','CO','SO','OOO','VIP'].map(s=>`<option ${editingLog.sfrom===s?'selected':''}>${s}</option>`).join('')}
-        </select></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">STATUS TO</div>
-        <select id="ed_sto" style="width:100%;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
-          ${['','VC','VD','OC','OD','CO','SO','OOO','VIP'].map(s=>`<option ${editingLog.sto===s?'selected':''}>${s}</option>`).join('')}
-        </select></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">TIME IN</div>
-        <input type="time" id="ed_tin" value="${editingLog.tin||''}" style="width:100%;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;"></div>
-      <div><div style="font-size:10px;color:var(--muted);margin-bottom:4px;">TIME OUT</div>
-        <input type="time" id="ed_tout" value="${editingLog.tout||''}" style="width:100%;padding:9px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;"></div>
-    </div>
-  </div>`;
-
-  // Linen
-  h += `<div style="background:var(--bg3);border:1.5px solid var(--linen2)44;border-radius:var(--r);padding:13px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--linen);margin-bottom:10px;">🛏️ Linen Report</div>`;
-  LINEN_CATS.forEach(cat => {
-    h += `<div style="font-size:11px;font-weight:700;color:var(--gold);margin:8px 0 5px;">${cat.icon} ${cat.name}</div>`;
-    cat.items.forEach(item => {
-      const val = editingLog.linen[item] || {in:0, out:0};
-      const k = item.replace(/[^a-zA-Z0-9]/g,'_');
-      h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-        <div style="flex:1;font-size:12px;">${item}</div>
-        <div style="font-size:10px;color:var(--linen);font-weight:700;min-width:20px;">IN</div>
-        <input type="number" id="edl_${k}_in" value="${val.in}" min="0" style="width:55px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
-        <div style="font-size:10px;color:var(--linen);font-weight:700;min-width:24px;">OUT</div>
-        <input type="number" id="edl_${k}_out" value="${val.out}" min="0" style="width:55px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
-      </div>`;
-    });
-  });
-  h += `</div>`;
-
-  // Recycle
-  h += `<div style="background:var(--bg3);border:1.5px solid var(--linen2)33;border-radius:var(--r);padding:13px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--linen);margin-bottom:10px;">♻️ Recycle Linen</div>`;
-  const recycleOpts = ['Clean','Stained','Torn','Missing'];
-  RECYCLE_ITEMS.forEach(item => {
-    const cur = editingLog.recycle?.[item] || '';
-    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
-    h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-      <div style="flex:1;font-size:12px;">${item}</div>
-      <select id="edr_${k}" style="padding:7px 10px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;">
-        ${['', ...recycleOpts].map(o=>`<option ${cur===o?'selected':''}>${o}</option>`).join('')}
-      </select></div>`;
-  });
-  h += `</div>`;
-
-  // Amenities
-  h += `<div style="background:var(--bg3);border:1.5px solid var(--amen2)44;border-radius:var(--r);padding:13px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--amen);margin-bottom:10px;">🧴 Amenities Report</div>`;
-  AMEN_CATS.forEach(cat => {
-    h += `<div style="font-size:11px;font-weight:700;color:var(--gold);margin:8px 0 5px;">${cat.icon} ${cat.name}</div>`;
-    cat.items.forEach(item => {
-      const val = editingLog.amenities[item] || {in:0, out:0};
-      const k = item.replace(/[^a-zA-Z0-9]/g,'_');
-      h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-        <div style="flex:1;font-size:12px;">${item}</div>
-        <div style="font-size:10px;color:var(--amen);font-weight:700;min-width:20px;">IN</div>
-        <input type="number" id="eda_${k}_in" value="${val.in}" min="0" style="width:55px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
-        <div style="font-size:10px;color:var(--amen);font-weight:700;min-width:24px;">OUT</div>
-        <input type="number" id="eda_${k}_out" value="${val.out}" min="0" style="width:55px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
-      </div>`;
-    });
-  });
-  h += `</div>`;
-
-  // Equipment
-  h += `<div style="background:var(--bg3);border:1.5px solid var(--equip2)44;border-radius:var(--r);padding:13px;margin-bottom:14px;">
-    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--equip);margin-bottom:10px;">🛎️ Equipment Report</div>`;
-  EQUIP_CATS.forEach(cat => {
-    h += `<div style="font-size:11px;font-weight:700;color:var(--gold);margin:8px 0 5px;">${cat.icon} ${cat.name}</div>`;
-    cat.items.forEach(item => {
-      const val = editingLog.equipment[item] || {count:0};
-      const k = item.replace(/[^a-zA-Z0-9]/g,'_');
-      h += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-        <div style="flex:1;font-size:12px;">${item}</div>
-        <div style="font-size:10px;color:var(--equip);font-weight:700;">Count</div>
-        <input type="number" id="ede_${k}" value="${val.count}" min="0" style="width:65px;padding:6px;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;text-align:center;">
-      </div>`;
-    });
-  });
-  h += `</div>`;
-
-  // Remarks
-  h += `<div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:13px;">
-    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">📝 Remarks</div>
-    <textarea id="ed_remarks" style="width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;padding:10px 12px;resize:none;min-height:80px;">${editingLog.remarks||''}</textarea>
-  </div>`;
-
-  document.getElementById('editBody').innerHTML = h;
-}
-
-function closeEdit() {
-  document.getElementById('editModal').style.display = 'none';
-  document.body.style.overflow = '';
-  editingLog = null;
-}
-
-async function saveEdit() {
-  if (!editingLog) return;
-
-  // Collect linen
-  LINEN_CATS.forEach(cat => cat.items.forEach(item => {
-    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
-    const inEl = document.getElementById('edl_'+k+'_in');
-    const outEl = document.getElementById('edl_'+k+'_out');
-    if (inEl) editingLog.linen[item] = {in: parseInt(inEl.value)||0, out: parseInt(outEl.value)||0};
-  }));
-
-  // Collect recycle
-  RECYCLE_ITEMS.forEach(item => {
-    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
-    const el = document.getElementById('edr_'+k);
-    if (el) editingLog.recycle[item] = el.value;
-  });
-
-  // Collect amenities
-  AMEN_CATS.forEach(cat => cat.items.forEach(item => {
-    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
-    const inEl = document.getElementById('eda_'+k+'_in');
-    const outEl = document.getElementById('eda_'+k+'_out');
-    if (inEl) editingLog.amenities[item] = {in: parseInt(inEl.value)||0, out: parseInt(outEl.value)||0};
-  }));
-
-  // Collect equipment
-  EQUIP_CATS.forEach(cat => cat.items.forEach(item => {
-    const k = item.replace(/[^a-zA-Z0-9]/g,'_');
-    const el = document.getElementById('ede_'+k);
-    if (el) { const c = parseInt(el.value)||0; editingLog.equipment[item] = {count:c, checked:c>0}; }
-  }));
-
-  // Collect other fields
-  editingLog.sfrom = document.getElementById('ed_sfrom').value;
-  editingLog.sto = document.getElementById('ed_sto').value;
-  editingLog.tin = document.getElementById('ed_tin').value;
-  editingLog.tout = document.getElementById('ed_tout').value;
-  editingLog.remarks = document.getElementById('ed_remarks').value;
-
-  // Save to Supabase
-  try {
-    await supaFetch('PATCH', `/rest/v1/housekeeping_logs?id=eq.${editingLog.id}`, {
-      time_in: editingLog.tin,
-      time_out: editingLog.tout,
-      status_from: editingLog.sfrom,
-      status_to: editingLog.sto,
-      items: {
-        linen: editingLog.linen,
-        amenities: editingLog.amenities,
-        equipment: editingLog.equipment,
-        recycle: editingLog.recycle,
-        remarks: editingLog.remarks
-      }
-    });
-    showToast('✅ Report updated!');
-  } catch(e) {
-    console.error(e);
-    showToast('⚠️ Saved locally only');
-  }
-
-  // Update local cache
-  const cache = getCached();
-  const idx = cache.findIndex(l => l.id === editingLog.id);
-  if (idx >= 0) cache[idx] = editingLog;
-  setCached(cache);
-
-  closeEdit();
-  loadDash();
-}
-
-// ── INIT ──────────────────────────────────────────────────────
-function newMaid(){if(!confirm('End shift and clear maid details?'))return;localStorage.removeItem('maid_name');localStorage.removeItem('maid_floor');document.getElementById('h_name').value='';document.getElementById('h_floor').value='';staff={name:'',floor:''};showToast('✅ Ready for next maid');}
-updateHome().catch(console.error);
+// ── keyboard submit on login ──
+document.getElementById('loginPw').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('loginId').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('loginPw').focus(); });
 </script>
-
-<!-- EDIT MODAL -->
-<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#00000088;z-index:1000;overflow-y:auto;">
-  <div style="background:var(--bg2);margin:20px auto;max-width:600px;border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#F8F3EA,#EDE4D0);border-bottom:2px solid var(--gold);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#6B4C1E;font-weight:700;">✏️ Amend Report — Room <span id="edit_room_title"></span></div>
-      <button onclick="closeEdit()" style="background:var(--bg3);border:1.5px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 12px;border-radius:20px;cursor:pointer;">✕ Close</button>
-    </div>
-    <div style="padding:16px;" id="editBody"></div>
-    <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;">
-      <button onclick="saveEdit()" style="flex:1;padding:14px;background:linear-gradient(135deg,var(--gold3),var(--gold));border:none;border-radius:var(--r);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">💾 Save Changes</button>
-      <button onclick="closeEdit()" style="padding:14px 20px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Cancel</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
