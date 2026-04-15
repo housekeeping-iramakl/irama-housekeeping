@@ -2,418 +2,472 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Irama KL — Housekeeping System</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Irama KL — Housekeeping</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
-  --navy:#0B1520;--navy2:#111E2E;--navy3:#172436;
-  --gold:#C8A96E;--gold2:#9A7240;
-  --cream:#F8F3EA;--white:#FFFFFF;
-  --muted:#6A8099;--soft:#324E6A;--text:#EAE4D4;
-  --green:#2D6A4F;--green-bg:#E8F5E9;
-  --red:#C05050;--red-bg:#FFEBEE;
-  --amber:#9A7240;--amber-bg:#FFF8E7;
-  --border:#263C58;
+  --n0:#070E18;--n1:#0B1520;--n2:#111E2E;--n3:#172436;--n4:#1E3048;
+  --gold:#C8A96E;--gold2:#9A7240;--gold3:#E8D4A8;
+  --white:#FFFFFF;--text:#E8E0D0;--muted:#6A8099;--soft:#324E6A;
+  --border:#1E3048;
+  --green:#2D7A50;--gbg:#0D2A1A;
+  --amber:#C8922E;--abg:#2A1E0A;
+  --red:#C05050;--rbg:#2A0D0D;
+  --blue:#3A8FBF;--bbg:#0D1E2A;
 }
-html,body{height:100%;background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);overflow-x:hidden;}
+html,body{height:100%;background:var(--n0);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);overflow-x:hidden;}
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.on{display:flex;}
 
-/* ── SCREENS ── */
-.screen{display:none;min-height:100vh;}
-.screen.active{display:flex;flex-direction:column;}
-
-/* ── LOGIN ── */
-#loginScreen{align-items:center;justify-content:center;padding:24px;background:var(--navy);}
-.login-box{width:100%;max-width:380px;background:var(--navy2);border:1px solid var(--border);border-radius:20px;padding:32px 28px;}
-.login-logo{text-align:center;margin-bottom:28px;}
-.login-logo h1{font-size:26px;font-weight:300;color:var(--white);letter-spacing:0.05em;}
-.login-logo h1 span{color:var(--gold);font-weight:600;}
-.login-logo p{font-size:12px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;}
-.form-group{margin-bottom:16px;}
-.form-group label{display:block;font-size:12px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
-.form-group input{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-size:15px;color:var(--white);outline:none;letter-spacing:0.08em;}
-.form-group input:focus{border-color:var(--gold);}
-.form-group input::placeholder{color:var(--muted);letter-spacing:0.04em;}
-.login-btn{width:100%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:0.04em;}
-.login-btn:active{opacity:0.88;}
-.login-err{background:var(--red-bg);color:var(--red);border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;display:none;text-align:center;}
-.sup-link{text-align:center;margin-top:20px;}
-.sup-link a{color:var(--muted);font-size:12px;text-decoration:none;letter-spacing:0.06em;}
-.sup-link a:hover{color:var(--gold);}
+/* ── TYPOGRAPHY ── */
+h1{font-family:Georgia,serif;font-weight:400;}
+.mono{font-family:'Courier New',monospace;letter-spacing:0.08em;}
 
 /* ── HEADER ── */
-.app-header{background:var(--navy2);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.header-left{display:flex;align-items:center;gap:10px;}
-.hk-logo{font-size:15px;font-weight:300;color:var(--white);}
-.hk-logo span{color:var(--gold);font-weight:600;}
-.staff-badge{background:var(--gold)22;border:1px solid var(--gold)44;color:var(--gold);font-size:10px;padding:3px 10px;border-radius:20px;letter-spacing:0.08em;}
-.header-right{display:flex;align-items:center;gap:8px;}
-.hdr-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:6px 12px;border-radius:20px;cursor:pointer;letter-spacing:0.04em;}
-.hdr-btn:active{background:var(--border);}
-.hdr-time{font-size:12px;color:var(--muted);}
+.hdr{background:var(--n1);border-bottom:1px solid var(--border);padding:0 16px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:50;}
+.hdr-brand{font-family:Georgia,serif;font-size:16px;color:var(--white);letter-spacing:0.05em;}
+.hdr-brand b{color:var(--gold);}
+.hdr-right{display:flex;align-items:center;gap:8px;}
+.chip{background:var(--n3);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:3px 10px;border-radius:20px;letter-spacing:0.08em;}
+.chip.gold{background:var(--gold)18;border-color:var(--gold)44;color:var(--gold);}
+.hbtn{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.hbtn:active{background:var(--border);}
+
+/* ── LOGIN ── */
+#loginScreen{align-items:center;justify-content:center;padding:24px;background:var(--n0);}
+.login-card{width:100%;max-width:360px;background:var(--n1);border:1px solid var(--border);border-radius:16px;padding:32px 28px;}
+.login-head{text-align:center;margin-bottom:28px;}
+.login-head h1{font-size:28px;color:var(--white);}
+.login-head h1 b{color:var(--gold);}
+.login-head p{font-size:11px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-top:4px;}
+.fgrp{margin-bottom:14px;}
+.fgrp label{display:block;font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
+.finp{width:100%;background:var(--n3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:15px;color:var(--white);outline:none;}
+.finp:focus{border-color:var(--gold);}
+.finp::placeholder{color:var(--soft);}
+.btn-gold{width:100%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--n0);border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.04em;margin-top:8px;}
+.btn-gold:active{opacity:.88;}
+.err-msg{background:var(--rbg);color:var(--red);border:1px solid var(--red)44;border-radius:6px;padding:9px 12px;font-size:12px;margin-top:10px;display:none;text-align:center;}
+.login-foot{text-align:center;margin-top:18px;}
+.login-foot a{color:var(--muted);font-size:12px;text-decoration:none;}
 
 /* ── HOME ── */
-#homeScreen .body{flex:1;overflow-y:auto;padding:16px;}
-.home-welcome{text-align:center;padding:20px 0 24px;}
-.home-welcome h2{font-family:Georgia,serif;font-size:24px;font-weight:400;color:var(--white);}
-.home-welcome p{font-size:13px;color:var(--muted);margin-top:4px;}
-.home-welcome .staff-name{color:var(--gold);font-weight:600;}
+#homeScreen .body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;}
+.welcome-bar{padding:4px 0 8px;}
+.welcome-bar h2{font-family:Georgia,serif;font-size:22px;font-weight:400;color:var(--white);}
+.welcome-bar .name{color:var(--gold);font-weight:600;}
+.welcome-bar .date{font-size:11px;color:var(--muted);margin-top:3px;}
 
-.room-entry-box{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;}
-.room-entry-box label{display:block;font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;}
-.room-num-input{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:20px;color:var(--white);outline:none;letter-spacing:0.15em;text-align:center;font-weight:600;}
-.room-num-input:focus{border-color:var(--gold);}
-.room-type-badge{text-align:center;margin-top:10px;min-height:24px;}
-.room-type-pill{display:inline-block;background:var(--gold)22;border:1px solid var(--gold)44;color:var(--gold);font-size:11px;padding:3px 14px;border-radius:20px;letter-spacing:0.06em;}
-.room-type-err{color:var(--red);font-size:12px;}
-.start-btn{width:100%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:14px;letter-spacing:0.04em;}
-.start-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.stat-box{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:12px 10px;text-align:center;}
+.stat-num{font-family:Georgia,serif;font-size:24px;color:var(--gold);}
+.stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.04em;}
 
-.today-summary{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:20px;}
-.today-summary h3{font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;}
-.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.sstat{background:var(--navy3);border-radius:10px;padding:12px 8px;text-align:center;}
-.sstat-num{font-size:22px;font-weight:700;color:var(--gold);font-family:Georgia,serif;}
-.sstat-lbl{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.05em;}
+.room-selector{background:var(--n2);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.room-selector h3{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;}
+.floor-select{width:100%;background:var(--n3);border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:14px;color:var(--white);outline:none;margin-bottom:10px;-webkit-appearance:none;}
+.floor-select:focus{border-color:var(--gold);}
+.room-grid-wrap{max-height:220px;overflow-y:auto;}
+.room-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.room-btn{background:var(--n3);border:1px solid var(--border);border-radius:6px;padding:8px 4px;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;transition:all .15s;}
+.room-btn:hover{border-color:var(--gold);color:var(--gold);}
+.room-btn.sel{background:var(--gold)22;border-color:var(--gold);color:var(--gold);font-weight:700;}
+.room-btn.done{background:var(--gbg);border-color:var(--green)44;color:var(--green)44;}
+.room-type-info{margin-top:10px;min-height:20px;text-align:center;font-size:12px;color:var(--gold);letter-spacing:.04em;}
+.btn-start{width:100%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--n0);border:none;border-radius:8px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:12px;letter-spacing:.03em;}
+.btn-start:disabled{opacity:.35;cursor:not-allowed;}
 
-/* ── REPORT SCREEN ── */
+/* ── REPORT ── */
 #reportScreen .body{flex:1;overflow-y:auto;}
-.progress-bar{display:flex;background:var(--navy3);padding:0;border-bottom:1px solid var(--border);}
-.step-tab{flex:1;padding:10px 4px;text-align:center;font-size:10px;color:var(--muted);letter-spacing:0.05em;border-bottom:2px solid transparent;transition:all 0.2s;}
-.step-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
-.step-tab.done{color:var(--green);}
+.step-bar{display:flex;background:var(--n2);border-bottom:1px solid var(--border);}
+.step{flex:1;padding:9px 2px;text-align:center;font-size:10px;color:var(--soft);letter-spacing:.04em;border-bottom:2px solid transparent;}
+.step.act{color:var(--gold);border-color:var(--gold);}
+.step.done{color:var(--green);}
 
-.step-panel{display:none;padding:16px;}
-.step-panel.active{display:block;}
-.step-title{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.step-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.panel{display:none;padding:14px 14px 80px;}
+.panel.on{display:block;}
 
-/* Room info bar */
-.room-info-bar{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
-.rib-room{font-family:Georgia,serif;font-size:20px;font-weight:600;color:var(--white);}
-.rib-type{font-size:11px;color:var(--gold);letter-spacing:0.08em;}
-.rib-time{font-size:11px;color:var(--muted);}
+.section-tag{font-size:10px;font-weight:700;color:var(--gold2);letter-spacing:.12em;text-transform:uppercase;padding:10px 0 6px;margin-top:14px;}
+.section-tag:first-child{margin-top:0;}
+.section-tag::after{content:'';display:block;height:1px;background:var(--border);margin-top:5px;}
 
-/* ── ITEM ROWS ── */
-.section-hdr{font-size:11px;font-weight:700;color:var(--gold2);letter-spacing:0.1em;text-transform:uppercase;padding:10px 0 6px;border-bottom:1px solid var(--border);margin-bottom:8px;margin-top:16px;}
-.section-hdr:first-child{margin-top:0;}
+/* Room info banner */
+.room-banner{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.rb-left .room-no{font-family:Georgia,serif;font-size:22px;color:var(--white);}
+.rb-left .room-type{font-size:11px;color:var(--gold);letter-spacing:.06em;margin-top:1px;}
+.rb-right{text-align:right;font-size:11px;color:var(--muted);}
 
-.item-row{display:flex;align-items:center;background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;gap:12px;transition:all 0.15s;}
-.item-row.flagged{border-color:var(--red);background:#1E1010;}
-.item-row.ok{border-color:var(--border);}
+/* Status selector */
+.status-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.status-btn{background:var(--n3);border:1.5px solid var(--border);border-radius:8px;padding:10px 8px;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;transition:all .15s;}
+.status-btn.sel{background:var(--gbg);border-color:var(--green);color:var(--green);font-weight:700;}
 
-.item-info{flex:1;min-width:0;}
-.item-name{font-size:13px;color:var(--white);font-weight:500;line-height:1.3;}
-.item-std{font-size:11px;color:var(--muted);margin-top:2px;}
-.item-std span{color:var(--gold);font-weight:600;}
+/* Linen rows */
+.linen-row{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.lr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+.lr-name{font-size:13px;color:var(--white);font-weight:500;}
+.lr-std{font-size:10px;background:var(--n4);border:1px solid var(--border);color:var(--gold);padding:2px 8px;border-radius:10px;letter-spacing:.05em;}
+.lr-btns{display:flex;gap:6px;}
+.lr-btn{flex:1;padding:8px 4px;border-radius:7px;border:1.5px solid var(--border);background:transparent;font-size:11px;font-weight:700;color:var(--soft);cursor:pointer;text-align:center;transition:all .15s;}
+.lr-btn:active{transform:scale(.97);}
+.lr-btn.ok{border-color:var(--green);color:var(--green);background:var(--gbg);}
+.lr-btn.reuse{border-color:var(--amber);color:var(--amber);background:var(--abg);}
 
-.item-status{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.status-ok{width:32px;height:32px;border-radius:50%;background:var(--green-bg);border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:14px;}
-.flag-btn{padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;font-weight:600;transition:all 0.15s;white-space:nowrap;}
-.flag-btn:active{transform:scale(0.96);}
-.flag-btn.missing{border-color:var(--red);color:var(--red);background:var(--red-bg);}
-.flag-btn.reuse{border-color:var(--amber);color:var(--amber);background:var(--amber-bg);}
+/* Item rows */
+.item-row{display:flex;align-items:center;background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:7px;gap:10px;transition:all .15s;}
+.item-row.flagged{border-color:var(--amber);background:var(--abg);}
+.item-row.flagged2{border-color:var(--red);background:var(--rbg);}
+.ir-info{flex:1;min-width:0;}
+.ir-name{font-size:13px;color:var(--white);font-weight:500;}
+.ir-qty{font-size:10px;color:var(--muted);margin-top:2px;}
+.ir-qty span{color:var(--gold3);}
+.ir-ok{width:28px;height:28px;border-radius:50%;background:var(--gbg);border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--green);flex-shrink:0;}
+.topup-btn{padding:6px 11px;border-radius:6px;border:1.5px solid var(--border);background:transparent;font-size:10px;font-weight:700;color:var(--soft);cursor:pointer;letter-spacing:.04em;transition:all .15s;white-space:nowrap;}
+.topup-btn.topup{border-color:var(--amber);color:var(--amber);background:var(--abg);}
+.topup-btn.action{border-color:var(--red);color:var(--red);background:var(--rbg);}
 
-/* Reuse options */
-.reuse-opts{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
-.reuse-opts.show{display:flex;flex-wrap:wrap;gap:6px;}
-.reuse-opt{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;}
-.reuse-opt.sel{border-color:var(--amber);color:var(--amber);background:var(--amber-bg);}
-
-/* ── LINEN SPECIAL ── */
-.linen-row{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;}
-.linen-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.linen-name{font-size:13px;color:var(--white);font-weight:500;}
-.linen-std-badge{background:var(--gold)22;color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px;letter-spacing:0.06em;}
-.linen-actions{display:flex;gap:6px;flex-wrap:wrap;}
-.linen-btn{flex:1;min-width:80px;padding:8px 6px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.15s;}
-.linen-btn:active{transform:scale(0.97);}
-.linen-btn.sel-ok{border-color:var(--green);color:var(--green);background:var(--green-bg);}
-.linen-btn.sel-reuse{border-color:var(--amber);color:var(--amber);background:var(--amber-bg);}
-.linen-btn.sel-missing{border-color:var(--red);color:var(--red);background:var(--red-bg);}
-
-/* ── NAVIGATION BUTTONS ── */
-.nav-btns{display:flex;gap:10px;padding:16px;background:var(--navy2);border-top:1px solid var(--border);flex-shrink:0;}
-.nav-back{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:13px 20px;font-size:14px;cursor:pointer;}
-.nav-next{flex:1;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.02em;}
-.nav-next:disabled{opacity:0.4;cursor:not-allowed;}
-
-/* ── SUBMIT STEP ── */
-.remarks-box{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;}
-.remarks-box label{display:block;font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
-.remarks-box textarea{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;color:var(--white);resize:none;height:80px;outline:none;font-family:inherit;}
-.remarks-box textarea:focus{border-color:var(--gold);}
-
-.flag-summary{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;}
-.flag-summary h3{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
-.flag-item{display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border);}
+/* Submit */
+.summary-box{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;}
+.summary-box h3{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+.sum-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.sum-row:last-child{border-bottom:none;}
+.sum-label{color:var(--muted);}
+.sum-val{color:var(--text);font-weight:600;}
+.flag-list{margin-top:8px;}
+.flag-item{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border)44;}
 .flag-item:last-child{border-bottom:none;}
-.flag-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.flag-dot.missing{background:var(--red);}
-.flag-dot.reuse{background:var(--amber);}
-.no-flags{color:var(--green);font-size:12px;display:flex;align-items:center;gap:6px;}
+.fdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.fdot.reuse{background:var(--amber);}
+.fdot.topup{background:var(--amber);}
+.fdot.action{background:var(--red);}
+.ftag{margin-left:auto;font-size:9px;font-weight:700;letter-spacing:.06em;padding:1px 6px;border-radius:10px;}
+.ftag.reuse{background:var(--abg);color:var(--amber);}
+.ftag.topup{background:var(--abg);color:var(--amber);}
+.ftag.action{background:var(--rbg);color:var(--red);}
 
-.submit-btn{width:100%;background:var(--green);color:var(--white);border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:0.04em;}
-.submit-btn:active{opacity:0.88;}
+.remarks-area{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;}
+.remarks-area label{display:block;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.remarks-area textarea{width:100%;background:var(--n3);border:1px solid var(--border);border-radius:7px;padding:10px;font-size:13px;color:var(--white);resize:none;height:72px;outline:none;font-family:inherit;}
+.remarks-area textarea:focus{border-color:var(--gold);}
+
+.btn-submit{width:100%;background:var(--green);color:var(--white);border:none;border-radius:8px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.03em;}
+.btn-submit:active{opacity:.88;}
+
+/* Nav */
+.nav-row{display:flex;gap:8px;padding:12px 14px;background:var(--n1);border-top:1px solid var(--border);position:sticky;bottom:0;z-index:20;}
+.btn-back{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:11px 16px;font-size:13px;cursor:pointer;}
+.btn-next{flex:1;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--n0);border:none;border-radius:7px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-next:disabled{opacity:.35;cursor:not-allowed;}
 
 /* ── SUCCESS ── */
-#successScreen{align-items:center;justify-content:center;padding:24px;text-align:center;}
-.success-icon{font-size:56px;margin-bottom:16px;}
-.success-title{font-family:Georgia,serif;font-size:24px;color:var(--white);margin-bottom:8px;}
-.success-sub{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.6;}
-.success-room{color:var(--gold);font-weight:600;font-size:18px;}
-.success-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;}
-.btn-next-room{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;}
-.btn-done{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:13px;font-size:14px;cursor:pointer;}
+#successScreen{align-items:center;justify-content:center;padding:32px;text-align:center;}
+.success-icon{font-size:52px;margin-bottom:14px;}
+.success-title{font-family:Georgia,serif;font-size:22px;color:var(--white);margin-bottom:6px;}
+.success-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6;}
+.suc-room{color:var(--gold);font-weight:700;}
+.suc-btns{display:flex;flex-direction:column;gap:8px;width:100%;max-width:300px;}
+.btn-nextroom{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--n0);border:none;border-radius:8px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-home2{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:12px;font-size:13px;cursor:pointer;}
 
 /* ── SUPERVISOR ── */
-#supScreen .body{flex:1;overflow-y:auto;padding:16px;}
-.sup-login{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:20px;max-width:360px;margin:0 auto;}
-.sup-login h2{font-size:18px;font-weight:600;color:var(--white);margin-bottom:16px;text-align:center;}
-.sup-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-.sup-filter{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--navy2);color:var(--muted);font-size:12px;cursor:pointer;}
-.sup-filter.active{background:var(--navy);border-color:var(--gold);color:var(--gold);}
-.record-card{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
-.rc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.rc-room{font-family:Georgia,serif;font-size:18px;color:var(--white);font-weight:600;}
-.rc-type{font-size:10px;color:var(--gold);letter-spacing:0.08em;}
-.rc-staff{font-size:12px;color:var(--muted);}
-.rc-time{font-size:11px;color:var(--muted);text-align:right;}
-.rc-flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-.rc-flag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;}
-.rc-flag.missing{background:var(--red-bg);color:var(--red);}
-.rc-flag.reuse{background:var(--amber-bg);color:var(--amber);}
-.rc-flag.ok{background:var(--green-bg);color:var(--green);}
+#supScreen .body{flex:1;overflow-y:auto;}
+.sup-toolbar{padding:10px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--border);background:var(--n1);}
+.sup-inp{background:var(--n3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:12px;color:var(--white);outline:none;}
+.sup-inp:focus{border-color:var(--gold);}
+.sup-records{padding:12px 14px;}
+.rec-card{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
+.rec-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.rec-room{font-family:Georgia,serif;font-size:20px;color:var(--white);}
+.rec-type{font-size:10px;color:var(--gold);letter-spacing:.06em;margin-top:1px;}
+.rec-staff{font-size:12px;color:var(--muted);margin-top:2px;}
+.rec-time{text-align:right;font-size:11px;color:var(--muted);}
+.rec-body{border-top:1px solid var(--border);padding-top:8px;}
+.rec-flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.rec-flag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;letter-spacing:.04em;}
+.rf-ok{background:var(--gbg);color:var(--green);}
+.rf-reuse{background:var(--abg);color:var(--amber);}
+.rf-topup{background:var(--abg);color:var(--amber);}
+.rf-action{background:var(--rbg);color:var(--red);}
+.rec-remarks{font-size:11px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)44;font-style:italic;}
+.rec-actions{display:flex;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+.rec-btn{flex:1;padding:7px 8px;border-radius:6px;border:1px solid var(--border);background:transparent;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;letter-spacing:.04em;}
+.rec-btn.amend{border-color:var(--amber)44;color:var(--amber);}
+.rec-btn.print-btn{border-color:var(--blue)44;color:var(--blue);}
+.rec-btn.void-btn{border-color:var(--red)44;color:var(--red);}
+.rec-card.voided{opacity:.5;border-color:var(--red)33;}
+.voided-badge{display:inline-block;background:var(--rbg);color:var(--red);font-size:10px;padding:2px 8px;border-radius:10px;margin-bottom:6px;}
+.amend-log{font-size:10px;color:var(--muted);background:var(--n3);border-radius:6px;padding:8px 10px;margin-top:6px;}
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--navy2);border:1px solid var(--border);color:var(--white);padding:10px 20px;border-radius:30px;font-size:13px;opacity:0;transition:all 0.3s;z-index:999;white-space:nowrap;pointer-events:none;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* Summary stats */
+.sup-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);}
+.ss-box{background:var(--n2);border:1px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center;}
+.ss-num{font-family:Georgia,serif;font-size:20px;font-weight:400;}
+.ss-lbl{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.04em;}
 
-/* ── UTILS ── */
-.divider{height:1px;background:var(--border);margin:12px 0;}
-.text-gold{color:var(--gold);}
-.text-green{color:var(--green);}
-.text-red{color:var(--red);}
+/* Email modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.on{display:flex;}
+.modal{background:var(--n2);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:380px;}
+.modal h3{font-size:16px;color:var(--white);margin-bottom:4px;}
+.modal p{font-size:12px;color:var(--muted);margin-bottom:14px;}
+.modal .finp{margin-bottom:10px;}
+.modal-btns{display:flex;gap:8px;}
+.btn-cancel{flex:1;padding:9px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:13px;cursor:pointer;}
+.btn-confirm{flex:1;padding:9px;border-radius:7px;border:none;background:var(--green);color:var(--white);font-size:13px;font-weight:700;cursor:pointer;}
+.btn-amberconf{background:var(--amber);}
+
+/* Amend modal */
+.amend-modal .finp{margin-bottom:8px;}
+.amend-modal textarea{width:100%;background:var(--n3);border:1px solid var(--border);border-radius:7px;padding:9px 10px;font-size:12px;color:var(--white);resize:none;height:64px;outline:none;font-family:inherit;margin-bottom:10px;}
+
+.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--n2);border:1px solid var(--border);color:var(--white);padding:9px 18px;border-radius:24px;font-size:12px;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media print{
+  .hdr,.step-bar,.nav-row,.rec-actions,.sup-toolbar,.sup-stats{display:none!important;}
+  body{background:white;color:black;}
+  .rec-card{border:1px solid #ccc;page-break-inside:avoid;}
+}
 </style>
 </head>
 <body>
 
-<!-- ════════════════════════════════════════════════════════
-     LOGIN SCREEN
-════════════════════════════════════════════════════════ -->
-<div id="loginScreen" class="screen active">
-  <div class="login-box">
-    <div class="login-logo">
-      <h1>IRAMA <span>KL</span></h1>
+<!-- LOGIN -->
+<div id="loginScreen" class="screen on">
+  <div class="login-card">
+    <div class="login-head">
+      <h1>IRAMA <b>KL</b></h1>
       <p>Housekeeping System</p>
     </div>
-    <div class="form-group">
+    <div class="fgrp">
       <label>Staff ID</label>
-      <input type="text" id="loginId" placeholder="e.g. IKL0050" autocomplete="off" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()">
+      <input class="finp mono" id="lId" placeholder="e.g. IKL0050" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()">
     </div>
-    <div class="form-group">
+    <div class="fgrp">
       <label>Password</label>
-      <input type="password" id="loginPw" placeholder="Enter password" autocomplete="current-password">
+      <input class="finp" type="password" id="lPw" placeholder="Enter password">
     </div>
-    <button class="login-btn" onclick="doLogin()">Sign In</button>
-    <div class="login-err" id="loginErr">Invalid Staff ID or password</div>
-    <div class="sup-link">
-      <a href="#" onclick="showSupervisor()">Supervisor Access →</a>
-    </div>
+    <button class="btn-gold" onclick="doLogin()">Sign In →</button>
+    <div class="err-msg" id="lErr">Invalid Staff ID or password. Please try again.</div>
+    <div class="login-foot"><a href="#" onclick="showSup()">Supervisor Access</a></div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════
-     HOME SCREEN
-════════════════════════════════════════════════════════ -->
+<!-- HOME -->
 <div id="homeScreen" class="screen">
-  <div class="app-header">
-    <div class="header-left">
-      <div class="hk-logo">IRAMA <span>KL</span></div>
-      <div class="staff-badge" id="staffBadge">IKL0000</div>
-    </div>
-    <div class="header-right">
-      <div class="hdr-time" id="headerTime"></div>
-      <button class="hdr-btn" onclick="doLogout()">Sign Out</button>
+  <div class="hdr">
+    <div class="hdr-brand">IRAMA <b>KL</b></div>
+    <div class="hdr-right">
+      <div class="chip gold" id="hStaff">—</div>
+      <div class="chip" id="hTime">—</div>
+      <button class="hbtn" onclick="doLogout()">Sign Out</button>
     </div>
   </div>
   <div class="body">
-    <div class="home-welcome">
-      <h2>Good <span id="greetTime">Morning</span>,</h2>
-      <h2 class="staff-name" id="staffNameDisplay">—</h2>
-      <p id="todayDate" style="color:var(--muted);font-size:12px;margin-top:6px;"></p>
+    <div class="welcome-bar">
+      <h2>Good <span id="greetWord">Morning</span>, <span class="name" id="staffName">—</span></h2>
+      <div class="date" id="todayDate">—</div>
     </div>
-
-    <div class="today-summary">
-      <h3>Today's Progress</h3>
-      <div class="summary-stats">
-        <div class="sstat"><div class="sstat-num" id="statRooms">0</div><div class="sstat-lbl">Rooms Done</div></div>
-        <div class="sstat"><div class="sstat-num" id="statFlags">0</div><div class="sstat-lbl">Items Flagged</div></div>
-        <div class="sstat"><div class="sstat-num" id="statReuse">0</div><div class="sstat-lbl">Reuse</div></div>
-      </div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-num" id="stRooms">0</div><div class="stat-lbl">Rooms Done</div></div>
+      <div class="stat-box"><div class="stat-num" id="stTopup">0</div><div class="stat-lbl">Top Ups</div></div>
+      <div class="stat-box"><div class="stat-num" id="stReuse">0</div><div class="stat-lbl">Reuse</div></div>
     </div>
-
-    <div class="room-entry-box">
-      <label>Enter Room Number</label>
-      <input type="text" id="roomInput" class="room-num-input" placeholder="e.g. 1401" maxlength="4"
-        oninput="onRoomInput(this.value)" onkeydown="if(event.key==='Enter')startReport()">
-      <div class="room-type-badge" id="roomTypeBadge"></div>
-      <button class="start-btn" id="startBtn" onclick="startReport()" disabled>Start Room Report</button>
+    <div class="room-selector">
+      <h3>Select Floor &amp; Room</h3>
+      <select class="floor-select" id="floorSel" onchange="onFloorChange()">
+        <option value="">— Select Floor —</option>
+        <option value="14">Level 14</option><option value="15">Level 15</option>
+        <option value="16">Level 16</option><option value="17">Level 17</option>
+        <option value="18">Level 18</option><option value="19">Level 19</option>
+        <option value="20">Level 20</option><option value="21">Level 21</option>
+        <option value="22">Level 22</option><option value="23">Level 23</option>
+        <option value="24">Level 24</option><option value="25">Level 25</option>
+        <option value="26">Level 26</option><option value="27">Level 27</option>
+        <option value="28">Level 28</option><option value="29">Level 29</option>
+        <option value="30">Level 30</option><option value="31">Level 31</option>
+        <option value="32">Level 32</option><option value="33">Level 33</option>
+        <option value="34">Level 34</option><option value="35">Level 35</option>
+        <option value="36">Level 36</option><option value="37">Level 37</option>
+      </select>
+      <div class="room-grid-wrap"><div class="room-grid" id="roomGrid"></div></div>
+      <div class="room-type-info" id="roomTypeInfo"></div>
+      <button class="btn-start" id="btnStart" onclick="startReport()" disabled>Start Room Report</button>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════
-     REPORT SCREEN  (5 steps)
-════════════════════════════════════════════════════════ -->
+<!-- REPORT -->
 <div id="reportScreen" class="screen">
-  <div class="app-header">
-    <div class="header-left">
-      <div class="hk-logo">IRAMA <span>KL</span></div>
-      <div id="reportRoomBadge" class="staff-badge">—</div>
-    </div>
-    <div class="header-right">
-      <button class="hdr-btn" onclick="cancelReport()">Cancel</button>
+  <div class="hdr">
+    <div class="hdr-brand">IRAMA <b>KL</b></div>
+    <div class="hdr-right">
+      <div class="chip gold" id="repRoomChip">—</div>
+      <button class="hbtn" onclick="if(confirm('Cancel report?'))showScr('homeScreen')">Cancel</button>
     </div>
   </div>
-
-  <div class="progress-bar">
-    <div class="step-tab active" id="tab0">Room</div>
-    <div class="step-tab" id="tab1">Linen</div>
-    <div class="step-tab" id="tab2">Amenities</div>
-    <div class="step-tab" id="tab3">Equipment</div>
-    <div class="step-tab" id="tab4">Submit</div>
+  <div class="step-bar">
+    <div class="step act" id="st0">1. Room</div>
+    <div class="step" id="st1">2. Linen</div>
+    <div class="step" id="st2">3. Amenities</div>
+    <div class="step" id="st3">4. Equipment</div>
+    <div class="step" id="st4">5. Submit</div>
   </div>
-
-  <div class="body" id="reportBody">
-
-    <!-- STEP 0: Room Info -->
-    <div class="step-panel active" id="step0">
-      <div class="step-title">Room Details</div>
-      <div class="room-info-bar">
-        <div>
-          <div class="rib-room" id="ribRoom">—</div>
-          <div class="rib-type" id="ribType">—</div>
+  <div class="body">
+    <!-- PANEL 0: Room -->
+    <div class="panel on" id="p0">
+      <div class="room-banner">
+        <div class="rb-left">
+          <div class="room-no" id="rbRoom">—</div>
+          <div class="room-type" id="rbType">—</div>
         </div>
-        <div class="rib-time" id="ribTimeIn">Time In: —</div>
+        <div class="rb-right" id="rbTimeIn">Time In: —</div>
       </div>
-      <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Room Status</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="linen-btn" id="statusOD" onclick="setStatus('OD')">Occupied Dirty</button>
-          <button class="linen-btn" id="statusVC" onclick="setStatus('VC')">Vacant Clean</button>
-          <button class="linen-btn" id="statusVD" onclick="setStatus('VD')">Vacant Dirty</button>
-          <button class="linen-btn" id="statusOC" onclick="setStatus('OC')">Occupied Clean</button>
-        </div>
+      <div class="section-tag">Room Status</div>
+      <div class="status-grid">
+        <button class="status-btn" id="sbOD" onclick="setSt('OD')">Occupied Dirty</button>
+        <button class="status-btn" id="sbVC" onclick="setSt('VC')">Vacant Clean</button>
+        <button class="status-btn" id="sbVD" onclick="setSt('VD')">Vacant Dirty</button>
+        <button class="status-btn" id="sbOC" onclick="setSt('OC')">Occupied Clean</button>
       </div>
-      <div style="background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;">
-        <div style="font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Room Features</div>
-        <div style="font-size:13px;color:var(--muted);" id="roomFeatures">—</div>
-      </div>
+      <div class="section-tag">Room Features</div>
+      <div style="background:var(--n2);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;color:var(--muted);" id="roomFeat">—</div>
     </div>
-
-    <!-- STEP 1: Linen -->
-    <div class="step-panel" id="step1">
-      <div class="step-title">Linen Report</div>
-      <div style="font-size:12px;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;">
-        ✓ = OK &nbsp;|&nbsp; REUSE = Send for laundry &nbsp;|&nbsp; MISSING = Not found in room
+    <!-- PANEL 1: Linen -->
+    <div class="panel" id="p1">
+      <div style="background:var(--n2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--muted);">
+        <b style="color:var(--green)">✓ OK</b> — Item is present &nbsp;|&nbsp; <b style="color:var(--amber)">REUSE</b> — Send for laundry
       </div>
-      <div id="linenItems"></div>
+      <div id="linenPanel"></div>
     </div>
-
-    <!-- STEP 2: Amenities -->
-    <div class="step-panel" id="step2">
-      <div class="step-title">Amenities Report</div>
-      <div style="font-size:12px;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;">
-        All items are preset. Tap MISSING only if item is not in room.
+    <!-- PANEL 2: Amenities -->
+    <div class="panel" id="p2">
+      <div style="background:var(--n2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--muted);">
+        All quantities preset per room type. Tap <b style="color:var(--amber)">TOP UP</b> if item needs restocking.
       </div>
-      <div id="amenitiesItems"></div>
+      <div id="amenPanel"></div>
     </div>
-
-    <!-- STEP 3: Equipment -->
-    <div class="step-panel" id="step3">
-      <div class="step-title">Equipment Check</div>
-      <div style="font-size:12px;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;">
-        All items shown as present. Tap MISSING if item is not found.
+    <!-- PANEL 3: Equipment -->
+    <div class="panel" id="p3">
+      <div style="background:var(--n2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--muted);">
+        All equipment preset. Tap <b style="color:var(--red)">ACTION</b> if item is missing or damaged.
       </div>
-      <div id="equipItems"></div>
+      <div id="equipPanel"></div>
     </div>
-
-    <!-- STEP 4: Submit -->
-    <div class="step-panel" id="step4">
-      <div class="step-title">Submit Report</div>
-      <div class="room-info-bar" style="margin-bottom:14px;">
-        <div>
-          <div class="rib-room" id="submitRibRoom">—</div>
-          <div class="rib-type" id="submitRibType">—</div>
-        </div>
-        <div class="rib-time" id="submitTimes">—</div>
-      </div>
-      <div class="flag-summary">
+    <!-- PANEL 4: Submit -->
+    <div class="panel" id="p4">
+      <div class="summary-box">
         <h3>Report Summary</h3>
-        <div id="flagSummaryContent"></div>
+        <div class="sum-row"><span class="sum-label">Room</span><span class="sum-val" id="sumRoom">—</span></div>
+        <div class="sum-row"><span class="sum-label">Type</span><span class="sum-val" id="sumType">—</span></div>
+        <div class="sum-row"><span class="sum-label">Staff</span><span class="sum-val" id="sumStaff">—</span></div>
+        <div class="sum-row"><span class="sum-label">Status</span><span class="sum-val" id="sumStatus">—</span></div>
+        <div class="sum-row"><span class="sum-label">Time In → Out</span><span class="sum-val" id="sumTimes">—</span></div>
+        <div class="sum-row"><span class="sum-label">Linen Reuse</span><span class="sum-val" id="sumReuse">—</span></div>
+        <div class="sum-row"><span class="sum-label">Items to Top Up</span><span class="sum-val" id="sumTopup">—</span></div>
+        <div class="sum-row"><span class="sum-label">Equipment Action</span><span class="sum-val" id="sumAction">—</span></div>
+        <div class="flag-list" id="flagList"></div>
       </div>
-      <div class="remarks-box">
+      <div class="remarks-area">
         <label>Closing Remarks</label>
-        <textarea id="closingRemarks" placeholder="Lost & found items, guest requests, room condition notes..."></textarea>
+        <textarea id="remarks" placeholder="Lost &amp; found, guest requests, room damage, special notes..."></textarea>
       </div>
-      <button class="submit-btn" onclick="submitReport()">✓ Submit Report</button>
+      <button class="btn-submit" onclick="submitReport()">✓ Submit Report</button>
     </div>
-
   </div>
-
-  <div class="nav-btns" id="navBtns">
-    <button class="nav-back" id="backBtn" onclick="goBack()" style="display:none">← Back</button>
-    <button class="nav-next" id="nextBtn" onclick="goNext()">Next →</button>
+  <div class="nav-row" id="navRow">
+    <button class="btn-back" id="btnBack" style="display:none" onclick="goBack()">← Back</button>
+    <button class="btn-next" id="btnNext" onclick="goNext()">Next →</button>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════
-     SUCCESS SCREEN
-════════════════════════════════════════════════════════ -->
+<!-- SUCCESS -->
 <div id="successScreen" class="screen">
   <div class="success-icon">✅</div>
-  <div class="success-title">Report Submitted!</div>
-  <div class="success-sub">Room <span class="success-room" id="successRoom">—</span> completed.<br>Report saved to cloud.</div>
-  <div class="success-btns">
-    <button class="btn-next-room" onclick="nextRoom()">Start Next Room</button>
-    <button class="btn-done" onclick="goHome()">Back to Home</button>
+  <div class="success-title">Report Submitted</div>
+  <div class="success-sub">Room <span class="suc-room" id="sucRoom">—</span> report saved successfully.</div>
+  <div class="suc-btns">
+    <button class="btn-nextroom" onclick="nextRoom()">Start Next Room</button>
+    <button class="btn-home2" onclick="goHome()">Back to Home</button>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════
-     SUPERVISOR SCREEN
-════════════════════════════════════════════════════════ -->
+<!-- SUPERVISOR -->
 <div id="supScreen" class="screen">
-  <div class="app-header">
-    <div class="header-left">
-      <div class="hk-logo">IRAMA <span>KL</span></div>
-      <div class="staff-badge">SUPERVISOR</div>
-    </div>
-    <div class="header-right">
-      <button class="hdr-btn" onclick="showScreen('loginScreen')">Exit</button>
+  <div class="hdr">
+    <div class="hdr-brand">IRAMA <b>KL</b></div>
+    <div class="hdr-right">
+      <div class="chip gold">SUPERVISOR</div>
+      <button class="hbtn" onclick="showScr('loginScreen')">Exit</button>
     </div>
   </div>
-  <div class="body">
-    <div id="supLoginPanel" style="padding:16px;">
-      <div class="sup-login">
-        <h2>Supervisor Login</h2>
-        <div class="form-group">
-          <label>Supervisor Password</label>
-          <input type="password" id="supPw" placeholder="Enter supervisor password" autocomplete="off">
-        </div>
-        <button class="login-btn" onclick="supLogin()">Access Dashboard</button>
-        <div class="login-err" id="supErr">Incorrect password</div>
-      </div>
+  <div id="supLoginWrap" style="padding:24px;display:flex;justify-content:center;">
+    <div style="width:100%;max-width:340px;background:var(--n2);border:1px solid var(--border);border-radius:12px;padding:22px;">
+      <div style="font-size:16px;color:var(--white);font-weight:600;text-align:center;margin-bottom:16px;">Supervisor Login</div>
+      <div class="fgrp"><label>Password</label><input class="finp" type="password" id="supPw" placeholder="Supervisor password"></div>
+      <button class="btn-gold" onclick="supLogin()">Access Dashboard</button>
+      <div class="err-msg" id="supErr">Incorrect password</div>
     </div>
-    <div id="supDashboard" style="display:none;">
-      <div style="padding:12px 16px 8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <input type="date" id="supDate" style="background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--white);outline:none;" onchange="loadDashboard()">
-        <input type="text" id="supRoomFilter" placeholder="Room..." style="background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--white);outline:none;width:80px;" oninput="loadDashboard()">
-        <input type="text" id="supStaffFilter" placeholder="Staff ID..." style="background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--white);outline:none;width:100px;" oninput="loadDashboard()">
-        <div id="supRecordCount" style="font-size:12px;color:var(--muted);margin-left:auto;"></div>
-      </div>
-      <div id="supRecords" style="padding:0 16px 16px;"></div>
+  </div>
+  <div id="supDash" style="display:none;flex:1;overflow-y:auto;flex-direction:column;display:none;">
+    <div class="sup-stats" id="supStats"></div>
+    <div class="sup-toolbar">
+      <input class="sup-inp" type="date" id="supDate" onchange="loadDash()">
+      <input class="sup-inp" placeholder="Room..." id="supRoomF" style="width:72px" oninput="loadDash()">
+      <input class="sup-inp" placeholder="Staff ID..." id="supStaffF" style="width:90px" oninput="loadDash()">
+      <select class="sup-inp" id="supFloorF" onchange="loadDash()">
+        <option value="">All Floors</option>
+        <option value="14">L14</option><option value="15">L15</option><option value="16">L16</option>
+        <option value="17">L17</option><option value="18">L18</option><option value="19">L19</option>
+        <option value="20">L20</option><option value="21">L21</option><option value="22">L22</option>
+        <option value="23">L23</option><option value="24">L24</option><option value="25">L25</option>
+        <option value="26">L26</option><option value="27">L27</option><option value="28">L28</option>
+        <option value="29">L29</option><option value="30">L30</option><option value="31">L31</option>
+        <option value="32">L32</option><option value="33">L33</option><option value="34">L34</option>
+        <option value="35">L35</option><option value="36">L36</option><option value="37">L37</option>
+      </select>
+      <button class="hbtn" onclick="sendDigest()" style="border-color:var(--blue)44;color:var(--blue);">📧 Email Digest</button>
+      <button class="hbtn" onclick="window.print()" style="border-color:var(--gold)44;color:var(--gold);">🖨 Print</button>
+      <span style="font-size:11px;color:var(--muted);margin-left:auto;" id="recCount">0 records</span>
+    </div>
+    <div class="sup-records" id="supRecords"></div>
+  </div>
+</div>
+
+<!-- Email Modal -->
+<div class="modal-bg" id="emailModal">
+  <div class="modal">
+    <h3>📧 Send Email Digest</h3>
+    <p>Enter email address to send today's housekeeping summary</p>
+    <input class="finp" id="emailAddr" placeholder="e.g. manager@iramakl.com" type="email">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('emailModal')">Cancel</button>
+      <button class="btn-confirm" onclick="confirmEmail()">Send Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- Amend Modal -->
+<div class="modal-bg" id="amendModal">
+  <div class="modal amend-modal">
+    <h3>✏️ Amend Report</h3>
+    <p>Room <strong id="amendRoom" style="color:var(--gold)">—</strong> — All amendments are logged with timestamp.</p>
+    <label style="font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:5px;">Amendment Reason (Required)</label>
+    <textarea id="amendReason" placeholder="State reason for amendment e.g. incorrect room status entered, maid made error on linen count..."></textarea>
+    <label style="font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:5px;">Field to Amend</label>
+    <select class="finp" id="amendField" style="margin-bottom:10px;">
+      <option value="">— Select field —</option>
+      <option value="room_status">Room Status</option>
+      <option value="remarks">Closing Remarks</option>
+      <option value="linen_note">Linen Note</option>
+      <option value="amenity_note">Amenity Note</option>
+      <option value="equipment_note">Equipment Note</option>
+    </select>
+    <input class="finp" id="amendValue" placeholder="New value..." style="margin-bottom:10px;">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('amendModal')">Cancel</button>
+      <button class="btn-confirm btn-amberconf" onclick="confirmAmend()">Save Amendment</button>
     </div>
   </div>
 </div>
@@ -421,10 +475,10 @@ html,body{height:100%;background:var(--navy);font-family:'Segoe UI',system-ui,sa
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════════════
-// ROOM DATABASE — all 766 rooms
-// ════════════════════════════════════════════════════════
-const ROOM_DB = {
+// ═══════════════════════════════════════════════
+// ROOM DATABASE
+// ═══════════════════════════════════════════════
+const ROOM_DB={
 1401:'DLXK',1402:'DLXT',1403:'DLXK',1404:'DLXK',1405:'DLXT',1406:'DLXK',1407:'APRT_K',1408:'DLXK',1409:'DLXK',1410:'APRT_K',1411:'DLXK',1412:'DLXT',1413:'DLXK',1414:'DLXT',1415:'DLXK',1416:'DLXT',1417:'DLXT',1418:'DLXT',1419:'DLXT',1420:'DLXT',1421:'DLXT',1422:'DLXT',1423:'DLXT',1424:'DLXK',1425:'DLXK',1426:'DLXK',1427:'DLXT',1428:'DLXT',1429:'DLXT',1430:'DLXT',1431:'DLXT',1432:'DLXT',1433:'DLXT',1434:'DLXT',
 1501:'DLXK',1502:'DLXT',1503:'DLXK',1504:'DLXK',1505:'DLXT',1506:'DLXK',1507:'JRSU',1508:'DLXT',1509:'DLXT',1510:'JRSU',1511:'DLXK',1512:'DLXT',1513:'DLXK',1514:'DLXT',1515:'DLXK',1516:'DLXT',1517:'DLXT',1518:'DLXT',1519:'DLXT',1520:'DLXT',1521:'DLXT',1522:'DLXT',1523:'DLXT',1524:'DLXK',1525:'DLXK',1526:'DLXK',1527:'DLXK',1528:'DLXT',1529:'DLXT',1530:'DLXT',1531:'DLXT',1532:'DLXT',1533:'DLXT',1534:'DLXT',1535:'DLXT',
 1601:'DLXK',1602:'DLXT',1603:'DLXK',1604:'DLXK',1605:'DLXT',1606:'DLXK',1607:'JRSU',1608:'DLXT',1609:'DLXT',1610:'JRSU',1611:'DLXK',1612:'DLXT',1613:'DLXK',1614:'DLXT',1615:'DLXK',1616:'DLXT',1617:'DLXT',1618:'DLXT',1619:'DLXT',1620:'DLXT',1621:'DLXT',1622:'DLXT',1623:'DLXT',1624:'DLXK',1625:'DLXK',1626:'DLXK',1627:'DLXK',1628:'DLXT',1629:'DLXT',1630:'DLXT',1631:'DLXT',1632:'DLXT',1633:'DLXT',1634:'DLXT',1635:'DLXT',
@@ -451,683 +505,491 @@ const ROOM_DB = {
 3701:'PRDST_K',3702:'IRSUT_K'
 };
 
-const ROOM_TYPE_NAMES = {
-  DLXK:'Deluxe King',DLXT:'Deluxe Twin',
-  JRSU:'Junior Suite',
-  CFDK:'Club Room King',CFDT:'Club Room Twin',
-  PRSU:'Premier Suite',EXSU:'Executive Suite',
-  APRT_K:'Apartment Suite King',APRT_T:'Apartment Suite Twin',APRT_P:'Apartment Powder Room',
-  PRDST_K:'Presidential Suite',PRDST_T:'Presidential Twin',PRDST_P:'Presidential Powder',
-  IRSUT_K:'Irama Royal Suite',IRSUT_T:'Irama Royal Twin',IRSUT_P:'Irama Royal Powder'
+const RT_NAMES={DLXK:'Deluxe King',DLXT:'Deluxe Twin',JRSU:'Junior Suite',CFDK:'Club Room King',CFDT:'Club Room Twin',PRSU:'Premier Suite',EXSU:'Executive Suite',APRT_K:'Apartment Suite',PRDST_K:'Presidential Suite',IRSUT_K:'Irama Royal Suite'};
+
+const ROOM_FEAT={
+1401:'AC · CN · NS · SS · CV · KB',1402:'CN · NS · SS · CV · TW',1407:'CN · BT · NS · SS · CV · KB',1410:'BT · NS · SS · CV · KB',
+3701:'CV · NS · SS · KB · BT',3702:'CV · NS · SS · KB · BT'
 };
 
-// ════════════════════════════════════════════════════════
-// ROOM FEATURES
-// ════════════════════════════════════════════════════════
-const ROOM_FEATURES_DB = {
-1401:'AC, CN, NS, SS, CV, KB',1402:'CN, NS, SS, CV, TW',1403:'NS, SS, CV, KB',1404:'NS, SS, CV, KB',1405:'CN, NS, SS, CV, TW',1406:'CN, NS, SS, CV, KB',1407:'CN, BT, NS, SS, CV, KB',1408:'CN, NS, SS, CV, KB',1409:'NS, SS, CV, KB',1410:'BT, NS, SS, CV, KB',1411:'CN, NS, SS, CV, KB',1412:'CN, NS, SS, CV, TW',1413:'CN, NS, SS, CV, KB',1414:'CN, NS, SS, CV, TW',1415:'NS, SS, CV, KB',1416:'NS, AE, SS, CV, TW',1417:'NS, AE, SS, CV, TW',1418:'NS, AE, SS, CV, TW',1419:'NS, AE, SS, CV, TW',1420:'NS, AE, SS, CV, TW',1421:'NS, AE, SS, CV, TW',1422:'NS, AE, SS, CV, TW',1423:'NS, AE, SS, CV, TW',1424:'NS, NV, AE, KB',1425:'NS, NV, AE, KB',1426:'NS, NV, AE, KB',1427:'NS, AE, SS, NV, TW',1428:'NS, AE, SS, CV, TW',1429:'NS, AE, SS, CV, TW',1430:'NS, AE, SS, CV, TW',1431:'NS, AE, SS, CV, TW',1432:'NS, AE, SS, CV, TW',1433:'NS, AE, SS, CV, TW',1434:'NS, AE, SS, CV, TW',
-3701:'CV, NS, SS, KB, BT',3702:'CV, NS, SS, KB, BT'
-};
-
-// ════════════════════════════════════════════════════════
-// ITEMS DATABASE — preset quantities per room type
-// ════════════════════════════════════════════════════════
-const ITEMS_DB = {
+// ═══════════════════════════════════════════════
+// ITEMS DATABASE
+// ═══════════════════════════════════════════════
+const ITEMS={
 DLXK:{
-  linen:[
-    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:2},{s:'Coffee',n:'Creamer',q:4},{s:'Coffee',n:'Coaster',q:2},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (White Tea)',q:1},{s:'Bathroom',n:'Body Wash (White Tea)',q:1},{s:'Bathroom',n:'Conditioner (White Tea)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},{s:'Bathroom',n:'Body Lotion 30ml',q:2},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2}
-  ],
-  equipment:[
-    {n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},
-    {n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Extra Pillow'},{n:'Extra Blanket'}
-  ]
+linen:[{n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},{n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}],
+amenities:[
+{s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+{s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:2},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:2},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Coffee Facilities',n:'Coaster',q:2},
+{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},
+{s:'Bathroom Amenities',n:'Shampoo White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Body Wash White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Conditioner White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:1},{s:'Bathroom Amenities',n:'Body Lotion 30ml',q:2},
+{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2}
+],
+equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
 },
 DLXT:{
-  linen:[
-    {n:'Bedsheet Twin',q:2},{n:'Duvet Cover Twin',q:2},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:2},{s:'Coffee',n:'Creamer',q:4},{s:'Coffee',n:'Coaster',q:2},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (White Tea)',q:1},{s:'Bathroom',n:'Body Wash (White Tea)',q:1},{s:'Bathroom',n:'Conditioner (White Tea)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},{s:'Bathroom',n:'Body Lotion 30ml',q:2},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2}
-  ],
-  equipment:[
-    {n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},
-    {n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Extra Pillow'},{n:'Extra Blanket'}
-  ]
+linen:[{n:'Bedsheet Twin',q:2},{n:'Duvet Cover Twin',q:2},{n:'Pillow Case',q:4},{n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}],
+amenities:[
+{s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+{s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:2},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:2},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Coffee Facilities',n:'Coaster',q:2},
+{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},
+{s:'Bathroom Amenities',n:'Shampoo White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Body Wash White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Conditioner White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:1},{s:'Bathroom Amenities',n:'Body Lotion 30ml',q:2},
+{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2}
+],
+equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
 },
 JRSU:{
-  linen:[
-    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:4},{s:'Coffee',n:'Creamer',q:2},{s:'Coffee',n:'Coaster',q:2},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:2},
-    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
-    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
-  ],
-  equipment:[
-    {n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},
-    {n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Extra Pillow'},{n:'Extra Blanket'}
-  ]
+linen:[{n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},{n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}],
+amenities:[
+{s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
+{s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:4},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:4},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Coffee Facilities',n:'Coaster',q:4},
+{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome Amenities',n:'Melvados Pisang Goreng 30g',q:1},
+{s:'Bathroom Amenities',n:'Shampoo Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Body Wash Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Conditioner Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:1},
+{s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
+{s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
+{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
+],
+equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Bar Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
 },
-CFDK:{
-  linen:[
-    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:2},{s:'Coffee',n:'Creamer',q:4},{s:'Coffee',n:'Coaster',q:2},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (Lagaia)',q:1},{s:'Bathroom',n:'Body Wash (Lagaia)',q:1},{s:'Bathroom',n:'Conditioner (Lagaia)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},
-    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
-    {s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
-  ],
-  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
-},
-CFDT:{
-  linen:[
-    {n:'Bedsheet Twin',q:2},{n:'Duvet Cover Twin',q:2},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:2},{s:'Coffee',n:'Creamer',q:4},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (Lagaia)',q:1},{s:'Bathroom',n:'Body Wash (Lagaia)',q:1},{s:'Bathroom',n:'Conditioner (Lagaia)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},
-    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
-    {s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
-  ],
-  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
-},
-PRSU:{
-  linen:[
-    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:4},{s:'Coffee',n:'Creamer',q:2},{s:'Coffee',n:'Coaster',q:2},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:2},
-    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
-    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
-  ],
-  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
-},
-EXSU:{
-  linen:[
-    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:2},{s:'Coffee',n:'Brown Sugar',q:4},{s:'Coffee',n:'Creamer',q:2},{s:'Coffee',n:'Coaster',q:2},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:2},
-    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
-    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
-  ],
-  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
-},
-APRT_K:{
-  linen:[
-    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:2},{s:'Coffee',n:'Nescafe Classic',q:2},{s:'Coffee',n:'Green Tea',q:2},{s:'Coffee',n:'English Breakfast Tea',q:2},{s:'Coffee',n:'White Sugar',q:4},{s:'Coffee',n:'Brown Sugar',q:4},{s:'Coffee',n:'Creamer',q:4},{s:'Coffee',n:'Coaster',q:4},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (Lagaia)',q:1},{s:'Bathroom',n:'Body Wash (Lagaia)',q:1},{s:'Bathroom',n:'Conditioner (Lagaia)',q:1},{s:'Bathroom',n:'Hand Lotion',q:1},
-    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
-    {s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}
-  ],
-  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
-},
-PRDST_K:{
-  linen:[
-    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:2},{n:'Bath Towel',q:4},{n:'Hand Towel',q:4},{n:'Face Towel',q:4},{n:'Bath Mat',q:2}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:4},{s:'Stationary',n:'Laundry Bag',q:4},{s:'Stationary',n:'Memo Pad',q:2},{s:'Stationary',n:'Ballpoint Pen',q:2},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:4},{s:'Coffee',n:'Nescafe Classic',q:4},{s:'Coffee',n:'Green Tea',q:4},{s:'Coffee',n:'English Breakfast Tea',q:4},{s:'Coffee',n:'White Sugar',q:8},{s:'Coffee',n:'Brown Sugar',q:8},{s:'Coffee',n:'Creamer',q:8},{s:'Coffee',n:'Coaster',q:4},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:4},
-    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
-    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:2},{s:'Minibar',n:'Coffee Capsule Livanto',q:2},{s:'Minibar',n:'Coffee Capsule Decaf',q:2},{s:'Minibar',n:'Coffee Capsule Rio',q:2},{s:'Minibar',n:'Harney & Son Sencha Tea',q:4},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:4},{s:'Minibar',n:'Harney & Son Paris Tea',q:4},{s:'Minibar',n:'Harney & Son Green Tea',q:4},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:2},{s:'Guest Supplies',n:'Shower Cap',q:2},{s:'Guest Supplies',n:'Vanity Kit',q:2},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:4},{s:'Guest Supplies',n:'Facial Tissue Box',q:4},{s:'Guest Supplies',n:'Toilet Roll',q:4},{s:'Guest Supplies',n:'Shoe Shine',q:2},{s:'Guest Supplies',n:'Comb',q:2},{s:'Guest Supplies',n:'Sewing Kit',q:2}
-  ],
-  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
-},
-IRSUT_K:{
-  linen:[
-    {n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},
-    {n:'Bath Robe',q:4},{n:'Bath Towel',q:4},{n:'Hand Towel',q:4},{n:'Face Towel',q:4},{n:'Bath Mat',q:2}
-  ],
-  amenities:[
-    {s:'Stationary',n:'Laundry Bill',q:4},{s:'Stationary',n:'Laundry Bag',q:4},{s:'Stationary',n:'Memo Pad',q:2},{s:'Stationary',n:'Ballpoint Pen',q:2},{s:'Stationary',n:'Shopping Bag',q:1},
-    {s:'Coffee',n:'Drinking Water 500ml',q:4},{s:'Coffee',n:'Nescafe Classic',q:4},{s:'Coffee',n:'Green Tea',q:4},{s:'Coffee',n:'English Breakfast Tea',q:4},{s:'Coffee',n:'White Sugar',q:8},{s:'Coffee',n:'Brown Sugar',q:8},{s:'Coffee',n:'Creamer',q:8},{s:'Coffee',n:'Coaster',q:4},
-    {s:'Welcome',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome',n:'Melvados Pisang Goreng 30g',q:1},
-    {s:'Bathroom',n:'Shampoo (Lagaia)',q:2},{s:'Bathroom',n:'Body Wash (Lagaia)',q:2},{s:'Bathroom',n:'Conditioner (Lagaia)',q:2},{s:'Bathroom',n:'Hand Lotion',q:4},
-    {s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},
-    {s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:2},{s:'Minibar',n:'Coffee Capsule Livanto',q:2},{s:'Minibar',n:'Coffee Capsule Decaf',q:2},{s:'Minibar',n:'Coffee Capsule Rio',q:2},{s:'Minibar',n:'Harney & Son Sencha Tea',q:4},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:4},{s:'Minibar',n:'Harney & Son Paris Tea',q:4},{s:'Minibar',n:'Harney & Son Green Tea',q:4},
-    {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:2},{s:'Guest Supplies',n:'Shower Cap',q:2},{s:'Guest Supplies',n:'Vanity Kit',q:2},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:4},{s:'Guest Supplies',n:'Facial Tissue Box',q:4},{s:'Guest Supplies',n:'Toilet Roll',q:4},{s:'Guest Supplies',n:'Shoe Shine',q:2},{s:'Guest Supplies',n:'Comb',q:2},{s:'Guest Supplies',n:'Sewing Kit',q:2}
-  ],
-  equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Kettle'},{n:'Telephone'},{n:'Do Not Disturb Card'},{n:'Make Up Room Card'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]
-}
-};
-// Fallback same config for variants
-ITEMS_DB.APRT_T = ITEMS_DB.APRT_K;
-ITEMS_DB.PRDST_T = ITEMS_DB.PRDST_K;
-ITEMS_DB.IRSUT_T = ITEMS_DB.IRSUT_K;
-
-// ════════════════════════════════════════════════════════
-// SUPABASE CONFIG
-// ════════════════════════════════════════════════════════
-const SUPA_URL = 'https://vwirvqlhyufejpzhueba.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXJ2cWxoeXVmZWpwemh1ZWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNTk2ODQsImV4cCI6MjA4ODkzNTY4NH0.CrGfXAv1K5RfkQOl3iKmBnm2pjmud7igAv9p9RI3YBA';
-const SUP_PASS = 'irama2026';
-
-async function supaFetch(method, path, body) {
-  try {
-    const res = await fetch(SUPA_URL + path, {
-      method,
-      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': method === 'POST' ? 'return=representation' : '' },
-      body: body ? JSON.stringify(body) : undefined
-    });
-    if (!res.ok) throw new Error(await res.text());
-    return method === 'DELETE' ? null : res.json();
-  } catch(e) { console.warn('Supabase:', e); return null; }
-}
-
-// ════════════════════════════════════════════════════════
-// STAFF DATABASE (demo — in production loaded from Supabase)
-// ════════════════════════════════════════════════════════
-const STAFF_DB = {
-  'IKL0050': { name: 'Karthikesu', pw: 'irama123', role: 'staff' },
-  'IKL0001': { name: 'Lisa Ahmad', pw: 'irama123', role: 'staff' },
-  'IKL0002': { name: 'Mary Lim', pw: 'irama123', role: 'staff' },
-  'IKL0003': { name: 'Sarah Tan', pw: 'irama123', role: 'staff' },
-  'IKL0004': { name: 'Aini Binti Aziz', pw: 'irama123', role: 'staff' },
-  'IKL0005': { name: 'Nurul Huda', pw: 'irama123', role: 'staff' },
-  'IKL9999': { name: 'HK Manager', pw: 'manager2026', role: 'supervisor' },
+CFDK:{linen:[{n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},{n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}],amenities:[{s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},{s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:2},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:2},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Coffee Facilities',n:'Coaster',q:4},{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome Amenities',n:'Melvados Pisang Goreng 30g',q:1},{s:'Bathroom Amenities',n:'Shampoo Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Body Wash Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Conditioner Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:1},{s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},{s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}],equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Bar Fridge'},{n:'Extra Pillow'},{n:'Extra Blanket'}]},
+CFDT:{linen:[{n:'Bedsheet Twin',q:2},{n:'Duvet Cover Twin',q:2},{n:'Pillow Case',q:4},{n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}],amenities:[{s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},{s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:2},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:2},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome Amenities',n:'Melvados Pisang Goreng 30g',q:1},{s:'Bathroom Amenities',n:'Shampoo Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Body Wash Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Conditioner Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:1},{s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},{s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}],equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Bar Fridge'},{n:'Extra Pillow'},{n:'Extra Blanket'}]},
+PRSU:{linen:[{n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},{n:'Bath Robe',q:2},{n:'Bath Towel',q:4},{n:'Hand Towel',q:4},{n:'Face Towel',q:4},{n:'Bath Mat',q:2}],amenities:[{s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},{s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:4},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:4},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Coffee Facilities',n:'Coaster',q:4},{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome Amenities',n:'Melvados Pisang Goreng 30g',q:1},{s:'Bathroom Amenities',n:'Shampoo Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Body Wash Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Conditioner Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:2},{s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},{s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:4},{s:'Guest Supplies',n:'Facial Tissue Box',q:2},{s:'Guest Supplies',n:'Toilet Roll',q:4},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}],equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Bar Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]},
+EXSU:{linen:[{n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},{n:'Bath Robe',q:2},{n:'Bath Towel',q:4},{n:'Hand Towel',q:4},{n:'Face Towel',q:4},{n:'Bath Mat',q:2}],amenities:[{s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},{s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:4},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:4},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Coffee Facilities',n:'Coaster',q:4},{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome Amenities',n:'Melvados Pisang Goreng 30g',q:1},{s:'Bathroom Amenities',n:'Shampoo Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Body Wash Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Conditioner Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:2},{s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},{s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:4},{s:'Guest Supplies',n:'Facial Tissue Box',q:2},{s:'Guest Supplies',n:'Toilet Roll',q:4},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}],equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Bar Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]},
+APRT_K:{linen:[{n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},{n:'Bath Robe',q:2},{n:'Bath Towel',q:2},{n:'Hand Towel',q:2},{n:'Face Towel',q:2},{n:'Bath Mat',q:1}],amenities:[{s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},{s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:4},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:4},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Coffee Facilities',n:'Coaster',q:4},{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome Amenities',n:'Melvados Pisang Goreng 30g',q:1},{s:'Bathroom Amenities',n:'Shampoo Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Body Wash Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Conditioner Lagaia 500ml',q:1},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:1},{s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},{s:'Minibar',n:'Coke 300ml',q:1},{s:'Minibar',n:'Diet Coke 300ml',q:1},{s:'Minibar',n:'Orange Juice',q:1},{s:'Minibar',n:'Apple Juice',q:1},{s:'Minibar',n:'Mineral Water',q:2},{s:'Minibar',n:'Kit Kat',q:1},{s:'Minibar',n:'Coffee Capsule Ristretto',q:1},{s:'Minibar',n:'Coffee Capsule Livanto',q:1},{s:'Minibar',n:'Coffee Capsule Decaf',q:1},{s:'Minibar',n:'Coffee Capsule Rio',q:1},{s:'Minibar',n:'Harney & Son Sencha Tea',q:2},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:2},{s:'Minibar',n:'Harney & Son Paris Tea',q:2},{s:'Minibar',n:'Harney & Son Green Tea',q:2},{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2},{s:'Guest Supplies',n:'Shoe Shine',q:1},{s:'Guest Supplies',n:'Comb',q:1},{s:'Guest Supplies',n:'Sewing Kit',q:1}],equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Bar Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]},
+PRDST_K:{linen:[{n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},{n:'Bath Robe',q:4},{n:'Bath Towel',q:4},{n:'Hand Towel',q:4},{n:'Face Towel',q:4},{n:'Bath Mat',q:2}],amenities:[{s:'Stationary',n:'Laundry Bill',q:4},{s:'Stationary',n:'Laundry Bag',q:4},{s:'Stationary',n:'Memo Pad',q:2},{s:'Stationary',n:'Ballpoint Pen',q:2},{s:'Stationary',n:'Shopping Bag',q:2},{s:'Coffee Facilities',n:'Drinking Water 500ml',q:4},{s:'Coffee Facilities',n:'Nescafe Classic',q:4},{s:'Coffee Facilities',n:'Green Tea',q:4},{s:'Coffee Facilities',n:'English Breakfast Tea',q:4},{s:'Coffee Facilities',n:'White Sugar Stick',q:8},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:8},{s:'Coffee Facilities',n:'Creamer Stick',q:8},{s:'Coffee Facilities',n:'Coaster',q:4},{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},{s:'Welcome Amenities',n:'Melvados Pisang Goreng 30g',q:1},{s:'Bathroom Amenities',n:'Shampoo Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Body Wash Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Conditioner Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:4},{s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},{s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:2},{s:'Minibar',n:'Apple Juice',q:2},{s:'Minibar',n:'Mineral Water',q:4},{s:'Minibar',n:'Kit Kat',q:2},{s:'Minibar',n:'Coffee Capsule Ristretto',q:2},{s:'Minibar',n:'Coffee Capsule Livanto',q:2},{s:'Minibar',n:'Coffee Capsule Decaf',q:2},{s:'Minibar',n:'Coffee Capsule Rio',q:2},{s:'Minibar',n:'Harney & Son Sencha Tea',q:4},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:4},{s:'Minibar',n:'Harney & Son Paris Tea',q:4},{s:'Minibar',n:'Harney & Son Green Tea',q:4},{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:2},{s:'Guest Supplies',n:'Shower Cap',q:2},{s:'Guest Supplies',n:'Vanity Kit',q:2},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:4},{s:'Guest Supplies',n:'Facial Tissue Box',q:4},{s:'Guest Supplies',n:'Toilet Roll',q:4},{s:'Guest Supplies',n:'Shoe Shine',q:2},{s:'Guest Supplies',n:'Comb',q:2},{s:'Guest Supplies',n:'Sewing Kit',q:2}],equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Bar Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]},
+IRSUT_K:{linen:[{n:'Bedsheet King',q:1},{n:'Duvet Cover King',q:1},{n:'Pillow Case',q:4},{n:'Bath Robe',q:4},{n:'Bath Towel',q:4},{n:'Hand Towel',q:4},{n:'Face Towel',q:4},{n:'Bath Mat',q:2}],amenities:[{s:'Stationary',n:'Laundry Bill',q:4},{s:'Stationary',n:'Laundry Bag',q:4},{s:'Stationary',n:'Memo Pad',q:2},{s:'Stationary',n:'Ballpoint Pen',q:2},{s:'Stationary',n:'Shopping Bag',q:2},{s:'Coffee Facilities',n:'Drinking Water 500ml',q:4},{s:'Coffee Facilities',n:'Nescafe Classic',q:4},{s:'Coffee Facilities',n:'Green Tea',q:4},{s:'Coffee Facilities',n:'English Breakfast Tea',q:4},{s:'Coffee Facilities',n:'White Sugar Stick',q:8},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:8},{s:'Coffee Facilities',n:'Creamer Stick',q:8},{s:'Coffee Facilities',n:'Coaster',q:4},{s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:2},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:2},{s:'Welcome Amenities',n:'Melvados Pisang Goreng 30g',q:2},{s:'Bathroom Amenities',n:'Shampoo Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Body Wash Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Conditioner Lagaia 500ml',q:2},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:4},{s:'Gift Set',n:'Lagaia Shampoo Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Wash Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Conditioner Tube 30ml',q:1},{s:'Gift Set',n:'Lagaia Body Lotion Tube 30ml',q:1},{s:'Gift Set',n:'Amenities Box',q:1},{s:'Minibar',n:'Coke 300ml',q:2},{s:'Minibar',n:'Diet Coke 300ml',q:2},{s:'Minibar',n:'Orange Juice',q:2},{s:'Minibar',n:'Apple Juice',q:2},{s:'Minibar',n:'Mineral Water',q:4},{s:'Minibar',n:'Kit Kat',q:2},{s:'Minibar',n:'Coffee Capsule Ristretto',q:2},{s:'Minibar',n:'Coffee Capsule Livanto',q:2},{s:'Minibar',n:'Coffee Capsule Decaf',q:2},{s:'Minibar',n:'Coffee Capsule Rio',q:2},{s:'Minibar',n:'Harney & Son Sencha Tea',q:4},{s:'Minibar',n:'Harney & Son Jasmine Tea',q:4},{s:'Minibar',n:'Harney & Son Paris Tea',q:4},{s:'Minibar',n:'Harney & Son Green Tea',q:4},{s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:2},{s:'Guest Supplies',n:'Shower Cap',q:2},{s:'Guest Supplies',n:'Vanity Kit',q:2},{s:'Guest Supplies',n:'Sanitary Bag',q:2},{s:'Guest Supplies',n:'Room Slipper',q:4},{s:'Guest Supplies',n:'Facial Tissue Box',q:4},{s:'Guest Supplies',n:'Toilet Roll',q:4},{s:'Guest Supplies',n:'Shoe Shine',q:2},{s:'Guest Supplies',n:'Comb',q:2},{s:'Guest Supplies',n:'Sewing Kit',q:2}],equipment:[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Mini Bar Fridge'},{n:'Bath Tub'},{n:'Extra Pillow'},{n:'Extra Blanket'}]}
 };
 
-// ════════════════════════════════════════════════════════
-// APP STATE
-// ════════════════════════════════════════════════════════
-let currentStaff = null;
-let currentRoom = null;
-let currentRoomType = null;
-let currentStep = 0;
-let timeIn = null;
-let roomStatus = null;
-let linenState = {};   // {itemName: 'ok'|'reuse'|'missing'}
-let amenityState = {}; // {itemName: 'ok'|'missing'}
-let equipState = {};   // {itemName: 'ok'|'missing'}
-let todayStats = { rooms: 0, flags: 0, reuse: 0 };
+// ═══════════════════════════════════════════════
+// STAFF DB
+// ═══════════════════════════════════════════════
+const STAFF={
+  'IKL0050':{name:'Karthikesu Kesavan',pw:'irama123',role:'staff'},
+  'IKL0001':{name:'Lisa Ahmad',pw:'irama123',role:'staff'},
+  'IKL0002':{name:'Mary Lim',pw:'irama123',role:'staff'},
+  'IKL0003':{name:'Sarah Tan',pw:'irama123',role:'staff'},
+  'IKL0004':{name:'Aini Binti Aziz',pw:'irama123',role:'staff'},
+  'IKL0005':{name:'Nurul Huda',pw:'irama123',role:'staff'},
+  'IKL9999':{name:'HK Supervisor',pw:'manager2026',role:'supervisor'},
+};
+const SUP_PW='irama2026';
+const SUPA_URL='https://vwirvqlhyufejpzhueba.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXJ2cWxoeXVmZWpwemh1ZWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNTk2ODQsImV4cCI6MjA4ODkzNTY4NH0.CrGfXAv1K5RfkQOl3iKmBnm2pjmud7igAv9p9RI3YBA';
 
-// ════════════════════════════════════════════════════════
+async function sfetch(method,path,body){
+  try{const r=await fetch(SUPA_URL+path,{method,headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':''},body:body?JSON.stringify(body):undefined});if(!r.ok)throw new Error;return method==='DELETE'?null:r.json();}catch(e){return null;}
+}
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let ST={staff:null,room:null,rtype:null,step:0,timeIn:null,status:null,linen:{},amen:{},equip:{},stats:{rooms:0,topup:0,reuse:0}};
+
+// ═══════════════════════════════════════════════
 // CLOCK
-// ════════════════════════════════════════════════════════
-function tick() {
-  const now = new Date();
-  const ts = now.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
-  const el = document.getElementById('headerTime');
-  if (el) el.textContent = ts;
-  const hr = now.getHours();
-  const greet = hr < 12 ? 'Morning' : hr < 18 ? 'Afternoon' : 'Evening';
-  const gel = document.getElementById('greetTime');
-  if (gel) gel.textContent = greet;
-  const del = document.getElementById('todayDate');
-  if (del) del.textContent = now.toLocaleDateString('en-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+// ═══════════════════════════════════════════════
+function tick(){
+  const n=new Date();
+  const ts=n.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
+  const hte=document.getElementById('hTime');if(hte)hte.textContent=ts;
+  const hr=n.getHours();
+  const gw=hr<12?'Morning':hr<18?'Afternoon':'Evening';
+  const ge=document.getElementById('greetWord');if(ge)ge.textContent=gw;
+  const de=document.getElementById('todayDate');
+  if(de)de.textContent=n.toLocaleDateString('en-MY',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 }
-tick(); setInterval(tick, 10000);
+tick();setInterval(tick,15000);
 
-// ════════════════════════════════════════════════════════
-// SCREENS
-// ════════════════════════════════════════════════════════
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-}
+function showScr(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);}
 
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // LOGIN
-// ════════════════════════════════════════════════════════
-function doLogin() {
-  const id = document.getElementById('loginId').value.trim().toUpperCase();
-  const pw = document.getElementById('loginPw').value;
-  const staff = STAFF_DB[id];
-  if (!staff || staff.pw !== pw) {
-    document.getElementById('loginErr').style.display = 'block';
-    return;
-  }
-  document.getElementById('loginErr').style.display = 'none';
-  currentStaff = { id, ...staff };
-  document.getElementById('staffBadge').textContent = id;
-  document.getElementById('staffNameDisplay').textContent = staff.name;
-  loadTodayStats();
-  showScreen('homeScreen');
+// ═══════════════════════════════════════════════
+function doLogin(){
+  const id=document.getElementById('lId').value.trim().toUpperCase();
+  const pw=document.getElementById('lPw').value;
+  const s=STAFF[id];
+  if(!s||s.pw!==pw){document.getElementById('lErr').style.display='block';return;}
+  document.getElementById('lErr').style.display='none';
+  ST.staff={id,...s};
+  document.getElementById('hStaff').textContent=id;
+  document.getElementById('staffName').textContent=s.name;
+  loadStats();showScr('homeScreen');
+}
+function doLogout(){ST.staff=null;document.getElementById('lId').value='';document.getElementById('lPw').value='';showScr('loginScreen');}
+function showSup(){showScr('supScreen');}
+document.getElementById('lPw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('lId').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('lPw').focus();});
+
+// ═══════════════════════════════════════════════
+// HOME — FLOOR & ROOM
+// ═══════════════════════════════════════════════
+function onFloorChange(){
+  const fl=parseInt(document.getElementById('floorSel').value);
+  const grid=document.getElementById('roomGrid');
+  grid.innerHTML='';
+  document.getElementById('roomTypeInfo').textContent='';
+  document.getElementById('btnStart').disabled=true;
+  ST.room=null;ST.rtype=null;
+  if(!fl)return;
+
+  // Get rooms for this floor from ROOM_DB
+  const done=getDoneRooms();
+  const rooms=Object.keys(ROOM_DB).map(Number).filter(r=>Math.floor(r/100)===fl).sort((a,b)=>a-b);
+  rooms.forEach(rn=>{
+    const btn=document.createElement('button');
+    btn.className='room-btn'+(done.has(String(rn))?' done':'');
+    btn.textContent=String(rn).slice(2); // Show last 2 digits only
+    btn.onclick=()=>selectRoom(rn,btn);
+    grid.appendChild(btn);
+  });
 }
 
-function doLogout() {
-  currentStaff = null;
-  document.getElementById('loginId').value = '';
-  document.getElementById('loginPw').value = '';
-  showScreen('loginScreen');
+function getDoneRooms(){
+  const today=new Date().toISOString().split('T')[0];
+  const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
+  return new Set(all.filter(r=>r.date===today&&r.staff_id===ST.staff?.id&&!r.voided).map(r=>r.room));
 }
 
-function showSupervisor() { showScreen('supScreen'); }
+function selectRoom(rn,btn){
+  document.querySelectorAll('.room-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  ST.room=String(rn);
+  ST.rtype=ROOM_DB[rn];
+  const name=RT_NAMES[ST.rtype]||ST.rtype;
+  document.getElementById('roomTypeInfo').textContent=`Room ${rn} — ${name}`;
+  document.getElementById('btnStart').disabled=false;
+}
 
-// ════════════════════════════════════════════════════════
-// HOME — ROOM INPUT
-// ════════════════════════════════════════════════════════
-function onRoomInput(val) {
-  const badge = document.getElementById('roomTypeBadge');
-  const btn = document.getElementById('startBtn');
-  if (val.length === 4) {
-    const rn = parseInt(val);
-    const rt = ROOM_DB[rn];
-    if (rt) {
-      const name = ROOM_TYPE_NAMES[rt] || rt;
-      badge.innerHTML = `<span class="room-type-pill">${val} — ${name}</span>`;
-      btn.disabled = false;
-      currentRoom = val;
-      currentRoomType = rt;
-    } else {
-      badge.innerHTML = `<span class="room-type-err">Room ${val} not found</span>`;
-      btn.disabled = true;
+// ═══════════════════════════════════════════════
+// START REPORT
+// ═══════════════════════════════════════════════
+function startReport(){
+  if(!ST.room||!ST.rtype)return;
+  ST.timeIn=new Date();ST.status=null;ST.linen={};ST.amen={};ST.equip={};
+  document.getElementById('repRoomChip').textContent=ST.room;
+  document.getElementById('rbRoom').textContent=ST.room;
+  document.getElementById('rbType').textContent=RT_NAMES[ST.rtype]||ST.rtype;
+  document.getElementById('rbTimeIn').textContent='Time In: '+ST.timeIn.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('roomFeat').textContent=ROOM_FEAT[parseInt(ST.room)]||'Standard room features apply';
+  ['OD','VC','VD','OC'].forEach(s=>document.getElementById('sb'+s).className='status-btn');
+  buildLinen();buildAmen();buildEquip();
+  goStep(0);showScr('reportScreen');
+}
+
+// ═══════════════════════════════════════════════
+// BUILD LINEN
+// ═══════════════════════════════════════════════
+function buildLinen(){
+  const items=(ITEMS[ST.rtype]||ITEMS.DLXK).linen;
+  const c=document.getElementById('linenPanel');c.innerHTML='';
+  items.forEach(item=>{
+    ST.linen[item.n]='ok';
+    const d=document.createElement('div');d.className='linen-row';d.id='lr_'+esc(item.n);
+    d.innerHTML=`<div class="lr-top"><span class="lr-name">${item.n}</span><span class="lr-std">Std: ${item.q}</span></div>
+<div class="lr-btns">
+  <button class="lr-btn ok" onclick="setLinen('${esc2(item.n)}','ok',this)">✓ OK</button>
+  <button class="lr-btn" onclick="setLinen('${esc2(item.n)}','reuse',this)">↺ REUSE</button>
+</div>`;
+    c.appendChild(d);
+  });
+}
+function setLinen(n,v,btn){
+  ST.linen[n]=v;
+  const row=document.getElementById('lr_'+esc(n));
+  row.querySelectorAll('.lr-btn').forEach(b=>b.className='lr-btn');
+  btn.className='lr-btn '+v;
+}
+
+// ═══════════════════════════════════════════════
+// BUILD AMENITIES
+// ═══════════════════════════════════════════════
+function buildAmen(){
+  const items=(ITEMS[ST.rtype]||ITEMS.DLXK).amenities;
+  const c=document.getElementById('amenPanel');c.innerHTML='';
+  let lastSec='';
+  items.forEach(item=>{
+    ST.amen[item.n]='ok';
+    if(item.s!==lastSec){
+      const h=document.createElement('div');h.className='section-tag';h.textContent=item.s;c.appendChild(h);lastSec=item.s;
     }
-  } else {
-    badge.innerHTML = '';
-    btn.disabled = true;
-  }
-}
-
-function startReport() {
-  if (!currentRoom || !currentRoomType) return;
-  timeIn = new Date();
-  roomStatus = null;
-  linenState = {};
-  amenityState = {};
-  equipState = {};
-  currentStep = 0;
-
-  // Set room info bar
-  document.getElementById('reportRoomBadge').textContent = currentRoom;
-  document.getElementById('ribRoom').textContent = currentRoom;
-  document.getElementById('ribType').textContent = ROOM_TYPE_NAMES[currentRoomType] || currentRoomType;
-  document.getElementById('ribTimeIn').textContent = 'Time In: ' + timeIn.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
-  document.getElementById('roomFeatures').textContent = ROOM_FEATURES_DB[parseInt(currentRoom)] || 'Standard room features';
-
-  // Reset status buttons
-  ['OD','VC','VD','OC'].forEach(s => document.getElementById('status'+s).className = 'linen-btn');
-
-  // Build linen items
-  buildLinenItems();
-  buildAmenityItems();
-  buildEquipItems();
-
-  goToStep(0);
-  showScreen('reportScreen');
-}
-
-// ════════════════════════════════════════════════════════
-// BUILD ITEMS
-// ════════════════════════════════════════════════════════
-function buildLinenItems() {
-  const items = (ITEMS_DB[currentRoomType] || ITEMS_DB['DLXK']).linen;
-  const container = document.getElementById('linenItems');
-  container.innerHTML = '';
-  items.forEach(item => {
-    linenState[item.n] = 'ok';
-    const div = document.createElement('div');
-    div.className = 'linen-row';
-    div.id = 'linen_' + item.n.replace(/\s/g,'_');
-    div.innerHTML = `
-      <div class="linen-top">
-        <span class="linen-name">${item.n}</span>
-        <span class="linen-std-badge">Std: ${item.q}</span>
-      </div>
-      <div class="linen-actions">
-        <button class="linen-btn sel-ok" onclick="setLinen('${item.n}','ok',this)">✓ OK</button>
-        <button class="linen-btn" onclick="setLinen('${item.n}','reuse',this)">REUSE</button>
-        <button class="linen-btn" onclick="setLinen('${item.n}','missing',this)">MISSING</button>
-      </div>`;
-    container.appendChild(div);
+    const d=document.createElement('div');d.className='item-row';d.id='am_'+esc(item.n);
+    d.innerHTML=`<div class="ir-info"><div class="ir-name">${item.n}</div><div class="ir-qty">Standard: <span>${item.q}</span></div></div>
+<div class="ir-ok" id="amok_${esc(item.n)}">✓</div>
+<button class="topup-btn" id="amtb_${esc(item.n)}" onclick="toggleAmen('${esc2(item.n)}')">TOP UP</button>`;
+    c.appendChild(d);
   });
 }
-
-function setLinen(name, status, btn) {
-  linenState[name] = status;
-  const row = document.getElementById('linen_' + name.replace(/\s/g,'_'));
-  const btns = row.querySelectorAll('.linen-btn');
-  btns.forEach(b => b.className = 'linen-btn');
-  btn.className = 'linen-btn sel-' + status;
+function toggleAmen(n){
+  const v=ST.amen[n]==='ok'?'topup':'ok';ST.amen[n]=v;
+  const row=document.getElementById('am_'+esc(n));
+  const btn=document.getElementById('amtb_'+esc(n));
+  const ok=document.getElementById('amok_'+esc(n));
+  row.className=v==='topup'?'item-row flagged':'item-row';
+  btn.className=v==='topup'?'topup-btn topup':'topup-btn';
+  btn.textContent=v==='topup'?'✓ RESTORE':'TOP UP';
+  ok.style.display=v==='topup'?'none':'';
 }
 
-function buildAmenityItems() {
-  const items = (ITEMS_DB[currentRoomType] || ITEMS_DB['DLXK']).amenities;
-  const container = document.getElementById('amenitiesItems');
-  container.innerHTML = '';
-  let lastSection = '';
-  items.forEach(item => {
-    amenityState[item.n] = 'ok';
-    if (item.s !== lastSection) {
-      const hdr = document.createElement('div');
-      hdr.className = 'section-hdr';
-      hdr.textContent = item.s;
-      container.appendChild(hdr);
-      lastSection = item.s;
-    }
-    const div = document.createElement('div');
-    div.className = 'item-row ok';
-    div.id = 'am_' + item.n.replace(/[^a-z0-9]/gi,'_');
-    div.innerHTML = `
-      <div class="item-info">
-        <div class="item-name">${item.n}</div>
-        <div class="item-std">Standard: <span>${item.q}</span></div>
-      </div>
-      <div class="item-status">
-        <span class="status-ok" id="amok_${item.n.replace(/[^a-z0-9]/gi,'_')}">✓</span>
-        <button class="flag-btn" id="amflag_${item.n.replace(/[^a-z0-9]/gi,'_')}" onclick="flagAmenity('${item.n}')">MISSING</button>
-      </div>`;
-    container.appendChild(div);
+// ═══════════════════════════════════════════════
+// BUILD EQUIPMENT
+// ═══════════════════════════════════════════════
+function buildEquip(){
+  const items=(ITEMS[ST.rtype]||ITEMS.DLXK).equipment;
+  const c=document.getElementById('equipPanel');c.innerHTML='';
+  items.forEach(item=>{
+    ST.equip[item.n]='ok';
+    const d=document.createElement('div');d.className='item-row';d.id='eq_'+esc(item.n);
+    d.innerHTML=`<div class="ir-info"><div class="ir-name">${item.n}</div><div class="ir-qty" style="color:var(--green)" id="eqlbl_${esc(item.n)}">Present ✓</div></div>
+<button class="topup-btn" id="eqtb_${esc(item.n)}" onclick="toggleEquip('${esc2(item.n)}')">ACTION</button>`;
+    c.appendChild(d);
   });
 }
-
-function flagAmenity(name) {
-  const key = name.replace(/[^a-z0-9]/gi,'_');
-  const row = document.getElementById('am_' + key);
-  const btn = document.getElementById('amflag_' + key);
-  const ok = document.getElementById('amok_' + key);
-  if (amenityState[name] === 'ok') {
-    amenityState[name] = 'missing';
-    row.className = 'item-row flagged';
-    btn.className = 'flag-btn missing';
-    btn.textContent = '✓ RESTORE';
-    ok.style.display = 'none';
-  } else {
-    amenityState[name] = 'ok';
-    row.className = 'item-row ok';
-    btn.className = 'flag-btn';
-    btn.textContent = 'MISSING';
-    ok.style.display = '';
-  }
+function toggleEquip(n){
+  const v=ST.equip[n]==='ok'?'action':'ok';ST.equip[n]=v;
+  const row=document.getElementById('eq_'+esc(n));
+  const btn=document.getElementById('eqtb_'+esc(n));
+  const lbl=document.getElementById('eqlbl_'+esc(n));
+  row.className=v==='action'?'item-row flagged2':'item-row';
+  btn.className=v==='action'?'topup-btn action':'topup-btn';
+  btn.textContent=v==='action'?'✓ RESTORE':'ACTION';
+  lbl.style.color=v==='action'?'var(--red)':'var(--green)';
+  lbl.textContent=v==='action'?'Action Required ✗':'Present ✓';
 }
 
-function buildEquipItems() {
-  const equip = (ITEMS_DB[currentRoomType] || ITEMS_DB['DLXK']).equipment;
-  const container = document.getElementById('equipItems');
-  container.innerHTML = '';
-  equip.forEach(item => {
-    equipState[item.n] = 'ok';
-    const div = document.createElement('div');
-    div.className = 'item-row ok';
-    div.id = 'eq_' + item.n.replace(/[^a-z0-9]/gi,'_');
-    div.innerHTML = `
-      <div class="item-info">
-        <div class="item-name">${item.n}</div>
-        <div class="item-std" style="color:var(--green)">Present ✓</div>
-      </div>
-      <div class="item-status">
-        <button class="flag-btn" id="eqflag_${item.n.replace(/[^a-z0-9]/gi,'_')}" onclick="flagEquip('${item.n}')">MISSING</button>
-      </div>`;
-    container.appendChild(div);
-  });
-}
+function esc(s){return s.replace(/[^a-zA-Z0-9]/g,'_');}
+function esc2(s){return s.replace(/'/g,"\\'");}
 
-function flagEquip(name) {
-  const key = name.replace(/[^a-z0-9]/gi,'_');
-  const row = document.getElementById('eq_' + key);
-  const btn = document.getElementById('eqflag_' + key);
-  const lbl = row.querySelector('.item-std');
-  if (equipState[name] === 'ok') {
-    equipState[name] = 'missing';
-    row.className = 'item-row flagged';
-    btn.className = 'flag-btn missing';
-    btn.textContent = '✓ RESTORE';
-    lbl.style.color = 'var(--red)';
-    lbl.textContent = 'Not Found ✗';
-  } else {
-    equipState[name] = 'ok';
-    row.className = 'item-row ok';
-    btn.className = 'flag-btn';
-    btn.textContent = 'MISSING';
-    lbl.style.color = 'var(--green)';
-    lbl.textContent = 'Present ✓';
-  }
-}
-
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // ROOM STATUS
-// ════════════════════════════════════════════════════════
-function setStatus(s) {
-  ['OD','VC','VD','OC'].forEach(x => document.getElementById('status'+x).className = 'linen-btn');
-  document.getElementById('status'+s).className = 'linen-btn sel-ok';
-  roomStatus = s;
+// ═══════════════════════════════════════════════
+function setSt(s){
+  ['OD','VC','VD','OC'].forEach(x=>document.getElementById('sb'+x).className='status-btn');
+  document.getElementById('sb'+s).className='status-btn sel';ST.status=s;
 }
 
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // NAVIGATION
-// ════════════════════════════════════════════════════════
-function goToStep(n) {
-  currentStep = n;
-  document.querySelectorAll('.step-panel').forEach((p,i) => p.classList.toggle('active', i===n));
-  document.querySelectorAll('.step-tab').forEach((t,i) => {
-    t.classList.remove('active','done');
-    if (i === n) t.classList.add('active');
-    else if (i < n) t.classList.add('done');
-  });
-  document.getElementById('backBtn').style.display = n > 0 ? '' : 'none';
-  document.getElementById('nextBtn').textContent = n < 4 ? 'Next →' : 'Review';
-  document.getElementById('navBtns').style.display = n === 4 ? 'none' : '';
-  if (n === 4) buildSummary();
-  document.getElementById('reportBody').scrollTop = 0;
+// ═══════════════════════════════════════════════
+function goStep(n){
+  ST.step=n;
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('on',i===n));
+  document.querySelectorAll('.step').forEach((t,i)=>{t.classList.remove('act','done');if(i===n)t.classList.add('act');else if(i<n)t.classList.add('done');});
+  document.getElementById('btnBack').style.display=n>0?'':'none';
+  document.getElementById('navRow').style.display=n===4?'none':'';
+  if(n===4)buildSummary();
+  document.getElementById('reportScreen').querySelector('.body').scrollTop=0;
 }
-function goNext() { if (currentStep < 4) goToStep(currentStep + 1); }
-function goBack() { if (currentStep > 0) goToStep(currentStep - 1); }
-function cancelReport() {
-  if (confirm('Cancel this report?')) { showScreen('homeScreen'); }
-}
+function goNext(){if(ST.step<4)goStep(ST.step+1);}
+function goBack(){if(ST.step>0)goStep(ST.step-1);}
 
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // SUMMARY
-// ════════════════════════════════════════════════════════
-function buildSummary() {
-  const timeOut = new Date();
-  document.getElementById('submitRibRoom').textContent = currentRoom;
-  document.getElementById('submitRibType').textContent = ROOM_TYPE_NAMES[currentRoomType] || currentRoomType;
-  document.getElementById('submitTimes').innerHTML = `In: ${timeIn.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'})}<br>Out: ${timeOut.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'})}`;
-
-  const flags = [];
-  Object.entries(linenState).forEach(([k,v]) => { if(v!=='ok') flags.push({name:k,type:v}); });
-  Object.entries(amenityState).forEach(([k,v]) => { if(v!=='ok') flags.push({name:k,type:v}); });
-  Object.entries(equipState).forEach(([k,v]) => { if(v!=='ok') flags.push({name:k,type:v}); });
-
-  const el = document.getElementById('flagSummaryContent');
-  if (flags.length === 0) {
-    el.innerHTML = '<div class="no-flags">✓ All items OK — no issues found</div>';
-  } else {
-    el.innerHTML = flags.map(f => `
-      <div class="flag-item">
-        <div class="flag-dot ${f.type}"></div>
-        <span>${f.name}</span>
-        <span style="margin-left:auto;font-size:10px;text-transform:uppercase;color:${f.type==='missing'?'var(--red)':'var(--amber)'};">${f.type}</span>
-      </div>`).join('');
-  }
+// ═══════════════════════════════════════════════
+function buildSummary(){
+  const tout=new Date();
+  document.getElementById('sumRoom').textContent=ST.room;
+  document.getElementById('sumType').textContent=RT_NAMES[ST.rtype]||ST.rtype;
+  document.getElementById('sumStaff').textContent=`${ST.staff.id} — ${ST.staff.name}`;
+  document.getElementById('sumStatus').textContent=ST.status||'Not selected';
+  document.getElementById('sumTimes').textContent=`${fmt(ST.timeIn)} → ${fmt(tout)}`;
+  const reuse=Object.values(ST.linen).filter(v=>v==='reuse').length;
+  const topup=Object.values(ST.amen).filter(v=>v==='topup').length;
+  const action=Object.values(ST.equip).filter(v=>v==='action').length;
+  document.getElementById('sumReuse').textContent=reuse?`${reuse} items`:'None';
+  document.getElementById('sumTopup').textContent=topup?`${topup} items`:'None';
+  document.getElementById('sumAction').textContent=action?`${action} items`:'None';
+  const flags=[];
+  Object.entries(ST.linen).forEach(([k,v])=>{if(v!=='ok')flags.push({n:k,t:v});});
+  Object.entries(ST.amen).forEach(([k,v])=>{if(v!=='ok')flags.push({n:k,t:v});});
+  Object.entries(ST.equip).forEach(([k,v])=>{if(v!=='ok')flags.push({n:k,t:v});});
+  const fl=document.getElementById('flagList');
+  if(!flags.length){fl.innerHTML='<div style="font-size:12px;color:var(--green);padding:6px 0">✓ All items OK</div>';}
+  else{fl.innerHTML=flags.map(f=>`<div class="flag-item"><div class="fdot ${f.t}"></div><span>${f.n}</span><span class="ftag ${f.t}">${f.t.toUpperCase()}</span></div>`).join('');}
 }
+function fmt(d){return d?d.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'}):'—';}
 
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // SUBMIT
-// ════════════════════════════════════════════════════════
-async function submitReport() {
-  const timeOut = new Date();
-  const flags = [];
-  Object.entries(linenState).forEach(([k,v]) => { if(v!=='ok') flags.push({item:k,type:v,category:'linen'}); });
-  Object.entries(amenityState).forEach(([k,v]) => { if(v!=='ok') flags.push({item:k,type:v,category:'amenity'}); });
-  Object.entries(equipState).forEach(([k,v]) => { if(v!=='ok') flags.push({item:k,type:v,category:'equipment'}); });
-
-  const report = {
-    room: currentRoom,
-    room_type: currentRoomType,
-    room_type_name: ROOM_TYPE_NAMES[currentRoomType] || currentRoomType,
-    staff_id: currentStaff.id,
-    staff_name: currentStaff.name,
-    room_status: roomStatus || 'OD',
-    time_in: timeIn.toISOString(),
-    time_out: timeOut.toISOString(),
-    linen: JSON.stringify(linenState),
-    amenities: JSON.stringify(amenityState),
-    equipment: JSON.stringify(equipState),
-    flags: JSON.stringify(flags),
-    flag_count: flags.length,
-    reuse_count: Object.values(linenState).filter(v=>v==='reuse').length,
-    remarks: document.getElementById('closingRemarks').value,
-    date: new Date().toISOString().split('T')[0]
+// ═══════════════════════════════════════════════
+async function submitReport(){
+  const tout=new Date();
+  const flags=[];
+  Object.entries(ST.linen).forEach(([k,v])=>{if(v!=='ok')flags.push({item:k,type:v,cat:'linen'});});
+  Object.entries(ST.amen).forEach(([k,v])=>{if(v!=='ok')flags.push({item:k,type:v,cat:'amenity'});});
+  Object.entries(ST.equip).forEach(([k,v])=>{if(v!=='ok')flags.push({item:k,type:v,cat:'equipment'});});
+  const rec={
+    id:'hk_'+Date.now(),room:ST.room,room_type:ST.rtype,room_type_name:RT_NAMES[ST.rtype]||ST.rtype,
+    staff_id:ST.staff.id,staff_name:ST.staff.name,floor:ST.room.slice(0,ST.room.length===4?2:2),
+    room_status:ST.status||'OD',time_in:ST.timeIn.toISOString(),time_out:tout.toISOString(),
+    linen:JSON.stringify(ST.linen),amenities:JSON.stringify(ST.amen),equipment:JSON.stringify(ST.equip),
+    flags:JSON.stringify(flags),flag_count:flags.length,
+    reuse_count:Object.values(ST.linen).filter(v=>v==='reuse').length,
+    topup_count:Object.values(ST.amen).filter(v=>v==='topup').length,
+    action_count:Object.values(ST.equip).filter(v=>v==='action').length,
+    remarks:document.getElementById('remarks').value,
+    date:new Date().toISOString().split('T')[0],
+    submitted_at:tout.toISOString(),
+    voided:false,amendments:[]
   };
-
-  // Save to localStorage
-  const key = 'hk_' + Date.now();
-  const existing = JSON.parse(localStorage.getItem('hk_reports') || '[]');
-  existing.push({ key, ...report });
-  localStorage.setItem('hk_reports', JSON.stringify(existing));
-
-  // Try Supabase
-  await supaFetch('POST', '/rest/v1/housekeeping_reports', report);
-
-  // Update stats
-  todayStats.rooms++;
-  todayStats.flags += flags.length;
-  todayStats.reuse += report.reuse_count;
-  document.getElementById('statRooms').textContent = todayStats.rooms;
-  document.getElementById('statFlags').textContent = todayStats.flags;
-  document.getElementById('statReuse').textContent = todayStats.reuse;
-
-  document.getElementById('successRoom').textContent = currentRoom;
-  showScreen('successScreen');
+  const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
+  all.push(rec);localStorage.setItem('hk_v3',JSON.stringify(all));
+  await sfetch('POST','/rest/v1/housekeeping_reports',rec);
+  ST.stats.rooms++;ST.stats.topup+=rec.topup_count;ST.stats.reuse+=rec.reuse_count;
+  document.getElementById('stRooms').textContent=ST.stats.rooms;
+  document.getElementById('stTopup').textContent=ST.stats.topup;
+  document.getElementById('stReuse').textContent=ST.stats.reuse;
+  document.getElementById('sucRoom').textContent=ST.room;
+  showScr('successScreen');
+}
+function nextRoom(){
+  onFloorChange();document.getElementById('roomTypeInfo').textContent='';
+  document.getElementById('btnStart').disabled=true;ST.room=null;showScr('homeScreen');
+}
+function goHome(){
+  document.getElementById('roomTypeInfo').textContent='';document.getElementById('btnStart').disabled=true;
+  ST.room=null;showScr('homeScreen');
+}
+function loadStats(){
+  const today=new Date().toISOString().split('T')[0];
+  const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
+  const mine=all.filter(r=>r.staff_id===ST.staff.id&&r.date===today&&!r.voided);
+  ST.stats={rooms:mine.length,topup:mine.reduce((s,r)=>s+(r.topup_count||0),0),reuse:mine.reduce((s,r)=>s+(r.reuse_count||0),0)};
+  document.getElementById('stRooms').textContent=ST.stats.rooms;
+  document.getElementById('stTopup').textContent=ST.stats.topup;
+  document.getElementById('stReuse').textContent=ST.stats.reuse;
 }
 
-function nextRoom() {
-  document.getElementById('roomInput').value = '';
-  document.getElementById('roomTypeBadge').innerHTML = '';
-  document.getElementById('startBtn').disabled = true;
-  currentRoom = null;
-  currentRoomType = null;
-  showScreen('homeScreen');
-}
-function goHome() {
-  document.getElementById('roomInput').value = '';
-  document.getElementById('roomTypeBadge').innerHTML = '';
-  document.getElementById('startBtn').disabled = true;
-  currentRoom = null;
-  showScreen('homeScreen');
-}
-
-// ════════════════════════════════════════════════════════
-// TODAY STATS
-// ════════════════════════════════════════════════════════
-function loadTodayStats() {
-  const today = new Date().toISOString().split('T')[0];
-  const all = JSON.parse(localStorage.getItem('hk_reports') || '[]');
-  const mine = all.filter(r => r.staff_id === currentStaff.id && r.date === today);
-  todayStats = {
-    rooms: mine.length,
-    flags: mine.reduce((s,r) => s + (r.flag_count||0), 0),
-    reuse: mine.reduce((s,r) => s + (r.reuse_count||0), 0)
-  };
-  document.getElementById('statRooms').textContent = todayStats.rooms;
-  document.getElementById('statFlags').textContent = todayStats.flags;
-  document.getElementById('statReuse').textContent = todayStats.reuse;
-}
-
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // SUPERVISOR
-// ════════════════════════════════════════════════════════
-function supLogin() {
-  if (document.getElementById('supPw').value === SUP_PASS) {
-    document.getElementById('supLoginPanel').style.display = 'none';
-    document.getElementById('supDashboard').style.display = '';
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('supDate').value = today;
-    loadDashboard();
-  } else {
-    document.getElementById('supErr').style.display = 'block';
-  }
+// ═══════════════════════════════════════════════
+function supLogin(){
+  if(document.getElementById('supPw').value===SUP_PW){
+    document.getElementById('supLoginWrap').style.display='none';
+    const sd=document.getElementById('supDash');sd.style.display='flex';sd.style.flexDirection='column';
+    document.getElementById('supDate').value=new Date().toISOString().split('T')[0];
+    loadDash();
+  }else{document.getElementById('supErr').style.display='block';}
 }
 
-function loadDashboard() {
-  const date = document.getElementById('supDate').value;
-  const roomF = document.getElementById('supRoomFilter').value.toLowerCase();
-  const staffF = document.getElementById('supStaffFilter').value.toLowerCase();
-  const all = JSON.parse(localStorage.getItem('hk_reports') || '[]');
-  let records = all.filter(r => r.date === date);
-  if (roomF) records = records.filter(r => r.room && r.room.toLowerCase().includes(roomF));
-  if (staffF) records = records.filter(r => r.staff_id && r.staff_id.toLowerCase().includes(staffF));
-  records.sort((a,b) => new Date(b.time_out||b.time_in) - new Date(a.time_out||a.time_in));
-  document.getElementById('supRecordCount').textContent = records.length + ' records';
-  const el = document.getElementById('supRecords');
-  if (records.length === 0) {
-    el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No records found for this date</div>';
-    return;
-  }
-  el.innerHTML = records.map(r => {
-    const flags = JSON.parse(r.flags || '[]');
-    const flagHtml = flags.length > 0
-      ? flags.map(f => `<span class="rc-flag ${f.type}">${f.item}: ${f.type}</span>`).join('')
-      : '<span class="rc-flag ok">All OK</span>';
-    const tin = r.time_in ? new Date(r.time_in).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'}) : '—';
-    const tout = r.time_out ? new Date(r.time_out).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'}) : '—';
-    return `<div class="record-card">
-      <div class="rc-header">
+function loadDash(){
+  const date=document.getElementById('supDate').value;
+  const rf=document.getElementById('supRoomF').value.toLowerCase();
+  const sf=document.getElementById('supStaffF').value.toLowerCase();
+  const ff=document.getElementById('supFloorF').value;
+  const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
+  let recs=all.filter(r=>r.date===date);
+  if(rf)recs=recs.filter(r=>r.room&&r.room.toLowerCase().includes(rf));
+  if(sf)recs=recs.filter(r=>r.staff_id&&r.staff_id.toLowerCase().includes(sf));
+  if(ff)recs=recs.filter(r=>r.room&&r.room.startsWith(ff));
+  recs.sort((a,b)=>new Date(b.submitted_at||b.time_out)-new Date(a.submitted_at||a.time_out));
+
+  // Stats
+  const active=recs.filter(r=>!r.voided);
+  document.getElementById('supStats').innerHTML=`
+    <div class="ss-box"><div class="ss-num" style="color:var(--gold)">${active.length}</div><div class="ss-lbl">Reports</div></div>
+    <div class="ss-box"><div class="ss-num" style="color:var(--green)">${active.reduce((s,r)=>s+(r.reuse_count||0),0)}</div><div class="ss-lbl">Reuse</div></div>
+    <div class="ss-box"><div class="ss-num" style="color:var(--amber)">${active.reduce((s,r)=>s+(r.topup_count||0),0)}</div><div class="ss-lbl">Top Up</div></div>
+    <div class="ss-box"><div class="ss-num" style="color:var(--red)">${active.reduce((s,r)=>s+(r.action_count||0),0)}</div><div class="ss-lbl">Actions</div></div>`;
+
+  document.getElementById('recCount').textContent=recs.length+' records';
+  const el=document.getElementById('supRecords');
+  if(!recs.length){el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No records found</div>';return;}
+
+  el.innerHTML=recs.map(r=>{
+    const flags=JSON.parse(r.flags||'[]');
+    const fhtml=flags.length?flags.map(f=>`<span class="rec-flag rf-${f.type}">${f.item}: ${f.type.toUpperCase()}</span>`).join(''):'<span class="rec-flag rf-ok">All OK</span>';
+    const amlog=r.amendments&&r.amendments.length?`<div class="amend-log">📝 ${r.amendments.map(a=>`${a.by} amended ${a.field} at ${new Date(a.at).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'})} — ${a.reason}`).join(' | ')}</div>`:'';
+    return `<div class="rec-card${r.voided?' voided':''}" id="rc_${r.id}">
+      ${r.voided?'<div class="voided-badge">VOIDED</div>':''}
+      <div class="rec-header">
         <div>
-          <div class="rc-room">Room ${r.room}</div>
-          <div class="rc-type">${r.room_type_name||r.room_type} · ${r.room_status||'—'}</div>
-          <div class="rc-staff">${r.staff_name||r.staff_id}</div>
+          <div class="rec-room">Room ${r.room}</div>
+          <div class="rec-type">${r.room_type_name||r.room_type} · ${r.room_status||'—'} · Level ${r.room?r.room.slice(0,r.room.length===4?2:2):'—'}</div>
+          <div class="rec-staff">${r.staff_name||r.staff_id} · ${r.staff_id}</div>
         </div>
-        <div class="rc-time">${tin} → ${tout}</div>
+        <div class="rec-time">${fmt2(r.time_in)} → ${fmt2(r.time_out)}<br><span style="font-size:10px;color:var(--soft);">${r.date}</span></div>
       </div>
-      ${r.remarks ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);">📝 ${r.remarks}</div>` : ''}
-      <div class="rc-flags">${flagHtml}</div>
+      <div class="rec-body">
+        <div class="rec-flags">${fhtml}</div>
+        ${r.remarks?`<div class="rec-remarks">💬 ${r.remarks}</div>`:''}
+        ${amlog}
+      </div>
+      ${!r.voided?`<div class="rec-actions">
+        <button class="rec-btn amend" onclick="openAmend('${r.id}','${r.room}')">✏️ Amend</button>
+        <button class="rec-btn print-btn" onclick="printRecord('${r.id}')">🖨 Print</button>
+      </div>`:''}
     </div>`;
   }).join('');
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+function fmt2(d){return d?new Date(d).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'}):'—';}
+
+// ═══════════════════════════════════════════════
+// AMEND
+// ═══════════════════════════════════════════════
+let amendId=null;
+function openAmend(id,room){
+  amendId=id;
+  document.getElementById('amendRoom').textContent=room;
+  document.getElementById('amendReason').value='';
+  document.getElementById('amendField').value='';
+  document.getElementById('amendValue').value='';
+  openModal('amendModal');
+}
+function confirmAmend(){
+  const reason=document.getElementById('amendReason').value.trim();
+  const field=document.getElementById('amendField').value;
+  const value=document.getElementById('amendValue').value.trim();
+  if(!reason){toast('Amendment reason is required');return;}
+  if(!field){toast('Please select a field to amend');return;}
+  const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
+  const rec=all.find(r=>r.id===amendId);
+  if(rec){
+    if(!rec.amendments)rec.amendments=[];
+    rec.amendments.push({field,value,reason,by:'Supervisor',at:new Date().toISOString()});
+    if(field==='room_status')rec.room_status=value;
+    if(field==='remarks')rec.remarks=value;
+    localStorage.setItem('hk_v3',JSON.stringify(all));
+  }
+  closeModal('amendModal');loadDash();toast('Amendment saved ✓');
 }
 
-// ── keyboard submit on login ──
-document.getElementById('loginPw').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-document.getElementById('loginId').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('loginPw').focus(); });
+// ═══════════════════════════════════════════════
+// EMAIL DIGEST
+// ═══════════════════════════════════════════════
+function sendDigest(){openModal('emailModal');}
+function confirmEmail(){
+  const email=document.getElementById('emailAddr').value;
+  if(!email){toast('Please enter email address');return;}
+  closeModal('emailModal');toast('📧 Digest sent to '+email);
+}
+
+function printRecord(id){
+  const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
+  const rec=all.find(r=>r.id===id);
+  if(!rec)return;
+  const w=window.open('','_blank');
+  const flags=JSON.parse(rec.flags||'[]');
+  w.document.write(`<html><head><title>Room ${rec.room} Report</title>
+  <style>body{font-family:Arial,sans-serif;padding:20px;color:#000;}h1{font-size:18px;}table{width:100%;border-collapse:collapse;margin:10px 0;}td,th{border:1px solid #ccc;padding:6px 10px;font-size:12px;}th{background:#f0f0f0;}</style></head>
+  <body><h1>IRAMA KUALA LUMPUR — Housekeeping Report</h1>
+  <table><tr><th>Room</th><td>${rec.room}</td><th>Type</th><td>${rec.room_type_name}</td></tr>
+  <tr><th>Staff</th><td>${rec.staff_name} (${rec.staff_id})</td><th>Status</th><td>${rec.room_status}</td></tr>
+  <tr><th>Time In</th><td>${fmt2(rec.time_in)}</td><th>Time Out</th><td>${fmt2(rec.time_out)}</td></tr>
+  <tr><th>Date</th><td>${rec.date}</td><th>Remarks</th><td>${rec.remarks||'—'}</td></tr></table>
+  <h2 style="font-size:14px;margin-top:16px;">Flagged Items (${flags.length})</h2>
+  <table><tr><th>Item</th><th>Type</th><th>Category</th></tr>
+  ${flags.length?flags.map(f=>`<tr><td>${f.item}</td><td>${f.type.toUpperCase()}</td><td>${f.cat}</td></tr>`).join(''):'<tr><td colspan="3">All items OK</td></tr>'}
+  </table><p style="margin-top:20px;font-size:11px;color:#888">Printed: ${new Date().toLocaleString('en-MY')} | Irama KL Housekeeping System</p>
+  </body></html>`);w.print();
+}
+
+function openModal(id){document.getElementById(id).classList.add('on');}
+function closeModal(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
+
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
 </script>
 </body>
 </html>
