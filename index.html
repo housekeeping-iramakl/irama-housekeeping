@@ -126,6 +126,19 @@ h1{font-family:Georgia,serif;font-weight:400;}
 .topup-btn{padding:6px 11px;border-radius:6px;border:1.5px solid var(--border);background:transparent;font-size:10px;font-weight:700;color:var(--soft);cursor:pointer;letter-spacing:.04em;transition:all .15s;white-space:nowrap;}
 .topup-btn.topup{border-color:var(--amber);color:var(--amber);background:var(--abg);}
 .topup-btn.action{border-color:var(--red);color:var(--red);background:var(--rbg);}
+/* Quantity counter */
+.qty-ctrl{display:none;align-items:center;gap:6px;margin-top:8px;}
+.qty-ctrl.show{display:flex;}
+.qty-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--amber);background:transparent;color:var(--amber);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.qty-display{min-width:80px;text-align:center;font-size:12px;color:var(--text);}
+.qty-display .qty-num{font-family:Georgia,serif;font-size:18px;color:var(--amber);font-weight:700;}
+.qty-display .qty-std{font-size:10px;color:var(--muted);}
+.qty-note{font-size:10px;color:var(--amber);margin-top:4px;}
+/* Equipment action with note */
+.action-note{display:none;margin-top:8px;}
+.action-note.show{display:block;}
+.action-note input{width:100%;background:var(--n3);border:1px solid var(--red)44;border-radius:6px;padding:7px 10px;font-size:12px;color:var(--white);outline:none;font-family:inherit;}
+.action-note input::placeholder{color:var(--soft);}
 
 /* Submit */
 .summary-box{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;}
@@ -220,6 +233,22 @@ h1{font-family:Georgia,serif;font-weight:400;}
 /* Amend modal */
 .amend-modal .finp{margin-bottom:8px;}
 .amend-modal textarea{width:100%;background:var(--n3);border:1px solid var(--border);border-radius:7px;padding:9px 10px;font-size:12px;color:var(--white);resize:none;height:64px;outline:none;font-family:inherit;margin-bottom:10px;}
+
+/* ── QTY MODAL ── */
+.qty-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.qty-modal-bg.on{display:flex;}
+.qty-modal{background:var(--n2);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:300px;}
+.qty-modal h3{font-size:15px;color:var(--white);margin-bottom:6px;}
+.item-lbl{font-size:12px;color:var(--gold);margin-bottom:14px;line-height:1.5;}
+.qty-row{display:flex;align-items:center;justify-content:space-between;background:var(--n3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:10px;}
+.qty-row label{font-size:11px;color:var(--muted);}
+.std-val{font-size:16px;color:var(--gold3);font-weight:700;}
+.qty-input-wrap{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.qty-input-wrap label{font-size:12px;color:var(--muted);}
+.qty-spinner{display:flex;align-items:center;gap:10px;}
+.spin-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--n3);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.spin-btn:active{background:var(--border);}
+.spin-val{font-size:20px;font-weight:700;color:var(--amber);min-width:30px;text-align:center;}
 
 .toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--n2);border:1px solid var(--border);color:var(--white);padding:9px 18px;border-radius:24px;font-size:12px;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -716,26 +745,89 @@ function buildAmen(){
   const c=document.getElementById('amenPanel');c.innerHTML='';
   let lastSec='';
   items.forEach(item=>{
-    ST.amen[item.n]='ok';
+    // state: {status:'ok'|'topup', have:0, need:0}
+    ST.amen[item.n]={status:'ok',std:item.q,have:item.q,need:0};
     if(item.s!==lastSec){
       const h=document.createElement('div');h.className='section-tag';h.textContent=item.s;c.appendChild(h);lastSec=item.s;
     }
-    const d=document.createElement('div');d.className='item-row';d.id='am_'+esc(item.n);
-    d.innerHTML=`<div class="ir-info"><div class="ir-name">${item.n}</div><div class="ir-qty">Standard: <span>${item.q}</span></div></div>
-<div class="ir-ok" id="amok_${esc(item.n)}">✓</div>
-<button class="topup-btn" id="amtb_${esc(item.n)}" onclick="toggleAmen('${esc2(item.n)}')">TOP UP</button>`;
+    const k=esc(item.n);const k2=esc2(item.n);
+    const d=document.createElement('div');d.className='item-row';d.id='am_'+k;
+    d.innerHTML=`
+<div class="ir-info" style="flex:1">
+  <div class="ir-name">${item.n}</div>
+  <div class="ir-qty">Standard: <span>${item.q}</span></div>
+  <div class="qty-ctrl" id="qctrl_${k}">
+    <button class="qty-btn" onclick="adjHave('${k2}',-1)">−</button>
+    <div class="qty-display">
+      <div class="qty-num" id="qhave_${k}">${item.q}</div>
+      <div class="qty-std">found / std ${item.q}</div>
+    </div>
+    <button class="qty-btn" onclick="adjHave('${k2}',1)">+</button>
+  </div>
+  <div class="qty-note" id="qnote_${k}" style="display:none"></div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+  <div class="ir-ok" id="amok_${k}">✓</div>
+  <button class="topup-btn" id="amtb_${k}" onclick="toggleAmen('${k2}')">TOP UP</button>
+</div>`;
     c.appendChild(d);
   });
 }
+
+function adjHave(n,delta){
+  const s=ST.amen[n];if(!s)return;
+  s.have=Math.max(0,s.have+delta);
+  const k=esc(n);
+  document.getElementById('qhave_'+k).textContent=s.have;
+  s.need=Math.max(0,s.std-s.have);
+  const note=document.getElementById('qnote_'+k);
+  if(s.have<s.std){
+    note.style.display='block';
+    note.textContent=`Needs ${s.need} more to reach standard`;
+    note.style.color='var(--amber)';
+    s.status='topup';
+    document.getElementById('am_'+k).className='item-row flagged';
+    document.getElementById('amtb_'+k).className='topup-btn topup';
+    document.getElementById('amtb_'+k).textContent='TOP UP ('+s.need+')';
+    document.getElementById('amok_'+k).style.display='none';
+  } else {
+    note.style.display='none';
+    s.status='ok';s.need=0;
+    document.getElementById('am_'+k).className='item-row';
+    document.getElementById('amtb_'+k).className='topup-btn';
+    document.getElementById('amtb_'+k).textContent='TOP UP';
+    document.getElementById('amok_'+k).style.display='';
+  }
+}
+
 function toggleAmen(n){
-  const v=ST.amen[n]==='ok'?'topup':'ok';ST.amen[n]=v;
-  const row=document.getElementById('am_'+esc(n));
-  const btn=document.getElementById('amtb_'+esc(n));
-  const ok=document.getElementById('amok_'+esc(n));
-  row.className=v==='topup'?'item-row flagged':'item-row';
-  btn.className=v==='topup'?'topup-btn topup':'topup-btn';
-  btn.textContent=v==='topup'?'✓ RESTORE':'TOP UP';
-  ok.style.display=v==='topup'?'none':'';
+  const s=ST.amen[n];if(!s)return;
+  const k=esc(n);
+  const btn=document.getElementById('amtb_'+k);
+  const ctrl=document.getElementById('qctrl_'+k);
+  const ok=document.getElementById('amok_'+k);
+  const row=document.getElementById('am_'+k);
+  if(s.status==='ok'){
+    // Show qty counter
+    s.status='topup';s.have=s.std-1<0?0:s.std-1;s.need=1;
+    ctrl.classList.add('show');
+    document.getElementById('qhave_'+k).textContent=s.have;
+    row.className='item-row flagged';
+    btn.className='topup-btn topup';
+    btn.textContent='TOP UP ('+s.need+')';
+    ok.style.display='none';
+    const note=document.getElementById('qnote_'+k);
+    note.style.display='block';note.textContent='Needs '+s.need+' more';note.style.color='var(--amber)';
+  } else {
+    // Restore
+    s.status='ok';s.have=s.std;s.need=0;
+    ctrl.classList.remove('show');
+    row.className='item-row';
+    btn.className='topup-btn';btn.textContent='TOP UP';
+    ok.style.display='';
+    document.getElementById('qhave_'+k).textContent=s.std;
+    const note=document.getElementById('qnote_'+k);note.style.display='none';
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -745,23 +837,38 @@ function buildEquip(){
   const items=(ITEMS[ST.rtype]||ITEMS.DLXK).equipment;
   const c=document.getElementById('equipPanel');c.innerHTML='';
   items.forEach(item=>{
-    ST.equip[item.n]='ok';
-    const d=document.createElement('div');d.className='item-row';d.id='eq_'+esc(item.n);
-    d.innerHTML=`<div class="ir-info"><div class="ir-name">${item.n}</div><div class="ir-qty" style="color:var(--green)" id="eqlbl_${esc(item.n)}">Present ✓</div></div>
-<button class="topup-btn" id="eqtb_${esc(item.n)}" onclick="toggleEquip('${esc2(item.n)}')">ACTION</button>`;
+    ST.equip[item.n]={status:'ok',note:''};
+    const k=esc(item.n);const k2=esc2(item.n);
+    const d=document.createElement('div');d.className='item-row';d.id='eq_'+k;
+    d.innerHTML=`
+<div class="ir-info" style="flex:1">
+  <div class="ir-name">${item.n}</div>
+  <div class="ir-qty" style="color:var(--green)" id="eqlbl_${k}">Present ✓</div>
+  <div class="action-note" id="anote_${k}">
+    <input type="text" placeholder="Describe issue e.g. remote missing, safe not working..." 
+      oninput="ST.equip['${k2}'].note=this.value" id="anoteinp_${k}">
+  </div>
+</div>
+<button class="topup-btn" id="eqtb_${k}" onclick="toggleEquip('${k2}')">ACTION</button>`;
     c.appendChild(d);
   });
 }
 function toggleEquip(n){
-  const v=ST.equip[n]==='ok'?'action':'ok';ST.equip[n]=v;
-  const row=document.getElementById('eq_'+esc(n));
-  const btn=document.getElementById('eqtb_'+esc(n));
-  const lbl=document.getElementById('eqlbl_'+esc(n));
+  const s=ST.equip[n];if(!s)return;
+  const v=s.status==='ok'?'action':'ok';s.status=v;s.note='';
+  const k=esc(n);
+  const row=document.getElementById('eq_'+k);
+  const btn=document.getElementById('eqtb_'+k);
+  const lbl=document.getElementById('eqlbl_'+k);
+  const anote=document.getElementById('anote_'+k);
+  const ainp=document.getElementById('anoteinp_'+k);
   row.className=v==='action'?'item-row flagged2':'item-row';
   btn.className=v==='action'?'topup-btn action':'topup-btn';
   btn.textContent=v==='action'?'✓ RESTORE':'ACTION';
   lbl.style.color=v==='action'?'var(--red)':'var(--green)';
   lbl.textContent=v==='action'?'Action Required ✗':'Present ✓';
+  anote.className=v==='action'?'action-note show':'action-note';
+  if(v==='ok'){s.note='';if(ainp)ainp.value='';}
 }
 
 function esc(s){return s.replace(/[^a-zA-Z0-9]/g,'_');}
@@ -801,18 +908,37 @@ function buildSummary(){
   document.getElementById('sumStatus').textContent=ST.status||'Not selected';
   document.getElementById('sumTimes').textContent=`${fmt(ST.timeIn)} → ${fmt(tout)}`;
   const reuse=Object.values(ST.linen).filter(v=>v==='reuse').length;
-  const topup=Object.values(ST.amen).filter(v=>v==='topup').length;
-  const action=Object.values(ST.equip).filter(v=>v==='action').length;
+  const topup=Object.values(ST.amen).filter(v=>v&&typeof v==='object'&&v.status==='topup').length;
+  const action=Object.values(ST.equip).filter(v=>v&&typeof v==='object'&&v.status==='action').length;
   document.getElementById('sumReuse').textContent=reuse?`${reuse} items`:'None';
   document.getElementById('sumTopup').textContent=topup?`${topup} items`:'None';
   document.getElementById('sumAction').textContent=action?`${action} items`:'None';
   const flags=[];
-  Object.entries(ST.linen).forEach(([k,v])=>{if(v!=='ok')flags.push({n:k,t:v});});
-  Object.entries(ST.amen).forEach(([k,v])=>{if(v!=='ok')flags.push({n:k,t:v});});
-  Object.entries(ST.equip).forEach(([k,v])=>{if(v!=='ok')flags.push({n:k,t:v});});
+  Object.entries(ST.linen).forEach(([k,v])=>{if(v!=='ok')flags.push({n:k,t:'reuse',cat:'Linen',info:''});});
+  Object.entries(ST.amen).forEach(([k,v])=>{
+    if(v&&typeof v==='object'&&v.status==='topup'){
+      flags.push({n:k,t:'topup',cat:'Amenity',info:`Found: ${v.have} / Std: ${v.std} — Need ${v.need} more`});
+    }
+  });
+  Object.entries(ST.equip).forEach(([k,v])=>{
+    if(v&&typeof v==='object'&&v.status==='action'){
+      flags.push({n:k,t:'action',cat:'Equipment',info:v.note||'Action required'});
+    }
+  });
   const fl=document.getElementById('flagList');
-  if(!flags.length){fl.innerHTML='<div style="font-size:12px;color:var(--green);padding:6px 0">✓ All items OK</div>';}
-  else{fl.innerHTML=flags.map(f=>`<div class="flag-item"><div class="fdot ${f.t}"></div><span>${f.n}</span><span class="ftag ${f.t}">${f.t.toUpperCase()}</span></div>`).join('');}
+  if(!flags.length){fl.innerHTML='<div style="font-size:12px;color:var(--green);padding:6px 0">✓ All items OK — no issues found</div>';}
+  else{fl.innerHTML=flags.map(f=>{
+    const color=f.t==='action'?'var(--red)':f.t==='reuse'?'var(--green)':'var(--amber)';
+    return `<div class="flag-item">
+      <div class="fdot" style="background:${color}"></div>
+      <div style="flex:1">
+        <span style="font-size:12px">${f.n}</span>
+        <span style="font-size:10px;color:var(--muted);margin-left:6px">[${f.cat}]</span>
+        ${f.info?`<div style="font-size:11px;color:${color};margin-top:2px">${f.info}</div>`:''}
+      </div>
+      <span class="ftag" style="background:${f.t==='action'?'var(--rbg)':f.t==='reuse'?'var(--gbg)':'var(--abg)'};color:${color}">${f.t.toUpperCase()}</span>
+    </div>`;
+  }).join('');}
 }
 function fmt(d){return d?d.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'}):'—';}
 
@@ -822,9 +948,15 @@ function fmt(d){return d?d.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-
 async function submitReport(){
   const tout=new Date();
   const flags=[];
-  Object.entries(ST.linen).forEach(([k,v])=>{if(v!=='ok')flags.push({item:k,type:v,cat:'linen'});});
-  Object.entries(ST.amen).forEach(([k,v])=>{if(v!=='ok')flags.push({item:k,type:v,cat:'amenity'});});
-  Object.entries(ST.equip).forEach(([k,v])=>{if(v!=='ok')flags.push({item:k,type:v,cat:'equipment'});});
+  Object.entries(ST.linen).forEach(([k,v])=>{if(v!=='ok')flags.push({item:k,type:'reuse',cat:'linen'});});
+  Object.entries(ST.amen).forEach(([k,v])=>{
+    if(v&&typeof v==='object'&&v.status==='topup')
+      flags.push({item:k,type:'topup',cat:'amenity',std:v.std,have:v.have,need:v.need});
+  });
+  Object.entries(ST.equip).forEach(([k,v])=>{
+    if(v&&typeof v==='object'&&v.status==='action')
+      flags.push({item:k,type:'action',cat:'equipment',note:v.note||''});
+  });
   const rec={
     id:'hk_'+Date.now(),room:ST.room,room_type:ST.rtype,room_type_name:RT_NAMES[ST.rtype]||ST.rtype,
     staff_id:ST.staff.id,staff_name:ST.staff.name,floor:ST.room.slice(0,ST.room.length===4?2:2),
@@ -832,8 +964,8 @@ async function submitReport(){
     linen:JSON.stringify(ST.linen),amenities:JSON.stringify(ST.amen),equipment:JSON.stringify(ST.equip),
     flags:JSON.stringify(flags),flag_count:flags.length,
     reuse_count:Object.values(ST.linen).filter(v=>v==='reuse').length,
-    topup_count:Object.values(ST.amen).filter(v=>v==='topup').length,
-    action_count:Object.values(ST.equip).filter(v=>v==='action').length,
+    topup_count:Object.values(ST.amen).filter(v=>v&&typeof v==='object'&&v.status==='topup').length,
+    action_count:Object.values(ST.equip).filter(v=>v&&typeof v==='object'&&v.status==='action').length,
     remarks:document.getElementById('remarks').value,
     date:new Date().toISOString().split('T')[0],
     submitted_at:tout.toISOString(),
@@ -905,7 +1037,12 @@ function loadDash(){
 
   el.innerHTML=recs.map(r=>{
     const flags=JSON.parse(r.flags||'[]');
-    const fhtml=flags.length?flags.map(f=>`<span class="rec-flag rf-${f.type}">${f.item}: ${f.type.toUpperCase()}</span>`).join(''):'<span class="rec-flag rf-ok">All OK</span>';
+    const fhtml=flags.length?flags.map(f=>{
+      let detail='';
+      if(f.need!==undefined)detail=` — Need ${f.need} (have ${f.have}/${f.std})`;
+      if(f.note)detail=` — ${f.note}`;
+      return `<span class="rec-flag rf-${f.type}">${f.item}${detail}</span>`;
+    }).join(''):'<span class="rec-flag rf-ok">All OK</span>';
     const amlog=r.amendments&&r.amendments.length?`<div class="amend-log">📝 ${r.amendments.map(a=>`${a.by} amended ${a.field} at ${new Date(a.at).toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'})} — ${a.reason}`).join(' | ')}</div>`:'';
     return `<div class="rec-card${r.voided?' voided':''}" id="rc_${r.id}">
       ${r.voided?'<div class="voided-badge">VOIDED</div>':''}
@@ -978,25 +1115,150 @@ function printRecord(id){
   if(!rec)return;
   const w=window.open('','_blank');
   const flags=JSON.parse(rec.flags||'[]');
-  w.document.write(`<html><head><title>Room ${rec.room} Report</title>
-  <style>body{font-family:Arial,sans-serif;padding:20px;color:#000;}h1{font-size:18px;}table{width:100%;border-collapse:collapse;margin:10px 0;}td,th{border:1px solid #ccc;padding:6px 10px;font-size:12px;}th{background:#f0f0f0;}</style></head>
-  <body><h1>IRAMA KUALA LUMPUR — Housekeeping Report</h1>
-  <table><tr><th>Room</th><td>${rec.room}</td><th>Type</th><td>${rec.room_type_name}</td></tr>
-  <tr><th>Staff</th><td>${rec.staff_name} (${rec.staff_id})</td><th>Status</th><td>${rec.room_status}</td></tr>
-  <tr><th>Time In</th><td>${fmt2(rec.time_in)}</td><th>Time Out</th><td>${fmt2(rec.time_out)}</td></tr>
-  <tr><th>Date</th><td>${rec.date}</td><th>Remarks</th><td>${rec.remarks||'—'}</td></tr></table>
-  <h2 style="font-size:14px;margin-top:16px;">Flagged Items (${flags.length})</h2>
-  <table><tr><th>Item</th><th>Type</th><th>Category</th></tr>
-  ${flags.length?flags.map(f=>`<tr><td>${f.item}</td><td>${f.type.toUpperCase()}</td><td>${f.cat}</td></tr>`).join(''):'<tr><td colspan="3">All items OK</td></tr>'}
-  </table><p style="margin-top:20px;font-size:11px;color:#888">Printed: ${new Date().toLocaleString('en-MY')} | Irama KL Housekeeping System</p>
-  </body></html>`);w.print();
-}
+  const linen=flags.filter(f=>f.cat==='linen');
+  const amen=flags.filter(f=>f.cat==='amenity');
+  const equip=flags.filter(f=>f.cat==='equipment');
+  const tin=fmt2(rec.time_in), tout=fmt2(rec.time_out);
+  w.document.write(`<!DOCTYPE html><html><head><title>Room ${rec.room} — Housekeeping Report</title>
+<style>
+  body{font-family:Arial,sans-serif;padding:24px;color:#111;font-size:13px;}
+  h1{font-size:17px;border-bottom:3px solid #C8A96E;padding-bottom:8px;margin-bottom:14px;}
+  h2{font-size:13px;font-weight:700;color:#9A7240;margin:16px 0 6px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #ddd;padding-bottom:4px;}
+  table{width:100%;border-collapse:collapse;margin-bottom:10px;}
+  td,th{border:1px solid #ddd;padding:6px 10px;font-size:12px;text-align:left;}
+  th{background:#f5f0e8;font-weight:700;width:160px;}
+  .flag-tbl th{background:#1A3A5C;color:#fff;width:auto;}
+  .flag-row td{vertical-align:top;}
+  .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+  .b-reuse{background:#FFF8E7;color:#9A7240;}
+  .b-topup{background:#FFF3CD;color:#C8922E;}
+  .b-action{background:#FFEBEE;color:#C05050;}
+  .b-ok{background:#E8F5E9;color:#2D7A50;}
+  .footer{margin-top:20px;font-size:10px;color:#888;border-top:1px solid #ddd;padding-top:8px;}
+  @media print{button{display:none}}
+</style>
+</head>
+<body>
+<button onclick="window.print()" style="margin-bottom:16px;padding:8px 20px;background:#C8A96E;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;">🖨️ Print</button>
+<h1>IRAMA KUALA LUMPUR — Housekeeping Report</h1>
+<h2>Room Information</h2>
+<table>
+  <tr><th>Room Number</th><td>${rec.room}</td><th>Room Type</th><td>${rec.room_type_name||rec.room_type}</td></tr>
+  <tr><th>Floor / Level</th><td>Level ${rec.floor||rec.room.slice(0,2)}</td><th>Room Status</th><td>${rec.room_status||'—'}</td></tr>
+  <tr><th>Staff ID</th><td>${rec.staff_id}</td><th>Staff Name</th><td>${rec.staff_name}</td></tr>
+  <tr><th>Time In</th><td>${tin}</td><th>Time Out</th><td>${tout}</td></tr>
+  <tr><th>Date</th><td>${rec.date}</td><th>Submitted</th><td>${fmt2(rec.submitted_at)||tout}</td></tr>
+  <tr><th>Closing Remarks</th><td colspan="3">${rec.remarks||'—'}</td></tr>
+</table>
 
+<h2>Report Summary</h2>
+<table>
+  <tr><th>Linen REUSE</th><td>${linen.length?linen.length+' item(s)':'None — all OK'}</td>
+      <th>Amenities TOP UP</th><td>${amen.length?amen.length+' item(s)':'None — all OK'}</td></tr>
+  <tr><th>Equipment ACTION</th><td>${equip.length?equip.length+' item(s)':'None — all OK'}</td>
+      <th>Total Flags</th><td>${flags.length} flag(s)</td></tr>
+</table>
+
+${linen.length?`
+<h2>Linen — REUSE Items</h2>
+<table>
+  <tr class="flag-tbl"><th>Item</th><th>Status</th></tr>
+  ${linen.map(f=>`<tr class="flag-row"><td>${f.item}</td><td><span class="badge b-reuse">REUSE</span></td></tr>`).join('')}
+</table>`:''}
+
+${amen.length?`
+<h2>Amenities — TOP UP Required</h2>
+<table>
+  <tr class="flag-tbl"><th>Item</th><th>Found in Room</th><th>Standard Qty</th><th>Need to Add</th></tr>
+  ${amen.map(f=>`<tr class="flag-row">
+    <td>${f.item}</td>
+    <td>${f.have!==undefined?f.have:'—'}</td>
+    <td>${f.std!==undefined?f.std:'—'}</td>
+    <td><strong style="color:#C8922E">${f.need!==undefined?f.need:'—'}</strong></td>
+  </tr>`).join('')}
+</table>`:''}
+
+${equip.length?`
+<h2>Equipment — Action Required</h2>
+<table>
+  <tr class="flag-tbl"><th>Item</th><th>Issue / Note</th></tr>
+  ${equip.map(f=>`<tr class="flag-row"><td>${f.item}</td><td style="color:#C05050">${f.note||'Action required'}</td></tr>`).join('')}
+</table>`:''}
+
+${rec.amendments&&rec.amendments.length?`
+<h2>Amendment Log</h2>
+<table>
+  <tr class="flag-tbl"><th>Field</th><th>New Value</th><th>Reason</th><th>By</th><th>Time</th></tr>
+  ${rec.amendments.map(a=>`<tr><td>${a.field}</td><td>${a.value}</td><td>${a.reason}</td><td>${a.by}</td><td>${fmt2(a.at)}</td></tr>`).join('')}
+</table>`:''}
+
+<div class="footer">
+  Printed: ${new Date().toLocaleString('en-MY')} &nbsp;|&nbsp; 
+  Report ID: ${rec.id} &nbsp;|&nbsp; 
+  Irama Kuala Lumpur — Housekeeping Management System
+</div>
+</body></html>`);
+  w.document.close();
+}
 function openModal(id){document.getElementById(id).classList.add('on');}
 function closeModal(id){document.getElementById(id).classList.remove('on');}
 document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
+
+function toggleAmenBtn(n,std){
+  if(ST.amen[n]&&ST.amen[n]!=='ok'){
+    // Restore
+    ST.amen[n]='ok';
+    const row=document.getElementById('am_'+esc(n));
+    const btn=document.getElementById('amtb_'+esc(n));
+    const okEl=document.getElementById('amok_'+esc(n));
+    const qdEl=document.getElementById('amqd_'+esc(n));
+    row.className='item-row';
+    btn.className='topup-btn';btn.textContent='TOP UP';
+    if(okEl)okEl.style.display='';
+    if(qdEl)qdEl.style.display='none';
+  } else {
+    openTopUp(n,std);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// TOP UP QTY
+let qtyPendingItem=null,qtyPendingStd=1;
+
+function openTopUp(n,std){
+  qtyPendingItem=n;qtyPendingStd=std||1;
+  document.getElementById('qtyItemName').textContent=n;
+  document.getElementById('qtyStd').textContent=std||'—';
+  document.getElementById('qtyVal').textContent='1';
+  document.getElementById('qtyModal').classList.add('on');
+}
+function changeQty(d){
+  const el=document.getElementById('qtyVal');
+  let v=parseInt(el.textContent)+d;
+  if(v<1)v=1;if(v>99)v=99;
+  el.textContent=v;
+}
+function closeQtyModal(){
+  document.getElementById('qtyModal').classList.remove('on');
+  qtyPendingItem=null;
+}
+function confirmTopUp(){
+  if(!qtyPendingItem)return;
+  const qty=parseInt(document.getElementById('qtyVal').textContent);
+  const n=qtyPendingItem;
+  ST.amen[n]={status:'topup',qty,std:qtyPendingStd};
+  const row=document.getElementById('am_'+esc(n));
+  const btn=document.getElementById('amtb_'+esc(n));
+  const okEl=document.getElementById('amok_'+esc(n));
+  const qdEl=document.getElementById('amqd_'+esc(n));
+  row.className='item-row flagged';
+  btn.className='topup-btn topup';btn.textContent='✓ RESTORE';
+  if(okEl)okEl.style.display='none';
+  if(qdEl){qdEl.style.display='';qdEl.textContent='Added: +'+qty;}
+  closeQtyModal();
+}
+document.getElementById('qtyModal').addEventListener('click',function(e){if(e.target===this)closeQtyModal();});
+
 </script>
-</body>
-</html>
