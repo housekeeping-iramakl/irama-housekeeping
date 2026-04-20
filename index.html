@@ -107,15 +107,50 @@ h1{font-family:Georgia,serif;font-weight:400;}
 .status-btn.sel{background:var(--gbg);border-color:var(--green);color:var(--green);font-weight:700;}
 
 /* Linen rows */
-.linen-row{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
-.lr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+.linen-row{background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:border-color .2s;}
+.linen-row.mismatch{border-color:var(--red);}
+.linen-row.matched{border-color:var(--green);}
+.lr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .lr-name{font-size:13px;color:var(--white);font-weight:500;}
 .lr-std{font-size:10px;background:var(--n4);border:1px solid var(--border);color:var(--gold);padding:2px 8px;border-radius:10px;letter-spacing:.05em;}
-.lr-btns{display:flex;gap:6px;}
-.lr-btn{flex:1;padding:8px 4px;border-radius:7px;border:1.5px solid var(--border);background:transparent;font-size:11px;font-weight:700;color:var(--soft);cursor:pointer;text-align:center;transition:all .15s;}
-.lr-btn:active{transform:scale(.97);}
-.lr-btn.ok{border-color:var(--green);color:var(--green);background:var(--gbg);}
-.lr-btn.reuse{border-color:var(--amber);color:var(--amber);background:var(--abg);}
+/* IN/OUT counter row */
+.lr-inout{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.lr-col{background:var(--n3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
+.lr-col-hdr{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.lr-col.in-col .lr-col-hdr{color:#3AAFA9;}
+.lr-col.out-col .lr-col-hdr{color:var(--gold);}
+.lr-counter{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:6px;}
+.lr-cnt-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lr-cnt-btn:active{background:var(--border);}
+.lr-cnt-display{text-align:center;flex:1;}
+.lr-cnt-num{font-family:Georgia,serif;font-size:20px;font-weight:700;color:var(--white);line-height:1;}
+.lr-cnt-lbl{font-size:9px;color:var(--muted);letter-spacing:.04em;margin-top:1px;}
+.lr-reuse-row{margin-top:4px;}
+.lr-reuse-btn{width:100%;padding:5px;border-radius:6px;border:1px solid var(--border);background:transparent;font-size:10px;font-weight:700;color:var(--muted);cursor:pointer;letter-spacing:.04em;transition:all .15s;}
+.lr-reuse-btn.active{border-color:var(--amber);color:var(--amber);background:var(--abg);}
+.lr-status-row{min-height:18px;margin-top:2px;text-align:center;}plate-columns:1fr 1fr;gap:8px;}
+.lr-col{background:var(--n3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
+.lr-col-hdr{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.lr-col.in-col .lr-col-hdr{color:#3AAFA9;}
+.lr-col.out-col .lr-col-hdr{color:var(--gold);}
+.lr-counter{display:flex;align-items:center;gap:8px;justify-content:center;}
+.lr-cbtn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:transparent;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);line-height:1;transition:all .15s;}
+.lr-cbtn:active{transform:scale(.92);}
+.in-col .lr-cbtn{border-color:#3AAFA9;color:#3AAFA9;}
+.out-col .lr-cbtn{border-color:var(--gold);color:var(--gold);}
+.lr-cnum{font-family:Georgia,serif;font-size:22px;font-weight:700;min-width:32px;text-align:center;}
+.in-col .lr-cnum{color:#3AAFA9;}
+.out-col .lr-cnum{color:var(--gold);}
+/* Reuse row */
+.lr-reuse-row{margin-top:8px;display:flex;align-items:center;justify-content:space-between;}
+.lr-reuse-label{font-size:11px;color:var(--muted);}
+.lr-reuse-btn{padding:5px 14px;border-radius:6px;border:1.5px solid var(--border);background:transparent;font-size:11px;font-weight:700;color:var(--soft);cursor:pointer;transition:all .15s;}
+.lr-reuse-btn.active{border-color:var(--amber);color:var(--amber);background:var(--abg);}
+/* Status indicator */
+.lr-status{font-size:10px;margin-top:6px;padding:4px 8px;border-radius:6px;text-align:center;display:none;}
+.lr-status.show{display:block;}
+.lr-status.ok{background:var(--gbg);color:var(--green);}
+.lr-status.warn{background:var(--rbg);color:var(--red);}
 
 /* Item rows */
 .item-row{display:flex;align-items:center;background:var(--n2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:7px;gap:10px;transition:all .15s;}
@@ -370,7 +405,7 @@ h1{font-family:Georgia,serif;font-weight:400;}
     <!-- PANEL 1: Linen -->
     <div class="panel" id="p1">
       <div style="background:var(--n2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--muted);">
-        <b style="color:var(--green)">✓ OK</b> — Item is present &nbsp;|&nbsp; <b style="color:var(--amber)">REUSE</b> — Send for laundry
+        <b style="color:#3AAFA9">IN</b> = Linen collected from room &nbsp;|&nbsp; <b style="color:var(--gold)">OUT</b> = Fresh linen placed in room &nbsp;|&nbsp; <b style="color:var(--amber)">REUSE</b> = Send for laundry
       </div>
       <div id="linenPanel"></div>
     </div>
@@ -724,21 +759,77 @@ function buildLinen(){
   const items=(ITEMS[ST.rtype]||ITEMS.DLXK).linen;
   const c=document.getElementById('linenPanel');c.innerHTML='';
   items.forEach(item=>{
-    ST.linen[item.n]='ok';
-    const d=document.createElement('div');d.className='linen-row';d.id='lr_'+esc(item.n);
-    d.innerHTML=`<div class="lr-top"><span class="lr-name">${item.n}</span><span class="lr-std">Std: ${item.q}</span></div>
-<div class="lr-btns">
-  <button class="lr-btn ok" onclick="setLinen('${esc2(item.n)}','ok',this)">✓ OK</button>
-  <button class="lr-btn" onclick="setLinen('${esc2(item.n)}','reuse',this)">↺ REUSE</button>
+    // state: {in:0, out:0, reuse:false}
+    // IN = fresh linen placed into room
+    // OUT = linen removed from room (sent for laundry)
+    ST.linen[item.n]={std:item.q,in:item.q,out:item.q,reuse:false};
+    const k=esc(item.n);const k2=esc2(item.n);
+    const d=document.createElement('div');d.className='linen-row';d.id='lr_'+k;
+    d.innerHTML=`
+<div class="lr-top">
+  <span class="lr-name">${item.n}</span>
+  <span class="lr-std">Standard: ${item.q}</span>
+</div>
+<div class="lr-inout">
+  <div class="lr-col out-col">
+    <div class="lr-col-hdr">📤 OUT (Collected)</div>
+    <div class="lr-counter">
+      <button class="lr-cnt-btn" onclick="adjLinen('${k2}','out',-1)">−</button>
+      <div class="lr-cnt-display">
+        <div class="lr-cnt-num" id="lout_${k}">${item.q}</div>
+        <div class="lr-cnt-lbl">removed</div>
+      </div>
+      <button class="lr-cnt-btn" onclick="adjLinen('${k2}','out',1)">+</button>
+    </div>
+    <div class="lr-reuse-row">
+      <button class="lr-reuse-btn" id="lreuse_${k}" onclick="toggleReuse('${k2}')">↺ Mark REUSE</button>
+    </div>
+  </div>
+  <div class="lr-col in-col">
+    <div class="lr-col-hdr">📥 IN (Replenished)</div>
+    <div class="lr-counter">
+      <button class="lr-cnt-btn" onclick="adjLinen('${k2}','in',-1)">−</button>
+      <div class="lr-cnt-display">
+        <div class="lr-cnt-num" id="lin_${k}">${item.q}</div>
+        <div class="lr-cnt-lbl">placed in</div>
+      </div>
+      <button class="lr-cnt-btn" onclick="adjLinen('${k2}','in',1)">+</button>
+    </div>
+    <div class="lr-status-row" id="lstatus_${k}"></div>
+  </div>
 </div>`;
     c.appendChild(d);
   });
 }
-function setLinen(n,v,btn){
-  ST.linen[n]=v;
-  const row=document.getElementById('lr_'+esc(n));
-  row.querySelectorAll('.lr-btn').forEach(b=>b.className='lr-btn');
-  btn.className='lr-btn '+v;
+
+function adjLinen(n,dir,delta){
+  const s=ST.linen[n];if(!s)return;
+  const k=esc(n);
+  s[dir]=Math.max(0,s[dir]+delta);
+  document.getElementById('l'+dir+'_'+k).textContent=s[dir];
+  // Update row border based on IN vs standard
+  const row=document.getElementById('lr_'+k);
+  const statusEl=document.getElementById('lstatus_'+k);
+  if(s.in<s.std){
+    row.className='linen-row mismatch';
+    statusEl.innerHTML=`<span style="font-size:10px;color:var(--red)">⚠ Short by ${s.std-s.in}</span>`;
+  } else if(s.in===s.std){
+    row.className='linen-row matched';
+    statusEl.innerHTML=`<span style="font-size:10px;color:var(--green)">✓ Complete</span>`;
+  } else {
+    row.className='linen-row';
+    statusEl.innerHTML=`<span style="font-size:10px;color:var(--amber)">+${s.in-s.std} extra</span>`;
+  }
+}
+
+function toggleReuse(n){
+  const s=ST.linen[n];if(!s)return;
+  s.reuse=!s.reuse;
+  const k=esc(n);
+  const btn=document.getElementById('lreuse_'+k);
+  const row=document.getElementById('lr_'+k);
+  btn.className=s.reuse?'lr-reuse-btn active':'lr-reuse-btn';
+  btn.textContent=s.reuse?'↺ REUSE ✓':'↺ Mark REUSE';
 }
 
 // ═══════════════════════════════════════════════
@@ -911,14 +1002,20 @@ function buildSummary(){
   document.getElementById('sumStaff').textContent=`${ST.staff.id} — ${ST.staff.name}`;
   document.getElementById('sumStatus').textContent=ST.status||'Not selected';
   document.getElementById('sumTimes').textContent=`${fmt(ST.timeIn)} → ${fmt(tout)}`;
-  const reuse=Object.values(ST.linen).filter(v=>v==='reuse').length;
+  const reuse=Object.values(ST.linen).filter(v=>v&&typeof v==='object'&&v.reuse).length;
   const topup=Object.values(ST.amen).filter(v=>v&&typeof v==='object'&&v.status==='topup').length;
   const action=Object.values(ST.equip).filter(v=>v&&typeof v==='object'&&v.status==='action').length;
   document.getElementById('sumReuse').textContent=reuse?`${reuse} items`:'None';
   document.getElementById('sumTopup').textContent=topup?`${topup} items`:'None';
   document.getElementById('sumAction').textContent=action?`${action} items`:'None';
   const flags=[];
-  Object.entries(ST.linen).forEach(([k,v])=>{if(v!=='ok')flags.push({n:k,t:'reuse',cat:'Linen',info:''});});
+  Object.entries(ST.linen).forEach(([k,v])=>{
+    if(!v||typeof v!=='object')return;
+    const diff=v.in-v.std;
+    const info=`OUT: ${v.out} · IN: ${v.in} / Std: ${v.std}${v.reuse?' · REUSE':''}`;
+    if(v.reuse||v.in!==v.std||v.out!==v.std)
+      flags.push({n:k,t:v.reuse?'reuse':'linen',cat:'Linen',info});
+  });
   Object.entries(ST.amen).forEach(([k,v])=>{
     if(v&&typeof v==='object'&&v.status==='topup'){
       flags.push({n:k,t:'topup',cat:'Amenity',info:`Found: ${v.have} / Std: ${v.std} — Need ${v.need} more`});
@@ -952,7 +1049,11 @@ function fmt(d){return d?d.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-
 async function submitReport(){
   const tout=new Date();
   const flags=[];
-  Object.entries(ST.linen).forEach(([k,v])=>{if(v!=='ok')flags.push({item:k,type:'reuse',cat:'linen'});});
+  Object.entries(ST.linen).forEach(([k,v])=>{
+    if(!v||typeof v!=='object')return;
+    if(v.reuse||v.in!==v.std||v.out!==v.std)
+      flags.push({item:k,type:v.reuse?'reuse':'linen',cat:'linen',out:v.out,in:v.in,std:v.std,reuse:v.reuse});
+  });
   Object.entries(ST.amen).forEach(([k,v])=>{
     if(v&&typeof v==='object'&&v.status==='topup')
       flags.push({item:k,type:'topup',cat:'amenity',std:v.std,have:v.have,need:v.need});
@@ -967,7 +1068,8 @@ async function submitReport(){
     room_status:ST.status||'OD',time_in:ST.timeIn.toISOString(),time_out:tout.toISOString(),
     linen:JSON.stringify(ST.linen),amenities:JSON.stringify(ST.amen),equipment:JSON.stringify(ST.equip),
     flags:JSON.stringify(flags),flag_count:flags.length,
-    reuse_count:Object.values(ST.linen).filter(v=>v==='reuse').length,
+    reuse_count:Object.values(ST.linen).filter(v=>v&&typeof v==='object'&&v.reuse).length,
+    linen_summary:Object.entries(ST.linen).map(([k,v])=>typeof v==='object'?{item:k,out:v.out,in:v.in,std:v.std,reuse:v.reuse}:null).filter(Boolean),
     topup_count:Object.values(ST.amen).filter(v=>v&&typeof v==='object'&&v.status==='topup').length,
     action_count:Object.values(ST.equip).filter(v=>v&&typeof v==='object'&&v.status==='action').length,
     remarks:document.getElementById('remarks').value,
@@ -1044,6 +1146,7 @@ function loadDash(){
     const fhtml=flags.length?flags.map(f=>{
       let detail='';
       if(f.need!==undefined)detail=` — Need ${f.need} (have ${f.have}/${f.std})`;
+      if(f.in!==undefined)detail=` — OUT:${f.out} IN:${f.in} Std:${f.std}${f.reuse?' REUSE':''}`;
       if(f.note)detail=` — ${f.note}`;
       return `<span class="rec-flag rf-${f.type}">${f.item}${detail}</span>`;
     }).join(''):'<span class="rec-flag rf-ok">All OK</span>';
@@ -1163,12 +1266,15 @@ function printRecord(id){
       <th>Total Flags</th><td>${flags.length} flag(s)</td></tr>
 </table>
 
-${linen.length?`
-<h2>Linen — REUSE Items</h2>
+<h2>Linen Report — IN / OUT</h2>
 <table>
-  <tr class="flag-tbl"><th>Item</th><th>Status</th></tr>
-  ${linen.map(f=>`<tr class="flag-row"><td>${f.item}</td><td><span class="badge b-reuse">REUSE</span></td></tr>`).join('')}
-</table>`:''}
+  <tr class="flag-tbl"><th>Item</th><th>Standard</th><th>OUT (Collected)</th><th>IN (Replenished)</th><th>REUSE</th><th>Status</th></tr>
+  \${(rec.linen_summary&&rec.linen_summary.length?rec.linen_summary:linen.map(f=>({item:f.item,out:f.out||'—',in:f.in||'—',std:f.std||'—',reuse:f.reuse||false}))).map(l=>{
+    const diff=typeof l.in==='number'&&typeof l.std==='number'?l.in-l.std:0;
+    const status=diff<0?`<span style="color:#C05050">Short ${Math.abs(diff)}</span>`:diff>0?`<span style="color:#C8922E">+${diff} extra</span>`:'<span style="color:#2D7A50">✓ OK</span>';
+    return \`<tr><td>\${l.item}</td><td style="text-align:center">\${l.std}</td><td style="text-align:center">\${l.out}</td><td style="text-align:center;font-weight:700">\${l.in}</td><td style="text-align:center">\${l.reuse?'<span class="badge b-reuse">REUSE</span>':'—'}</td><td>\${status}</td></tr>\`;
+  }).join('')}
+</table>
 
 ${amen.length?`
 <h2>Amenities — TOP UP Required</h2>
