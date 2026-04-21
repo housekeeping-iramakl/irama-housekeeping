@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
     <title>Irama KL — Housekeeping</title>
     <style>
       *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -325,11 +328,20 @@
         </div>
         <div class="fgrp">
           <label>Password</label>
-          <input class="finp" type="password" id="lPw" placeholder="Enter password" />
+          <input
+            class="finp"
+            type="password"
+            id="lPw"
+            placeholder="Enter password"
+          />
         </div>
         <button class="btn-gold" onclick="doLogin()">Sign In →</button>
-        <div class="err-msg" id="lErr">Invalid Staff ID or password. Please try again.</div>
-        <div class="login-foot"><a href="#" onclick="showSup()">Supervisor Access</a></div>
+        <div class="err-msg" id="lErr">
+          Invalid Staff ID or password. Please try again.
+        </div>
+        <div class="login-foot">
+          <a href="#" onclick="showSup()">Supervisor Access</a>
+        </div>
       </div>
     </div>
 
@@ -405,9 +417,18 @@
             <option value="36">Level 36</option>
             <option value="37">Level 37</option>
           </select>
-          <div class="room-grid-wrap"><div class="room-grid" id="roomGrid"></div></div>
+          <div class="room-grid-wrap">
+            <div class="room-grid" id="roomGrid"></div>
+          </div>
           <div class="room-type-info" id="roomTypeInfo"></div>
-          <button class="btn-start" id="btnStart" onclick="startReport()" disabled="">Start Room Report</button>
+          <button
+            class="btn-start"
+            id="btnStart"
+            onclick="startReport()"
+            disabled=""
+          >
+            Start Room Report
+          </button>
         </div>
       </div>
     </div>
@@ -427,7 +448,12 @@
         </div>
         <div class="hdr-right">
           <div class="chip gold" id="repRoomChip">—</div>
-          <button class="hbtn" onclick="if (confirm('Cancel report?')) showScr('homeScreen');">Cancel</button>
+          <button
+            class="hbtn"
+            onclick="if (confirm('Cancel report?')) showScr('homeScreen');"
+          >
+            Cancel
+          </button>
         </div>
       </div>
       <div class="step-bar">
@@ -449,10 +475,18 @@
           </div>
           <div class="section-tag">Room Status</div>
           <div class="status-grid">
-            <button class="status-btn" id="sbOD" onclick="setSt('OD')">Occupied Dirty</button>
-            <button class="status-btn" id="sbVC" onclick="setSt('VC')">Vacant Clean</button>
-            <button class="status-btn" id="sbVD" onclick="setSt('VD')">Vacant Dirty</button>
-            <button class="status-btn" id="sbOC" onclick="setSt('OC')">Occupied Clean</button>
+            <button class="status-btn" id="sbOD" onclick="setSt('OD')">
+              Occupied Dirty
+            </button>
+            <button class="status-btn" id="sbVC" onclick="setSt('VC')">
+              Vacant Clean
+            </button>
+            <button class="status-btn" id="sbVD" onclick="setSt('VD')">
+              Vacant Dirty
+            </button>
+            <button class="status-btn" id="sbOC" onclick="setSt('OC')">
+              Occupied Clean
+            </button>
           </div>
           <div class="section-tag">Room Features</div>
           <div
@@ -574,11 +608,20 @@
               placeholder="Lost &amp; found, guest requests, room damage, special notes..."
             ></textarea>
           </div>
-          <button class="btn-submit" onclick="submitReport()">✓ Submit Report</button>
+          <button class="btn-submit" onclick="submitReport()">
+            ✓ Submit Report
+          </button>
         </div>
       </div>
       <div class="nav-row" id="navRow">
-        <button class="btn-back" id="btnBack" style="display: none" onclick="goBack()">← Back</button>
+        <button
+          class="btn-back"
+          id="btnBack"
+          style="display: none"
+          onclick="goBack()"
+        >
+          ← Back
+        </button>
         <button class="btn-next" id="btnNext" onclick="goNext()">Next →</button>
       </div>
     </div>
@@ -593,7 +636,9 @@
         report saved successfully.
       </div>
       <div class="suc-btns">
-        <button class="btn-nextroom" onclick="nextRoom()">Start Next Room</button>
+        <button class="btn-nextroom" onclick="nextRoom()">
+          Start Next Room
+        </button>
         <button class="btn-home2" onclick="goHome()">Back to Home</button>
       </div>
     </div>
@@ -616,7 +661,10 @@
           <button class="hbtn" onclick="showScr('loginScreen')">Exit</button>
         </div>
       </div>
-      <div id="supLoginWrap" style="padding: 24px; display: flex; justify-content: center">
+      <div
+        id="supLoginWrap"
+        style="padding: 24px; display: flex; justify-content: center"
+      >
         <div
           style="
             width: 100%;
@@ -627,23 +675,64 @@
             padding: 22px;
           "
         >
-          <div style="font-size: 16px; color: var(--white); font-weight: 600; text-align: center; margin-bottom: 16px">
+          <div
+            style="
+              font-size: 16px;
+              color: var(--white);
+              font-weight: 600;
+              text-align: center;
+              margin-bottom: 16px;
+            "
+          >
             Supervisor Login
           </div>
           <div class="fgrp">
             <label>Password</label>
-            <input class="finp" type="password" id="supPw" placeholder="Supervisor password" />
+            <input
+              class="finp"
+              type="password"
+              id="supPw"
+              placeholder="Supervisor password"
+            />
           </div>
-          <button class="btn-gold" onclick="supLogin()">Access Dashboard</button>
+          <button class="btn-gold" onclick="supLogin()">
+            Access Dashboard
+          </button>
           <div class="err-msg" id="supErr">Incorrect password</div>
         </div>
       </div>
-      <div id="supDash" style="display: none; flex: 1; overflow-y: auto; flex-direction: column; display: none">
+      <div
+        id="supDash"
+        style="
+          display: none;
+          flex: 1;
+          overflow-y: auto;
+          flex-direction: column;
+          display: none;
+        "
+      >
         <div class="sup-stats" id="supStats"></div>
         <div class="sup-toolbar">
-          <input class="sup-inp" type="date" id="supDate" onchange="loadDash()" />
-          <input class="sup-inp" placeholder="Room..." id="supRoomF" style="width: 72px" oninput="loadDash()" />
-          <input class="sup-inp" placeholder="Staff ID..." id="supStaffF" style="width: 90px" oninput="loadDash()" />
+          <input
+            class="sup-inp"
+            type="date"
+            id="supDate"
+            onchange="loadDash()"
+          />
+          <input
+            class="sup-inp"
+            placeholder="Room..."
+            id="supRoomF"
+            style="width: 72px"
+            oninput="loadDash()"
+          />
+          <input
+            class="sup-inp"
+            placeholder="Staff ID..."
+            id="supStaffF"
+            style="width: 90px"
+            oninput="loadDash()"
+          />
           <select class="sup-inp" id="supFloorF" onchange="loadDash()">
             <option value="">All Floors</option>
             <option value="14">L14</option>
@@ -671,13 +760,25 @@
             <option value="36">L36</option>
             <option value="37">L37</option>
           </select>
-          <button class="hbtn" onclick="sendDigest()" style="border-color: var(--blue) 44; color: var(--blue)">
+          <button
+            class="hbtn"
+            onclick="sendDigest()"
+            style="border-color: var(--blue) 44; color: var(--blue)"
+          >
             📧 Email Digest
           </button>
-          <button class="hbtn" onclick="window.print()" style="border-color: var(--gold) 44; color: var(--gold)">
+          <button
+            class="hbtn"
+            onclick="window.print()"
+            style="border-color: var(--gold) 44; color: var(--gold)"
+          >
             🖨 Print
           </button>
-          <span style="font-size: 11px; color: var(--muted); margin-left: auto" id="recCount">0 records</span>
+          <span
+            style="font-size: 11px; color: var(--muted); margin-left: auto"
+            id="recCount"
+            >0 records</span
+          >
         </div>
         <div class="sup-records" id="supRecords"></div>
       </div>
@@ -688,10 +789,19 @@
       <div class="modal">
         <h3>📧 Send Email Digest</h3>
         <p>Enter email address to send today's housekeeping summary</p>
-        <input class="finp" id="emailAddr" placeholder="e.g. manager@iramakl.com" type="email" />
+        <input
+          class="finp"
+          id="emailAddr"
+          placeholder="e.g. manager@iramakl.com"
+          type="email"
+        />
         <div class="modal-btns">
-          <button class="btn-cancel" onclick="closeModal('emailModal')">Cancel</button>
-          <button class="btn-confirm" onclick="confirmEmail()">Send Report</button>
+          <button class="btn-cancel" onclick="closeModal('emailModal')">
+            Cancel
+          </button>
+          <button class="btn-confirm" onclick="confirmEmail()">
+            Send Report
+          </button>
         </div>
       </div>
     </div>
@@ -741,10 +851,19 @@
           <option value="amenity_note">Amenity Note</option>
           <option value="equipment_note">Equipment Note</option>
         </select>
-        <input class="finp" id="amendValue" placeholder="New value..." style="margin-bottom: 10px" />
+        <input
+          class="finp"
+          id="amendValue"
+          placeholder="New value..."
+          style="margin-bottom: 10px"
+        />
         <div class="modal-btns">
-          <button class="btn-cancel" onclick="closeModal('amendModal')">Cancel</button>
-          <button class="btn-confirm btn-amberconf" onclick="confirmAmend()">Save Amendment</button>
+          <button class="btn-cancel" onclick="closeModal('amendModal')">
+            Cancel
+          </button>
+          <button class="btn-confirm btn-amberconf" onclick="confirmAmend()">
+            Save Amendment
+          </button>
         </div>
       </div>
     </div>
