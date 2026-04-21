@@ -72,7 +72,7 @@
 
       .room-selector{background:var(--n2);border:1px solid var(--border);border-radius:12px;padding:16px;}
       .room-selector h3{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;}
-      .floor-select{width:100%;background:var(--n3);border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:14px;color:var(--white);outline:none;margin-bottom:10px;-webkit-appearance:none;}
+      .floor-select{width:100%;background:var(--n3);border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:14px;color:var(--white);outline:none;margin-bottom:10px;appearance:none;-webkit-appearance:none;}
       .floor-select:focus{border-color:var(--gold);}
       .room-grid-wrap{max-height:220px;overflow-y:auto;}
       .room-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
@@ -131,7 +131,7 @@
       .lr-reuse-row{margin-top:4px;}
       .lr-reuse-btn{width:100%;padding:5px;border-radius:6px;border:1px solid var(--border);background:transparent;font-size:10px;font-weight:700;color:var(--muted);cursor:pointer;letter-spacing:.04em;transition:all .15s;}
       .lr-reuse-btn.active{border-color:var(--amber);color:var(--amber);background:var(--abg);}
-      .lr-status-row{min-height:18px;margin-top:2px;text-align:center;}plate-columns:1fr 1fr;gap:8px;}
+      .lr-status-row{min-height:18px;margin-top:2px;text-align:center;}
       .lr-col{background:var(--n3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
       .lr-col-hdr{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
       .lr-col.in-col .lr-col-hdr{color:#3AAFA9;}
@@ -1597,11 +1597,11 @@
       <h2>Linen Report — IN / OUT</h2>
       <table>
         <tr class="flag-tbl"><th>Item</th><th>Standard</th><th>OUT (Collected)</th><th>IN (Replenished)</th><th>REUSE</th><th>Status</th></tr>
-        \${(rec.linen_summary&&rec.linen_summary.length?rec.linen_summary:linen.map(f=>({item:f.item,out:f.out||'—',in:f.in||'—',std:f.std||'—',reuse:f.reuse||false}))).map(l=>{
-          const diff=typeof l.in==='number'&&typeof l.std==='number'?l.in-l.std:0;
-          const status=diff<0?`<span style="color:#C05050">Short ${Math.abs(diff)}</span>`:diff>0?`<span style="color:#C8922E">+${diff} extra</span>`:'<span style="color:#2D7A50">✓ OK</span>';
-          return \`<tr><td>\${l.item}</td><td style="text-align:center">\${l.std}</td><td style="text-align:center">\${l.out}</td><td style="text-align:center;font-weight:700">\${l.in}</td><td style="text-align:center">\${l.reuse?'<span class="badge b-reuse">REUSE</span>':'—'}</td><td>\${status}</td></tr>\`;
-        }).join('')}
+        ` + (rec.linen_summary && rec.linen_summary.length ? rec.linen_summary : linen.map(f => ({item: f.item, out: f.out || '—', in: f.in || '—', std: f.std || '—', reuse: f.reuse || false}))).map(l => {
+          let diff = (typeof l.in === 'number' && typeof l.std === 'number') ? (l.in - l.std) : 0;
+          let statusText = diff < 0 ? '<span style="color:#C05050">Short ' + Math.abs(diff) + '</span>' : diff > 0 ? '<span style="color:#C8922E">+' + diff + ' extra</span>' : '<span style="color:#2D7A50">✓ OK</span>';
+          return '<tr><td>' + l.item + '</td><td style="text-align:center">' + statusText + '</td><td style="text-align:center">' + l.out + '</td><td style="text-align:center;font-weight:700">' + l.in + '</td><td style="text-align:center">' + (l.reuse ? '<span class="badge b-reuse">REUSE</span>' : '—') + '</td></tr>';
+        }).join('') + `
       </table>
 
       ${amen.length?`
