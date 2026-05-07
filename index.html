@@ -290,22 +290,22 @@ body{
 /* Room selector card */
 .room-selector{
   background:var(--card);border:1px solid var(--border2);border-radius:16px;
-  padding:16px;margin-bottom:16px;
+  padding:10px 12px;margin-bottom:10px;
   box-shadow:0 4px 24px rgba(0,0,0,.12);
   animation:fadeUp .5s cubic-bezier(.22,1,.36,1) .2s both;
 }
 .room-selector h3{
   font-size:9px;font-family:'Syne Mono',monospace;
   letter-spacing:.2em;text-transform:uppercase;
-  color:var(--ink3);margin-bottom:12px;
+  color:var(--ink3);margin-bottom:6px;
 }
 
 /* Floor select */
 select.floor-sel{
   width:100%;background:var(--bg);border:1px solid var(--border);
-  border-radius:10px;padding:12px 14px;font-size:14px;
+  border-radius:10px;padding:9px 12px;font-size:13px;
   color:var(--ink);font-family:'Syne',sans-serif;
-  outline:none;margin-bottom:12px;cursor:pointer;
+  outline:none;margin-bottom:8px;cursor:pointer;
   transition:border-color .2s;appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8a96e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
@@ -313,7 +313,7 @@ select.floor-sel{
 select.floor-sel:focus{border-color:var(--gold);}
 
 /* Room grid */
-.room-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:12px;max-height:220px;overflow-y:auto;}
+.room-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:8px;max-height:140px;overflow-y:auto;}
 .room-btn{
   aspect-ratio:1;border-radius:10px;border:1px solid var(--border);
   background:var(--bg);color:var(--ink2);
@@ -340,8 +340,8 @@ select.floor-sel:focus{border-color:var(--gold);}
 .room-btn.done::after{content:'✓';position:absolute;top:2px;right:4px;font-size:7px;}
 
 .room-type-info{
-  min-height:20px;font-size:12px;color:var(--gold);
-  font-family:'Syne Mono',monospace;margin-bottom:12px;letter-spacing:.04em;
+  min-height:16px;font-size:11px;color:var(--gold);
+  font-family:'Syne Mono',monospace;margin-bottom:8px;letter-spacing:.04em;
 }
 
 /* Start button */
@@ -1570,7 +1570,7 @@ const AMEN_DLX=[
 {s:'Stationary',n:'Laundry Bill',q:2},{s:'Stationary',n:'Laundry Bag',q:2},{s:'Stationary',n:'Memo Pad',q:1},{s:'Stationary',n:'Ballpoint Pen',q:1},{s:'Stationary',n:'Shopping Bag',q:1},
 {s:'Coffee Facilities',n:'Drinking Water 500ml',q:2},{s:'Coffee Facilities',n:'Nescafe Classic',q:2},{s:'Coffee Facilities',n:'Green Tea',q:2},{s:'Coffee Facilities',n:'English Breakfast Tea',q:2},{s:'Coffee Facilities',n:'White Sugar Stick',q:2},{s:'Coffee Facilities',n:'Brown Sugar Stick',q:2},{s:'Coffee Facilities',n:'Creamer Stick',q:4},{s:'Coffee Facilities',n:'Coaster',q:2},
 {s:'Welcome Amenities',n:'Melvados Ondeh Ondeh 30g',q:1},{s:'Welcome Amenities',n:'Melvados Gula Melaka 30g',q:1},
-{s:'Bathroom Amenities',n:'Shampoo White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Body Wash White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Conditioner White Tea 500ml',q:1},{s:'Bathroom Amenities',n:'Hand & Body Lotion',q:1},{s:'Bathroom Amenities',n:'Body Lotion 30ml',q:2},
+{s:'Bathroom Amenities',n:'Body Lotion 30ml',q:2},
 {s:'Guest Supplies',n:'Dental Kit',q:2},{s:'Guest Supplies',n:'Shaver Kit',q:1},{s:'Guest Supplies',n:'Shower Cap',q:1},{s:'Guest Supplies',n:'Vanity Kit',q:1},{s:'Guest Supplies',n:'Sanitary Bag',q:1},{s:'Guest Supplies',n:'Room Slipper',q:2},{s:'Guest Supplies',n:'Facial Tissue Box',q:1},{s:'Guest Supplies',n:'Toilet Roll',q:2}
 ];
 const EQ_STD=[{n:'TV Remote'},{n:'Safe Box'},{n:'Hair Dryer'},{n:'Electric Kettle'},{n:'Telephone'},{n:'DND Door Hanger'},{n:'Make Up Room Hanger'},{n:'Luggage Rack'},{n:'Iron & Ironing Board'},{n:'Extra Pillow'},{n:'Extra Blanket'}];
@@ -1608,6 +1608,7 @@ const STAFF={
   'IKL0094':{name:'SERI SENKING',pw:'irama2026',role:'staff'},
   'IKL0053':{name:'NUR ANITA BINTI WILLIAM',pw:'irama2026',role:'staff'},
   'IKL0054':{name:'ROHANI BINTI ISMAIL',pw:'irama2026',role:'staff'},
+  'IKL0055':{name:'KARTHIKESU KESAVAN',pw:'irama2026',role:'it'},
   'IKL0051':{name:'RASUL IMAN RAVINDRAN BIN ABDULLAH',pw:'irama2026',role:'staff'},
   'IKL0060':{name:'WARDATUL BAIDA BINTI JALAL',pw:'irama2026',role:'staff'},
   'IKL0095':{name:'NOR AZAYIAH BINTI SORANI',pw:'irama2026',role:'staff'},
@@ -1684,6 +1685,7 @@ function doLogin(){
   ST.staff={id,...s};
   document.getElementById('hStaff').textContent=id;
   document.getElementById('staffName').textContent=s.name;
+  if(s.role==='it'){document.getElementById('staffName').insertAdjacentHTML('afterend','<span style="font-family:\'Syne Mono\',monospace;font-size:9px;color:var(--teal);letter-spacing:.12em;background:var(--teal2);border-radius:6px;padding:2px 8px;margin-left:8px;vertical-align:middle;">IT DEPT</span>');}
   loadStats();
   // Animate stat counters
   showScr('homeScreen');
