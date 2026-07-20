@@ -392,7 +392,7 @@ select.floor-sel:focus{border-color:var(--gold);}
    REPORT SCREEN
 ══════════════════════════════════════════ */
 .step-bar{
-  display:flex;gap:0;padding:0 16px;
+  display:flex;align-items:center;gap:6px;padding:10px 16px;
   border-bottom:1px solid var(--border2);
   flex-shrink:0;overflow-x:auto;background:var(--card);
 }
@@ -405,6 +405,16 @@ select.floor-sel:focus{border-color:var(--gold);}
 }
 .step.act{color:var(--gold);border-bottom-color:var(--gold);}
 .step.done{color:var(--teal);border-bottom-color:var(--teal);}
+.step-dot{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne Mono',monospace;font-size:12px;font-weight:700;
+  background:var(--card2);border:1px solid var(--border2);color:var(--ink3);
+  transition:all .25s;
+}
+.step-dot.act{background:var(--goldg);border-color:var(--gold);color:#0a1520;}
+.step-dot.done{background:var(--gbg);border-color:var(--green);color:var(--green);}
+.step-line{flex:1;height:1px;background:var(--border2);align-self:center;min-width:8px;}
 
 .room-banner{
   background:var(--card);border:1px solid var(--border);border-radius:14px;
@@ -1954,6 +1964,7 @@ body{font-size:15px;}
     <div class="hdr-brand"><div class="brand-text">IRAMA <b>KL</b></div></div>
     <div class="hdr-right">
       <button class="lamp-btn" onclick="toggleTheme()">🌙</button>
+      <div class="chip gold" id="supRepRoomChip">—</div>
       <div class="chip gold" id="supRepUserChip">SUP</div>
       <button class="hbtn" onclick="if(confirm('Cancel inspection?'))showScr('homeScreen')">Cancel</button>
     </div>
@@ -1966,10 +1977,28 @@ body{font-size:15px;}
     <div class="step-dot" id="ss4">5</div>
   </div>
   <div class="report-body">
-    <!-- SP0: Room Status -->
+    <!-- SP0: Linen -->
     <div class="panel on" id="sp0">
+      <div class="panel-title">Linen Check</div>
+      <div class="feat-box" style="margin-bottom:12px;">Tap <b style="color:var(--green)">✓</b> to confirm each item is checked & in order.</div>
+      <div id="supLinenPanel"></div>
+    </div>
+    <!-- SP1: Amenities -->
+    <div class="panel" id="sp1">
+      <div class="panel-title">Amenities Check</div>
+      <div class="feat-box" style="margin-bottom:12px;">Tap <b style="color:var(--green)">✓</b> to confirm each amenity is present & correctly placed.</div>
+      <div id="supAmenPanel"></div>
+    </div>
+    <!-- SP2: Equipment -->
+    <div class="panel" id="sp2">
+      <div class="panel-title">Equipment Check</div>
+      <div class="feat-box" style="margin-bottom:12px;">Tap <b style="color:var(--green)">✓</b> to confirm each item is present & functional.</div>
+      <div id="supEquipPanel"></div>
+    </div>
+    <!-- SP3: Room Status — decided AFTER inspecting, not before -->
+    <div class="panel" id="sp3">
       <div class="panel-title">Room Status</div>
-      <div class="feat-box" style="margin-bottom:14px;">Assign status for <b id="supRoomLabel">—</b></div>
+      <div class="feat-box" style="margin-bottom:14px;">Based on your inspection, assign the final status for <b id="supRoomLabel">—</b></div>
       <div class="sup-status-grid">
         <button class="sup-status-btn" id="ssb_OC" onclick="setSupStatus('OC')">🔵 OC Clean<br><span style="font-size:9px;font-weight:400">Occupied Clean</span></button>
         <button class="sup-status-btn" id="ssb_OI" onclick="setSupStatus('OI')">✅ OC Inspected<br><span style="font-size:9px;font-weight:400">Occupied Inspected</span></button>
@@ -1980,24 +2009,6 @@ body{font-size:15px;}
       <div id="supOooWrap" style="display:none;margin-top:10px;">
         <input type="text" id="supOooReason" placeholder="OOO reason..." style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;color:var(--ink);font-size:12px;outline:none;box-sizing:border-box;font-family:'Inter',sans-serif;"/>
       </div>
-    </div>
-    <!-- SP1: Linen -->
-    <div class="panel" id="sp1">
-      <div class="panel-title">Linen Check</div>
-      <div class="feat-box" style="margin-bottom:12px;">Tap <b style="color:var(--green)">✓</b> to confirm each item is checked & in order.</div>
-      <div id="supLinenPanel"></div>
-    </div>
-    <!-- SP2: Amenities -->
-    <div class="panel" id="sp2">
-      <div class="panel-title">Amenities Check</div>
-      <div class="feat-box" style="margin-bottom:12px;">Tap <b style="color:var(--green)">✓</b> to confirm each amenity is present & correctly placed.</div>
-      <div id="supAmenPanel"></div>
-    </div>
-    <!-- SP3: Equipment -->
-    <div class="panel" id="sp3">
-      <div class="panel-title">Equipment Check</div>
-      <div class="feat-box" style="margin-bottom:12px;">Tap <b style="color:var(--green)">✓</b> to confirm each item is present & functional.</div>
-      <div id="supEquipPanel"></div>
     </div>
     <!-- SP4: Remark + Submit -->
     <div class="panel" id="sp4">
@@ -2410,9 +2421,9 @@ function supGoStep(n){
   if(bb)bb.style.visibility=n===0?'hidden':'visible';
   var nb=document.getElementById('supNextBtn');
   if(nb)nb.style.display=n===SUP_TOTAL-1?'none':'';
-  if(n===1)buildSupTickPanel('supLinenPanel',(ITEMS[SUP_ST.rtype]||ITEMS.DLXK).linen,SUP_ST.linen);
-  if(n===2)buildSupTickPanel('supAmenPanel',(ITEMS[SUP_ST.rtype]||ITEMS.DLXK).amenities,SUP_ST.amen);
-  if(n===3)buildSupTickPanel('supEquipPanel',(ITEMS[SUP_ST.rtype]||ITEMS.DLXK).equipment,SUP_ST.equip);
+  if(n===0)buildSupTickPanel('supLinenPanel',(ITEMS[SUP_ST.rtype]||ITEMS.DLXK).linen,SUP_ST.linen);
+  if(n===1)buildSupTickPanel('supAmenPanel',(ITEMS[SUP_ST.rtype]||ITEMS.DLXK).amenities,SUP_ST.amen);
+  if(n===2)buildSupTickPanel('supEquipPanel',(ITEMS[SUP_ST.rtype]||ITEMS.DLXK).equipment,SUP_ST.equip);
   if(n===4)buildSupSummary();
 }
 
@@ -2424,7 +2435,7 @@ function setSupStatus(s){
   });
   var w=document.getElementById('supOooWrap');
   if(w)w.style.display=s==='OOO'?'block':'none';
-  if(s!=='OOO')setTimeout(function(){supGoStep(1);},300);
+  if(s!=='OOO')setTimeout(function(){supGoStep(4);},300);
 }
 
 function buildSupTickPanel(cid,items,state){
@@ -2491,10 +2502,10 @@ function buildSupSummary(){
 }
 
 async function submitSupReport(){
-  if(!SUP_ST.status){toast('Please set room status first');supGoStep(0);return;}
+  if(!SUP_ST.status){toast('Please set room status first');supGoStep(3);return;}
   if(SUP_ST.status==='OOO'){
     var reason=document.getElementById('supOooReason').value.trim();
-    if(!reason){toast('Enter OOO reason');supGoStep(0);return;}
+    if(!reason){toast('Enter OOO reason');supGoStep(3);return;}
   }
   var tout=new Date();
   var lVals=Object.entries(SUP_ST.linen);var aVals=Object.entries(SUP_ST.amen);var eVals=Object.entries(SUP_ST.equip);
@@ -2519,7 +2530,7 @@ async function submitSupReport(){
     room_status:SUP_ST.status,
     ooo_reason:SUP_ST.status==='OOO'?document.getElementById('supOooReason').value:'',
     time_in:SUP_ST.timeIn.toISOString(),time_out:tout.toISOString(),
-    date:new Date().toISOString().split('T')[0],submitted_at:tout.toISOString(),
+    date:localDateStr(),submitted_at:tout.toISOString(),
     linen_check:JSON.stringify(SUP_ST.linen),
     amen_check:JSON.stringify(SUP_ST.amen),
     equip_check:JSON.stringify(SUP_ST.equip),
@@ -2559,7 +2570,7 @@ function initSupHome(){
     var fls=[...new Set(Object.keys(ROOM_DB).map(function(r){return Math.floor(Number(r)/100);}))].sort(function(a,b){return a-b;});
     fls.forEach(function(f){var o=document.createElement('option');o.value=f;o.textContent='Level '+f;sel.appendChild(o);});
   }
-  var today=new Date().toISOString().split('T')[0];
+  var today=localDateStr();
   var all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
   var mine=all.filter(function(r){return r.date===today&&r.staff_id===s.id&&r.report_type==='supervisor'&&!r.voided;});
   var el=document.getElementById('supStRooms');if(el)el.textContent=mine.length;
@@ -2632,6 +2643,7 @@ function startSupInspection(){
   if(!SUP_ST.room){toast('Please select a room');return;}
   SUP_ST.step=0;SUP_ST.status=null;SUP_ST.linen={};SUP_ST.amen={};SUP_ST.equip={};SUP_ST.timeIn=new Date();
   document.getElementById('supRepUserChip').textContent=ST.staff.id;
+  document.getElementById('supRepRoomChip').textContent=SUP_ST.room;
   document.getElementById('supRoomLabel').textContent='Room '+SUP_ST.room;
   document.getElementById('supRemarks').value='';
   document.getElementById('supOooReason').value='';
@@ -2766,12 +2778,12 @@ function renderFloorGrid(){
   });
 }
 function getDoneRooms(){
-  const today=new Date().toISOString().split('T')[0];
+  const today=localDateStr();
   const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
   return new Set(all.filter(r=>r.date===today&&r.staff_id===ST.staff?.id&&!r.voided).map(r=>r.room));
 }
 function getCleanedRooms(){
-  const today=new Date().toISOString().split('T')[0];
+  const today=localDateStr();
   const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
   const map={};
   all.filter(r=>r.date===today&&r.report_type!=='supervisor'&&!r.voided)
@@ -2780,7 +2792,7 @@ function getCleanedRooms(){
   return map;
 }
 function getInspectedRooms(){
-  const today=new Date().toISOString().split('T')[0];
+  const today=localDateStr();
   const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
   const map={};
   all.filter(r=>r.date===today&&r.report_type==='supervisor'&&!r.voided)
@@ -2973,6 +2985,13 @@ function toggleOnReq(n){
 
 
 function esc(s){return s.replace(/[^a-zA-Z0-9]/g,'_');}
+function localDateStr(d){
+  d=d||new Date();
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
 function stColor(code){
   return {VC:'var(--green)',VD:'var(--red)',OD:'var(--amber)',OC:'var(--blue)',OI:'var(--green)',VI:'#A78BFA',OOO:'var(--red)'}[code]||'var(--ink3)';
 }
@@ -3102,7 +3121,7 @@ async function submitReport(){
     action_count:equip_summary.filter(e=>!e.ok&&!e.onReq).length,
     remarks:document.getElementById('remarks').value,
     linen_summary,amen_summary,equip_summary,
-    date:new Date().toISOString().split('T')[0],submitted_at:tout.toISOString(),voided:false,amendments:[]
+    date:localDateStr(),submitted_at:tout.toISOString(),voided:false,amendments:[]
   };
   const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
   all.push(rec);localStorage.setItem('hk_v3',JSON.stringify(all));
@@ -3136,7 +3155,7 @@ async function undoLastSubmission(){
 }
 function goHome(){document.getElementById('roomTypeInfo').textContent='';document.getElementById('btnStart').disabled=true;ST.room=null;showScr('homeScreen');}
 function loadStats(){
-  const today=new Date().toISOString().split('T')[0];
+  const today=localDateStr();
   const all=JSON.parse(localStorage.getItem('hk_v3')||'[]');
   const mine=all.filter(r=>r.staff_id===ST.staff.id&&r.date===today&&!r.voided);
   ST.stats={rooms:mine.length,topup:mine.reduce((s,r)=>s+(r.topup_count||0),0),reuse:mine.reduce((s,r)=>s+(r.reuse_count||0),0)};
@@ -3230,7 +3249,7 @@ function renderReportsTab(recs){
       var as=maid.amen_summary||[];
       var ls=maid.linen_summary||[];
       var es=maid.equip_summary||[];
-      var flags=as.filter(function(a){return !a.ok;}).length+(ls.filter(function(l){return l.reuse;}).length)+(es.filter(function(e){return !e.ok;}).length);
+      var flags=as.filter(function(a){return !a.ok;}).length+(ls.filter(function(l){return l.reuse;}).length)+(es.filter(function(e){return !e.ok&&!e.onReq;}).length);
       html2+='<div class="rec-pair-maid">';
       html2+='<div class="rec-pair-header">';
       html2+='<div class="rph-left"><div class="room-num">'+maid.room+'</div>';
